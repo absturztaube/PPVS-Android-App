@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PPVS</string>
+    <string name="title_news">Actuel</string>
+    <string name="title_forum">Forum</string>
+    <string name="title_projects">Projects</string>
+    <string name="title_contact">Contakt</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="msg_load_news">charger informations</string>
+    <string name="title_activity_news">PPVS News</string>
+	<string name="btn_webpage">Site web</string>
+	<string name="btn_mail">E-Mail</string>
+	<string name="btn_twitter">Twitter</string>
+	<string name="btn_facebook">Facebook</string>
+	<string name="btn_googleplus">Google Plus</string>
+
+</resources>

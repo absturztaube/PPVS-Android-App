@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_webpage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_launcher"
+        android:text="@string/btn_webpage" />
+
+    <Button
+        android:id="@+id/btn_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/mail_logo"
+        android:text="@string/btn_mail" />
+
+    <Button
+        android:id="@+id/btn_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/facebook_icon"
+        android:text="@string/btn_facebook" />
+
+    <Button
+        android:id="@+id/btn_googleplus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/googleplus_icon"
+        android:text="@string/btn_googleplus" />
+
+    <Button
+        android:id="@+id/btn_twitter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/twitter_logo"
+        android:text="@string/btn_twitter" />
+
+</LinearLayout>

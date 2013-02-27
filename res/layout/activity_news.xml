@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NewsActivity" >
+
+    <TextView
+        android:id="@+id/news_title"
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EEB50C"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/news_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EEB50C"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/news_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EEB50C"
+        android:gravity="right"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+
+        <WebView
+            android:id="@+id/news_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+</LinearLayout>
