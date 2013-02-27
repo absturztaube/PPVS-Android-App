@@ -97,8 +97,15 @@ public class NewsFragment extends ListFragment
 			{
 				titles.add(_feedItems.get(i).getTitle());
 			}
-			setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
-			setListShown(true);
+			try
+			{
+				setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
+				setListShown(true);
+			}
+			catch(NullPointerException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 	}
