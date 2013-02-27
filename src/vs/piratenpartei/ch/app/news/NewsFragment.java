@@ -3,6 +3,7 @@ package vs.piratenpartei.ch.app.news;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,7 +43,8 @@ public class NewsFragment extends ListFragment
 		Bundle params = new Bundle();
 		params.putString("title", clicked.getTitle());
 		params.putString("author", clicked.getCreator());
-		params.putString("date", clicked.getPublishDate());
+		Date pubDate = clicked.getPublishDate();
+		params.putString("date", pubDate.toLocaleString());
 		params.putString("content", clicked.getContent());
 		intent.putExtras(params);
 		startActivity(intent);
@@ -101,7 +103,7 @@ public class NewsFragment extends ListFragment
 				setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
 				setListShown(true);
 			}
-			catch(NullPointerException e)
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}

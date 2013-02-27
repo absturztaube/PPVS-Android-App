@@ -3,6 +3,7 @@ package vs.piratenpartei.ch.app.news;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -14,7 +15,7 @@ public class NewsItem {
 	private String _title;
 	private String _link;
 	private String _comments;
-	private String _publishDate;
+	private Date _publishDate;
 	private String _creator;
 	private ArrayList<String> _categories = new ArrayList<String>();
 	private String _description;
@@ -88,7 +89,7 @@ public class NewsItem {
 			}
 			else if(name.equals("pubDate"))
 			{
-				result._publishDate = NewsItem.readText(pParser, "pubDate");
+				result._publishDate = new Date(NewsItem.readText(pParser, "pubDate"));
 			}
 			else if(name.equals("dc:creator"))
 			{
@@ -154,7 +155,7 @@ public class NewsItem {
 		return this._comments;
 	}
 	
-	public String getPublishDate()
+	public Date getPublishDate()
 	{
 		return this._publishDate;
 	}

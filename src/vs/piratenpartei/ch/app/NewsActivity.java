@@ -34,6 +34,7 @@ public class NewsActivity extends Activity {
 		content.loadData(html, "text/html; charset=UTF-8", null);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(getString(R.string.app_name));
 	}
 
 	@Override

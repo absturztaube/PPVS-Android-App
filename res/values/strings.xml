@@ -2,16 +2,36 @@
 <resources>
 
     <string name="app_name">PPVS</string>
+    
     <string name="title_news">Aktuell</string>
     <string name="title_forum">Forum</string>
     <string name="title_projects">Projekte</string>
     <string name="title_contact">Kontakt</string>
-    <string name="menu_settings">Settings</string>
+    <string name="title_pads">Piratenpads</string>
+    
     <string name="msg_load_news">Lade Nachrichten</string>
-    <string name="title_activity_news">PPVS News</string>
-	<string name="btn_webpage">Webseite</string>
-	<string name="btn_mail">E-Mail</string>
-	<string name="btn_twitter">Twitter</string>
-	<string name="btn_facebook">Facebook</string>
-	<string name="btn_googleplus">Google Plus</string>
+    <string name="btn_webpage">Webseite</string>
+    <string name="btn_mail">E-Mail</string>
+    <string name="btn_twitter">Twitter</string>
+    <string name="btn_facebook">Facebook</string>
+    <string name="btn_googleplus">Google Plus</string>
+    <string name="project_tracker">Tracker</string>
+
+    <string-array name="projects_types">
+        <item>Alle</item>
+        <item>Information</item>
+        <item>Task</item>
+        <item>Motion</item>
+    </string-array>
+    <string-array name="project_states">
+        <item>Alle</item>
+        <item>Offen</item>
+        <item>Geschlossen</item>
+    </string-array>
+
+    <string name="issue_overview">Übersicht</string>
+    <string name="issue_description">Beschreibung</string>
+    <string name="issue_status">Status</string>
+    <string name="issue_journal">Journal</string>
+    
 </resources>

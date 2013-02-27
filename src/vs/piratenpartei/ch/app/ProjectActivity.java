@@ -1,22 +1,21 @@
 package vs.piratenpartei.ch.app;
 
-import vs.piratenpartei.ch.app.contact.ContactFragment;
-import vs.piratenpartei.ch.app.news.NewsFragment;
-import vs.piratenpartei.ch.app.redmine.ProjectsFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity {
+public class ProjectActivity extends FragmentActivity {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -36,9 +35,10 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
-		
+		setContentView(R.layout.activity_project);
+
+		// Show the Up button in the action bar.
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
@@ -54,8 +54,25 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_project, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -70,30 +87,19 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			Fragment fragment;
-
-			fragment = new DummySectionFragment();
+			// getItem is called to instantiate the fragment for the given page.
+			// Return a DummySectionFragment (defined as a static inner class
+			// below) with the page number as its lone argument.
+			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 			fragment.setArguments(args);
-			
-			switch(position)
-			{
-				case 0:
-					fragment = new NewsFragment();
-					break;
-				case 2:
-					fragment = new ProjectsFragment();
-					break;
-				case 3:
-					fragment = new ContactFragment();
-					break;
-			}
 			return fragment;
 		}
 
 		@Override
 		public int getCount() {
+			// Show 3 total pages.
 			return 4;
 		}
 
@@ -101,13 +107,13 @@ public class MainActivity extends FragmentActivity {
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
 			case 0:
-				return getString(R.string.title_news);
+				return getString(R.string.issue_overview);
 			case 1:
-				return getString(R.string.title_forum);
+				return getString(R.string.issue_description);
 			case 2:
-				return getString(R.string.title_projects);
+				return getString(R.string.issue_status);
 			case 3:
-				return getString(R.string.title_contact);
+				return getString(R.string.issue_journal);
 			}
 			return null;
 		}

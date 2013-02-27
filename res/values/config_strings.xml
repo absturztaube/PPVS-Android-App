@@ -6,4 +6,5 @@
     <string name="config_facebook">https://www.facebook.com/PPValais</string>
     <string name="config_googleplus">https://plus.google.com/112596815441394554834/posts</string>
     <string name="config_twitter">https://twitter.com/PPSVS</string>
+    <string name="config_issues_xml">http://projects.piratenpartei.ch/projects/section-vs/issues.xml?sort=updated_on:desc</string>
 </resources>
