@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_news_rss">http://vs.piratenpartei.ch/feed/</string>
+    <string name="config_website">http://vs.piratenpartei.ch</string>
+    <string name="config_email">info@vs.piratenpartei.ch"</string>
+    <string name="config_facebook">https://www.facebook.com/PPValais</string>
+    <string name="config_googleplus">https://plus.google.com/112596815441394554834/posts</string>
+    <string name="config_twitter">https://twitter.com/PPSVS</string>
+</resources>

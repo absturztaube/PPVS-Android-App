@@ -13,6 +13,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.NewsActivity;
+import vs.piratenpartei.ch.app.R;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,9 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class NewsFragment extends ListFragment 
-{
-	private static String URL_RSS_NEWS = "http://vs.piratenpartei.ch/feed/";
-	
+{	
 	private ArrayList<NewsItem> _feedItems = new ArrayList<NewsItem>();
 		
 	@Override
@@ -58,7 +57,7 @@ public class NewsFragment extends ListFragment
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(NewsFragment.URL_RSS_NEWS);
+				HttpGet httpget = new HttpGet(getString(R.string.config_news_rss));
 				HttpResponse response;
 				response = client.execute(httpget);
 				if(response.getStatusLine().getStatusCode() == 200)

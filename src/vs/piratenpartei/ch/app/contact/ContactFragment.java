@@ -28,7 +28,7 @@ public class ContactFragment extends Fragment
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("http://vs.piratenpartei.ch"));
+				intent.setData(Uri.parse(getString(R.string.config_website)));
 				startActivity(intent);
 			}
 		});
@@ -39,9 +39,9 @@ public class ContactFragment extends Fragment
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_SENDTO);
 				intent.setType("text/plain");
-				intent.setData(Uri.parse("mailto:info@vs.piratenpartei.ch"));
-				intent.putExtra(Intent.EXTRA_SUBJECT, "[PPVS]");
-				startActivity(Intent.createChooser(intent, "E-Mail..."));
+				intent.setData(Uri.parse("mailto:" + getString(R.string.config_email)));
+				intent.putExtra(Intent.EXTRA_SUBJECT, "[" + getString(R.string.app_name) + "]");
+				startActivity(Intent.createChooser(intent, getString(R.string.btn_mail) + "..."));
 			}
 		});
 		Button btn_facebook = (Button)getActivity().findViewById(R.id.btn_facebook);
@@ -50,7 +50,7 @@ public class ContactFragment extends Fragment
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("https://www.facebook.com/PPValais"));
+				intent.setData(Uri.parse(getString(R.string.config_facebook)));
 				startActivity(intent);
 			}
 		});
@@ -60,7 +60,7 @@ public class ContactFragment extends Fragment
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("https://plus.google.com/112596815441394554834/posts"));
+				intent.setData(Uri.parse(getString(R.string.config_googleplus)));
 				startActivity(intent);
 			}
 		});
@@ -70,7 +70,7 @@ public class ContactFragment extends Fragment
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("https://twitter.com/PPSVS"));
+				intent.setData(Uri.parse(getString(R.string.config_twitter)));
 				startActivity(intent);
 			}
 		});
