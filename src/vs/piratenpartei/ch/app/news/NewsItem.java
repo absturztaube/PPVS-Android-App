@@ -93,7 +93,7 @@ public class NewsItem {
 			}
 			else if(name.equals("pubDate"))
 			{
-				DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.getDefault());
+				DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.ENGLISH);
 				result._publishDate = df.parse(NewsItem.readText(pParser, "pubDate"));
 			}
 			else if(name.equals("dc:creator"))
