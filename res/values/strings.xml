@@ -7,15 +7,12 @@
     <string name="title_forum">Forum</string>
     <string name="title_projects">Projekte</string>
     <string name="title_contact">Kontakt</string>
-    <string name="title_pads">Piratenpads</string>
     
-    <string name="msg_load_news">Lade Nachrichten</string>
     <string name="btn_webpage">Webseite</string>
     <string name="btn_mail">E-Mail</string>
     <string name="btn_twitter">Twitter</string>
     <string name="btn_facebook">Facebook</string>
     <string name="btn_googleplus">Google Plus</string>
-    <string name="project_tracker">Tracker</string>
 
     <string-array name="projects_types">
         <item>Alle</item>
@@ -35,8 +32,6 @@
     <string name="issue_journal">Journal</string>
     <string name="issue_label_author">Author</string>
     <string name="issue_label_assignee">Zugewissen an</string>
-    <string name="issue_label_project">Projekt</string>
-    <string name="issue_label_tracker">Tracker</string>
     <string name="issue_label_status">Status</string>
     <string name="issue_label_priority">Priorität</string>
     <string name="issue_label_startdate">Start am</string>
