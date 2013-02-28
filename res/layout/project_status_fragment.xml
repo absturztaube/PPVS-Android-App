@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ppvs_background"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/issue_label_progress"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/ppvs_foreground" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ProgressBar
+                android:id="@+id/progress_project_detail_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/text_project_detail_progress"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ppvs_background"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/issue_label_status"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/ppvs_foreground" />
+
+        <TextView
+            android:id="@+id/text_project_detail_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ppvs_background"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/issue_label_estimatedhours"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/ppvs_foreground" />
+
+        <TextView
+            android:id="@+id/text_project_detail_esthours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+</ScrollView>

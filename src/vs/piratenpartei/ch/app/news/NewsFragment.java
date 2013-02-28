@@ -2,6 +2,7 @@ package vs.piratenpartei.ch.app.news;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,7 +45,7 @@ public class NewsFragment extends ListFragment
 		params.putString("title", clicked.getTitle());
 		params.putString("author", clicked.getCreator());
 		Date pubDate = clicked.getPublishDate();
-		params.putString("date", pubDate.toLocaleString());
+		params.putString("date", DateFormat.getInstance().format(pubDate));
 		params.putString("content", clicked.getContent());
 		intent.putExtras(params);
 		startActivity(intent);

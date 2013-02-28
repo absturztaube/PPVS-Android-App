@@ -33,5 +33,17 @@
     <string name="issue_description">Beschreibung</string>
     <string name="issue_status">Status</string>
     <string name="issue_journal">Journal</string>
+    <string name="issue_label_author">Author</string>
+    <string name="issue_label_assignee">Zugewissen an</string>
+    <string name="issue_label_project">Projekt</string>
+    <string name="issue_label_tracker">Tracker</string>
+    <string name="issue_label_status">Status</string>
+    <string name="issue_label_priority">Priorität</string>
+    <string name="issue_label_startdate">Start am</string>
+    <string name="issue_label_duedate">Fällig am</string>
+    <string name="issue_label_estimatedhours">Verbleibende Stunden</string>
+    <string name="issue_label_createdon">Erstellt am</string>
+    <string name="issue_label_updatedon">Letztes Update am</string>
+    <string name="issue_label_progress">Stand</string>
     
 </resources>

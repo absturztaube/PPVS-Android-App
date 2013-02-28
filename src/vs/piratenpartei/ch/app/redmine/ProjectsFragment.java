@@ -12,7 +12,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
-import vs.piratenpartei.ch.app.NewsActivity;
 import vs.piratenpartei.ch.app.ProjectActivity;
 import vs.piratenpartei.ch.app.R;
 import android.content.Intent;
@@ -31,6 +30,9 @@ import android.widget.Spinner;
 public class ProjectsFragment extends Fragment 
 {
 	private ArrayList<IssueItem> _issues = new ArrayList<IssueItem>();
+	private String _xml_sort_attribute = "sort=updated_on:desc&limit=100";
+	private String _xml_tracker_id = "";
+	private String _xml_status = "&status_id=open";
 	
 	@Override
 	public void onResume()
@@ -57,13 +59,29 @@ public class ProjectsFragment extends Fragment
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) 
 			{
-				
+				switch(arg2)
+				{
+				case 0:
+					_xml_tracker_id = "";
+					break;
+				case 1:
+					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_information_id);
+					break;
+				case 2:
+					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_task_id);
+					break;
+				case 3:
+					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_motion_id);
+					break;
+				}
+				new ProjectsLoaderTask().execute();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
-				
+				_xml_tracker_id = "";
+				new ProjectsLoaderTask().execute();
 			}
 		});
 		tracker_spinner.setSelection(0);
@@ -75,13 +93,26 @@ public class ProjectsFragment extends Fragment
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) 
 			{
-				
+				switch(arg2)
+				{
+				case 0:
+					_xml_status = "&status_id=*";
+					break;
+				case 1:
+					_xml_status = "&status_id=open";
+					break;
+				case 2:
+					_xml_status = "&status_id=closed";
+					break;
+				}
+				new ProjectsLoaderTask().execute();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
-				
+				_xml_status = "";
+				new ProjectsLoaderTask().execute();
 			}
 		});
 		status_spinner.setSelection(1);
@@ -95,6 +126,7 @@ public class ProjectsFragment extends Fragment
 				IssueItem clicked = _issues.get(arg2);
 				Intent intent = new Intent(getActivity(), ProjectActivity.class);
 				intent.putExtra("issue_id", clicked.getId());
+				intent.putExtra("issue_subject", clicked.getSubject());
 				startActivity(intent);
 			}
 			
@@ -110,7 +142,7 @@ public class ProjectsFragment extends Fragment
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(getString(R.string.config_issues_xml));
+				HttpGet httpget = new HttpGet(getString(R.string.config_issues_xml) + "issues.xml?" + _xml_sort_attribute + _xml_tracker_id + _xml_status);
 				HttpResponse response;
 				response = client.execute(httpget);
 				if(response.getStatusLine().getStatusCode() == 200)

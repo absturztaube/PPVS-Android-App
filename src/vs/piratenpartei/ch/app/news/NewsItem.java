@@ -2,8 +2,12 @@ package vs.piratenpartei.ch.app.news;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -25,7 +29,7 @@ public class NewsItem {
 	{
 	}
 
-	public static ArrayList<NewsItem> readFeed(InputStream pIn) throws XmlPullParserException, IOException
+	public static ArrayList<NewsItem> readFeed(InputStream pIn) throws XmlPullParserException, IOException, ParseException
 	{
 		ArrayList<NewsItem> result = new ArrayList<NewsItem>();
 
@@ -63,7 +67,7 @@ public class NewsItem {
 		return result;
 	}
 	
-	private static NewsItem readItem(XmlPullParser pParser) throws XmlPullParserException, IOException
+	private static NewsItem readItem(XmlPullParser pParser) throws XmlPullParserException, IOException, ParseException
 	{
 		NewsItem result = new NewsItem();
 		pParser.require(XmlPullParser.START_TAG, null, "item");
@@ -89,7 +93,8 @@ public class NewsItem {
 			}
 			else if(name.equals("pubDate"))
 			{
-				result._publishDate = new Date(NewsItem.readText(pParser, "pubDate"));
+				DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.getDefault());
+				result._publishDate = df.parse(NewsItem.readText(pParser, "pubDate"));
 			}
 			else if(name.equals("dc:creator"))
 			{

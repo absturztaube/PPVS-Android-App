@@ -3,12 +3,8 @@ package vs.piratenpartei.ch.app.redmine;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
-import vs.piratenpartei.ch.app.news.NewsItem;
 
 import android.util.Log;
 import android.util.Xml;
@@ -16,20 +12,7 @@ import android.util.Xml;
 public class IssueItem 
 {
 	private int _id;
-	private String _project;
-	private String _tracker;
-	private String _status;
-	private String _priority;
-	private String _author;
-	private String _assignedTo;
 	private String _subject;
-	private String _description;
-	private String _start_date;
-	private String _due_date;
-	private int _done_ratio;
-	private float _estimated_hours;
-	private String _createdOn;
-	private String _updatedOn;
 	
 	public IssueItem()
 	{
@@ -41,74 +24,9 @@ public class IssueItem
 		return this._id;
 	}
 	
-	public String getProject()
-	{
-		return this._project;
-	}
-	
-	public String getTracker()
-	{
-		return this._tracker;
-	}
-	
-	public String getStatus()
-	{
-		return this._status;
-	}
-	
-	public String getPriority()
-	{
-		return this._priority;
-	}
-	
-	public String getAuthor()
-	{
-		return this._author;
-	}
-	
-	public String getAssignedTo()
-	{
-		return this._assignedTo;
-	}
-	
 	public String getSubject()
 	{
 		return this._subject;
-	}
-	
-	public String getDescription()
-	{
-		return this._description;
-	}
-	
-	public String getStartDate()
-	{
-		return this._start_date;
-	}
-	
-	public String getDueDate()
-	{
-		return this._due_date;
-	}
-	
-	public int getDoneRatio()
-	{
-		return this._done_ratio;
-	}
-	
-	public float getEstimatedHours()
-	{
-		return this._estimated_hours;
-	}
-	
-	public String getCreatedOn()
-	{
-		return this._createdOn;
-	}
-	
-	public String getUpdatedOn()
-	{
-		return this._updatedOn;
 	}
 	
 	public static ArrayList<IssueItem> readRedmineXml(InputStream pIn) throws XmlPullParserException, IOException

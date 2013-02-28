@@ -1,44 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".NewsActivity" >
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/news_title"
-        style="@style/AppTheme"
+        android:id="@+id/text_list_item_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ppvs_background"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/ppvs_foreground" />
 
     <TextView
-        android:id="@+id/news_author"
+        android:id="@+id/text_list_item_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ppvs_background"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/news_date"
+        android:id="@+id/text_list_item_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ppvs_background"
         android:gravity="right"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <WebView
-            android:id="@+id/news_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
 
 </LinearLayout>
