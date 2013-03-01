@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="vs.piratenpartei.ch.app.MainActivity" />
         </activity>
+        <activity
+            android:name="vs.piratenpartei.ch.app.ThreadActivity"
+            android:label="@string/title_activity_thread"
+            android:parentActivityName="vs.piratenpartei.ch.app.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="vs.piratenpartei.ch.app.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
