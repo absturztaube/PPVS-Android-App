@@ -8,7 +8,7 @@
         android:id="@+id/post_list_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Author"
+        android:textIsSelectable="false"
         android:textColor="@color/ppvs_foreground"
         android:background="@color/ppvs_background"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ppvs_background"
+        android:textIsSelectable="false"
         android:gravity="right"
-        android:text="Date/Time"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>
