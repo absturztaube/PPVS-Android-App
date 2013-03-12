@@ -38,6 +38,7 @@ public class ProjectsFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
+		getActivity().setProgressBarIndeterminateVisibility(true);
 		new ProjectsLoaderTask().execute();
 	}
 	
@@ -74,6 +75,7 @@ public class ProjectsFragment extends Fragment
 					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_motion_id);
 					break;
 				}
+				getActivity().setProgressBarIndeterminateVisibility(true);
 				new ProjectsLoaderTask().execute();
 			}
 
@@ -81,6 +83,7 @@ public class ProjectsFragment extends Fragment
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
 				_xml_tracker_id = "";
+				getActivity().setProgressBarIndeterminateVisibility(true);
 				new ProjectsLoaderTask().execute();
 			}
 		});
@@ -105,6 +108,7 @@ public class ProjectsFragment extends Fragment
 					_xml_status = "&status_id=closed";
 					break;
 				}
+				getActivity().setProgressBarIndeterminateVisibility(true);
 				new ProjectsLoaderTask().execute();
 			}
 
@@ -112,6 +116,7 @@ public class ProjectsFragment extends Fragment
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
 				_xml_status = "";
+				getActivity().setProgressBarIndeterminateVisibility(true);
 				new ProjectsLoaderTask().execute();
 			}
 		});
@@ -190,6 +195,7 @@ public class ProjectsFragment extends Fragment
 			{
 				e.printStackTrace();
 			}
+			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

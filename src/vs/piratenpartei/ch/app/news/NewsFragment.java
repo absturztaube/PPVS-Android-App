@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -33,6 +34,7 @@ public class NewsFragment extends ListFragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		getActivity().setProgressBarIndeterminateVisibility(true);
 		new NewsLoaderTask().execute();
 	}
 	
@@ -108,6 +110,7 @@ public class NewsFragment extends ListFragment
 			{
 				e.printStackTrace();
 			}
+			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -58,6 +59,9 @@ public class ProjectActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
 		setContentView(R.layout.activity_project);
 
 		// Show the Up button in the action bar.
@@ -292,6 +296,7 @@ public class ProjectActivity extends FragmentActivity {
 		@Override
 		protected Void doInBackground(Void... params) 
 		{
+			setProgressBarIndeterminateVisibility(true);
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
@@ -333,6 +338,7 @@ public class ProjectActivity extends FragmentActivity {
 			updateView(index);
 			updateView(index+1);
 			updateView(index-1);
+			setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

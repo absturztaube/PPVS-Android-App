@@ -1,12 +1,10 @@
 package vs.piratenpartei.ch.app.forum;
 
-import java.util.Date;
-
 public class ForumParser 
 {
 	public static class Thread
 	{
-		public static final String REGEX_FULL_THREAD_TITLE = "<span id=\"msg_[0-9]+\"><a href=\"(.+)\">(.*)</a></span>";
+		public static final String REGEX_THREAD_TITLE = "<span id=\"msg_[0-9]+\"><a href=\"(.+)\">(.*)</a></span>";
 		public static final String REGEX_THREAD_STARTER = "<a href=\"(.*action=profile.*)\" title=\".*\">(.*)</a>";
 		public static final String REGEX_THREAD_POSTS = "([0-9]+) Antworten";
 		public static final String REGEX_THREAD_VIEWS = "([0-9]+) Aufrufe";
@@ -15,8 +13,6 @@ public class ForumParser
 		private String _beginner;
 		private int _posts;
 		private int _views;
-		private Date _lastUpdate;
-		private String _lastUpdater;
 		
 		public String getTitle()
 		{
@@ -38,19 +34,36 @@ public class ForumParser
 			return this._views;
 		}
 		
-		public Date getLastUpdateDate()
+		public void setTitle(String pTitle)
 		{
-			return this._lastUpdate;
+			this._title = pTitle;
 		}
 		
-		public String getLastUpdateAuthor()
+		public void setThreadStarter(String pStarter)
 		{
-			return this._lastUpdater;
+			this._beginner = pStarter;
 		}
 		
-		public static void parseHtml(String pHtml, int pPostIndex)
+		public void setPostCount(int pPost)
 		{
-			
+			this._posts = pPost;
+		}
+		
+		public void setViewCount(int pViews)
+		{
+			this._views = pViews;
+		}
+
+		public static boolean DetectPost(String pPartHtml)
+		{
+			return false;
+		}
+
+		public static Thread parseHtml(String pPartHtml)
+		{
+			Thread result = new Thread();
+			//Do Parsing here
+			return result;
 		}
 	}
 }
