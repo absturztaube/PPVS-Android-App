@@ -1,6 +1,7 @@
 package vs.piratenpartei.ch.app;
 
 import vs.piratenpartei.ch.app.contact.ContactFragment;
+import vs.piratenpartei.ch.app.forum.ForumFragment;
 import vs.piratenpartei.ch.app.news.NewsFragment;
 import vs.piratenpartei.ch.app.redmine.ProjectsFragment;
 import android.os.Bundle;
@@ -85,6 +86,9 @@ public class MainActivity extends FragmentActivity {
 			{
 				case 0:
 					fragment = new NewsFragment();
+					break;
+				case 1:
+					fragment = new ForumFragment();
 					break;
 				case 2:
 					fragment = new ProjectsFragment();
