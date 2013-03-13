@@ -11,4 +11,11 @@
     <string name="config_tracker_task_id">16</string>
     <string name="config_tracker_motion_id">17</string>
     <string name="config_issues_detail_xml">http://projects.piratenpartei.ch/issues/</string>
+    
+    <string name="config_forum_base_url">http://forum.piratenpartei.ch/index.php/$type,$id.$offset.html</string>
+    <string-array name="config_forum_base_url_type">
+        <item>topic</item>
+        <item>board</item>
+    </string-array>
+    
 </resources>
