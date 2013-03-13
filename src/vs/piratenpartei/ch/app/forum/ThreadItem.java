@@ -1,15 +1,17 @@
 package vs.piratenpartei.ch.app.forum;
 
-import java.util.Date;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jsoup.select.Elements;
 
 public class ThreadItem 
 {
 	private String _title;
 	private String _author;
-	private Date _created;
-	private int _views;
-	private int _posts;
-	private Date _lastUpdate;
+	private String _lastUpdate;
 	private String _lastUpdated;
 	
 	public String getTitle()
@@ -22,22 +24,7 @@ public class ThreadItem
 		return this._author;
 	}
 	
-	public Date getCreationDate()
-	{
-		return this._created;
-	}
-	
-	public int getViews()
-	{
-		return this._views;
-	}
-	
-	public int getPosts()
-	{
-		return this._posts;
-	}
-	
-	public Date getLastUpdateDate()
+	public String getLastUpdateDate()
 	{
 		return this._lastUpdate;
 	}
@@ -45,5 +32,32 @@ public class ThreadItem
 	public String getLastUpdateAuthor()
 	{
 		return this._lastUpdated;
+	}
+	
+	public static List<ThreadItem> getBoard(int pBoardId) throws IOException
+	{
+		return ThreadItem.getBoard(pBoardId, 0);
+	}
+	
+	public static List<ThreadItem> getBoard(int pBoardId, int pThreadOffset) throws IOException
+	{
+		URL boardUrl = new URL("http://forum.piratenpartei.ch/index.php/board," + pBoardId + "." + pThreadOffset + ".html");
+		List<ThreadItem> result = new ArrayList<ThreadItem>();
+		ForumParser boardParser = new ForumParser(boardUrl);
+		boardParser.parseDocument();
+		Elements subjects = boardParser.getSubjects();
+		Elements starters = boardParser.getStarters();
+		Elements updateDates = boardParser.getLastUpdateDates();
+		Elements updateAuthors = boardParser.getLastUpdateAuthors();
+		for(int index = 0; index < subjects.size(); index++)
+		{
+			ThreadItem current = new ThreadItem();
+			current._title = subjects.get(index).text();
+			current._author = starters.get(index).text();
+			current._lastUpdate = updateDates.get(index).text();
+			current._lastUpdated = updateAuthors.get(index).text();
+			result.add(current);
+		}
+		return result;
 	}
 }

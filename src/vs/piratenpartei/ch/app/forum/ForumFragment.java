@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import vs.piratenpartei.ch.app.R;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -15,7 +17,7 @@ import android.widget.ArrayAdapter;
 
 public class ForumFragment extends ListFragment 
 {
-	private Elements _subjects;
+	private List<ThreadItem> _threads = new ArrayList<ThreadItem>();
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -31,12 +33,9 @@ public class ForumFragment extends ListFragment
 		protected Void doInBackground(Void... params) 
 		{
 			try {
-				ForumParser parser = new ForumParser(new URL("http://forum.piratenpartei.ch/index.php?board=174.0.html"));
-				parser.parseDocument();
-				_subjects = parser.getSubjects();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				_threads = ThreadItem.getBoard(174);
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return null;
@@ -44,15 +43,10 @@ public class ForumFragment extends ListFragment
 		
 		@Override
 		protected void onPostExecute(Void result)
-		{
-			List<String> subjectText = new ArrayList<String>();
-			for(int i = 0; i < _subjects.size(); i++)
-			{
-				Element current = _subjects.get(i);
-				subjectText.add(current.text());
-			}
-			
-			setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectText));
+		{			
+			ThreadItem[] items = new ThreadItem[_threads.size()];
+			_threads.toArray(items);
+			setListAdapter(new BoardListAdapter(getActivity(), R.layout.forum_list_item, items));
 			setListShown(true);
 		}
 		

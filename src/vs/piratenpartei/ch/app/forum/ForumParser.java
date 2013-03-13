@@ -13,7 +13,7 @@ public class ForumParser
 	private boolean _docLoaded = false;
 	
 	private String _selectorSubject = "div.topic_table td.subject span a";
-	private String _selectorStarter = "div.topic_table td.subject p a";
+	private String _selectorStarter = "div.topic_table td.subject p>a";
 	private String _selectorViews = "div.topic_table td.stats";
 	private String _selectorPosts = "div.topic_table td.stats";
 	private String _selectorLastUpdateDate = "div.topic_table td.lastpost";
