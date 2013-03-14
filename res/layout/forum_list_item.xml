@@ -9,31 +9,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ppvs_background"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/ppvs_foreground"
-        android:textIsSelectable="false"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/text_forum_list_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
 
-    <TextView
-        android:id="@+id/text_forum_list_last_update_author"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:gravity="right"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/text_forum_list_last_update"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:gravity="right"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/last_post_string" />
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/text_forum_list_last_update_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/text_forum_list_last_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
