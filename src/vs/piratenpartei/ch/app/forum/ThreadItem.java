@@ -11,6 +11,7 @@ public class ThreadItem
 {
 	private String _title;
 	private String _author;
+	private String _link;
 	private String _lastUpdate;
 	private String _lastUpdated;
 	
@@ -22,6 +23,11 @@ public class ThreadItem
 	public String getStarter()
 	{
 		return this._author;
+	}
+	
+	public String getTopicLink()
+	{
+		return this._link;
 	}
 	
 	public String getLastUpdateDate()
@@ -53,11 +59,19 @@ public class ThreadItem
 		{
 			ThreadItem current = new ThreadItem();
 			current._title = subjects.get(index).text();
+			current._link = subjects.get(index).attr("href");
 			current._author = starters.get(index).text();
-			current._lastUpdate = updateDates.get(index).text();
+			current._lastUpdate = ThreadItem.detectString(updateDates.get(index).text());
 			current._lastUpdated = updateAuthors.get(index).text();
 			result.add(current);
 		}
 		return result;
+	}
+	
+	private static String detectString(String pInput)
+	{
+		String[] tempSplitted = pInput.split("\\sby\\s");
+		String date = tempSplitted[0];
+		return date;
 	}
 }

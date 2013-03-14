@@ -1,9 +1,6 @@
 package vs.piratenpartei.ch.app.forum;
 
-import java.text.DateFormat;
-
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.redmine.IssueDetailItem.JournalItem;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

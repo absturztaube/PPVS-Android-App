@@ -1,19 +1,17 @@
 package vs.piratenpartei.ch.app.forum;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.ThreadActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.ListView;
 
 public class ForumFragment extends ListFragment 
 {
@@ -24,6 +22,18 @@ public class ForumFragment extends ListFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		new BoardLoaderTask().execute();
+	}
+	
+	@Override
+	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
+	{
+		ThreadItem selectedItem = this._threads.get(pPosition);
+		String topicLink = selectedItem.getTopicLink();
+		Intent intent = new Intent(getActivity(), ThreadActivity.class);
+		Bundle params = new Bundle();
+		params.putString("topicUrl", topicLink);
+		intent.putExtras(params);
+		startActivity(intent);
 	}
 	
 	private class BoardLoaderTask extends AsyncTask<Void, Void, Void>
