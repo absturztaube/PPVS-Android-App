@@ -18,10 +18,34 @@ public class ForumParser
 	private String _selectorPosts = "div.topic_table td.stats";
 	private String _selectorLastUpdateDate = "div.topic_table td.lastpost";
 	private String _selectorLastUpdateAuthor = "div.topic_table td.lastpost a:last-child";
+	private String _selectorPostAuthor = "#forumposts div.poster h4>a";
+	private String _selectorPostAuthorAvatar = "#forumposts div.poster img.avatar";
+	private String _selectorPostContent = "#forumposts div.postarea div.post div.inner";
+	private String _selectorPostDate = "#forumposts div.postarea div.keyinfo div.smalltext";
 	
 	public ForumParser(URL pForumUrl)
 	{
 		this._forumUrl = pForumUrl;
+	}
+	
+	public void setSelectorPostAuthor(String pSelector)
+	{
+		this._selectorPostAuthor = pSelector;
+	}
+	
+	public void setSelectorPostAuthorAvatar(String pSelector)
+	{
+		this._selectorPostAuthorAvatar = pSelector;
+	}
+	
+	public void setSelectorPostContent(String pSelector)
+	{
+		this._selectorPostContent = pSelector;
+	}
+	
+	public void setSelectorPostDate(String pSelector)
+	{
+		this._selectorPostDate = pSelector;
 	}
 	
 	public void setSelectorSubject(String pSelector)
@@ -93,6 +117,26 @@ public class ForumParser
 	public Elements getLastUpdateAuthors()
 	{
 		return this.getElementsBySelector(this._selectorLastUpdateAuthor);
+	}
+	
+	public Elements getPostAuthors()
+	{
+		return this.getElementsBySelector(this._selectorPostAuthor);
+	}
+	
+	public Elements getPostAvatars()
+	{
+		return this.getElementsBySelector(this._selectorPostAuthorAvatar);
+	}
+	
+	public Elements getPostContents()
+	{
+		return this.getElementsBySelector(this._selectorPostContent);
+	}
+	
+	public Elements getPostDates()
+	{
+		return this.getElementsBySelector(this._selectorPostDate);
 	}
 	
 	public Elements getElementsBySelector(String pSelector)

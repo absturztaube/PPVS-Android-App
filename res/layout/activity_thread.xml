@@ -10,19 +10,12 @@
         android:id="@+id/text_thread_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/ppvs_background"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/ppvs_foreground"
-        android:background="@color/ppvs_background"
-        android:textIsSelectable="false"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TextView
-        android:id="@+id/text_thread_start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textIsSelectable="false"
-        android:background="@color/ppvs_background"
-        />
+        android:textIsSelectable="false" />
 
     <ListView
         android:id="@+id/list_thread_posts"

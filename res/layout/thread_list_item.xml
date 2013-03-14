@@ -4,27 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/post_list_author"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:textColor="@color/ppvs_foreground"
         android:background="@color/ppvs_background"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/post_list_avatar"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/string_avatar"
+            android:src="@android:drawable/gallery_thumb" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/post_list_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/ppvs_foreground"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/post_list_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+    </LinearLayout>
 
     <WebView
         android:id="@+id/post_list_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/post_list_datetime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/ppvs_background"
-        android:textIsSelectable="false"
-        android:gravity="right"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

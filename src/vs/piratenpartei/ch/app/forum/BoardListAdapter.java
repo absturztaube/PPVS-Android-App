@@ -26,12 +26,12 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
-		JournalItemHolder holder = null;
+		BoardItemHolder holder = null;
 		if(row == null)
 		{
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			row = inflater.inflate(ressourceLayoutId, parent, false);
-			holder = new JournalItemHolder();
+			holder = new BoardItemHolder();
 			holder.starter = (TextView)row.findViewById(R.id.text_forum_list_starter);
 			holder.summary = (TextView)row.findViewById(R.id.text_forum_list_summary);
 			holder.lastUpdateDate = (TextView)row.findViewById(R.id.text_forum_list_last_update);
@@ -40,7 +40,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		}
 		else
 		{
-			holder = (JournalItemHolder)row.getTag();
+			holder = (BoardItemHolder)row.getTag();
 		}
 		
 		ThreadItem item = data[position];
@@ -52,7 +52,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		return row;
 	}
 	
-	static class JournalItemHolder
+	static class BoardItemHolder
 	{
 		public TextView starter;
 		public TextView summary;

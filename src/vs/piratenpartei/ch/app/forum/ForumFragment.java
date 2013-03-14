@@ -28,9 +28,11 @@ public class ForumFragment extends ListFragment
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
 		ThreadItem selectedItem = this._threads.get(pPosition);
+		String title = selectedItem.getTitle();
 		String topicLink = selectedItem.getTopicLink();
 		Intent intent = new Intent(getActivity(), ThreadActivity.class);
 		Bundle params = new Bundle();
+		params.putString("title", title);
 		params.putString("topicUrl", topicLink);
 		intent.putExtras(params);
 		startActivity(intent);
