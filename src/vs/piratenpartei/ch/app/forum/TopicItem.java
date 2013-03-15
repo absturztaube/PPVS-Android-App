@@ -8,6 +8,7 @@ import java.util.List;
 import org.jsoup.select.Elements;
 
 import android.text.Html;
+import android.util.Log;
 
 public class TopicItem 
 {
@@ -45,13 +46,21 @@ public class TopicItem
 		Elements avatars = parser.getPostAvatars();
 		Elements contents = parser.getPostContents();
 		Elements dates = parser.getPostDates();
-		for(int index = 0; index < contents.size(); index++)
+		for(int index = 0; index < authors.size(); index++)
 		{
+			Log.d("PPVS App", index + ". Item");
 			TopicItem current = new TopicItem();
+			Log.d("PPVS App", " setting author");
 			current._author = authors.get(index).text();
+			/*
+			Log.d("PPVS App", " setting avatar");
 			current._avatarLink = avatars.get(index).attr("src");
-			current._content = contents.get(index).html();
+			//*/
+			Log.d("PPVS App", " setting content");
+			current._content = Html.fromHtml(contents.get(index).html()).toString();
+			Log.d("PPVS App", " setting date");
 			current._date = Html.fromHtml(dates.get(index).html()).toString();
+			Log.d("PPVS App", "Topic Object: " + current.toString());
 			result.add(current);
 		}
 		return result;

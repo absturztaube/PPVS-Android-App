@@ -39,7 +39,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 			row = inflater.inflate(ressourceLayoutId, parent, false);
 			holder = new TopicItemHolder();
 			holder.author = (TextView)row.findViewById(R.id.post_list_author);
-			holder.content = (WebView)row.findViewById(R.id.post_list_content);
+			holder.content = (TextView)row.findViewById(R.id.post_list_content);
 			holder.date = (TextView)row.findViewById(R.id.post_list_datetime);
 			holder.avatar = (ImageView)row.findViewById(R.id.post_list_avatar);
 			row.setTag(holder);
@@ -52,7 +52,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 		TopicItem item = data[position];
 		holder.author.setText(item.getAuthor());
 		holder.date.setText(item.getDate());
-		holder.content.loadData(item.getContent(), "text/html", "utf-8");
+		holder.content.setText(item.getContent());
 		new AvatarLoaderTask(item.getAvatarLink(), holder.avatar);		
 		return row;
 	}
@@ -94,7 +94,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	{
 		public TextView author;
 		public TextView date;
-		public WebView content;
+		public TextView content;
 		public ImageView avatar;
 	}
 }

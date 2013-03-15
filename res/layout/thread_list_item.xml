@@ -40,7 +40,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <WebView
+    <TextView android:text="TextView"
         android:id="@+id/post_list_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
