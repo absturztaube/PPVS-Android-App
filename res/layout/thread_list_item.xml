@@ -13,8 +13,9 @@
         <ImageView
             android:id="@+id/post_list_avatar"
             android:layout_width="40dp"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:contentDescription="@string/string_avatar"
+            android:layout_gravity="center_vertical"
             android:src="@android:drawable/gallery_thumb" />
 
         <LinearLayout
@@ -26,6 +27,8 @@
                 android:id="@+id/post_list_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/ppvs_foreground"
                 android:textIsSelectable="false" />
@@ -34,6 +37,8 @@
                 android:id="@+id/post_list_datetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
                 android:gravity="right"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textIsSelectable="false" />
@@ -41,8 +46,11 @@
     </LinearLayout>
 
     <TextView
+        android:textIsSelectable="true"
         android:id="@+id/post_list_content"
         android:layout_width="match_parent"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
         android:autoLink="web"
         android:layout_height="wrap_content" />
 

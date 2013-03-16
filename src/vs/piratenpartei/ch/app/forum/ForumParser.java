@@ -18,14 +18,35 @@ public class ForumParser
 	private String _selectorPosts = "div.topic_table td.stats";
 	private String _selectorLastUpdateDate = "div.topic_table td.lastpost";
 	private String _selectorLastUpdateAuthor = "div.topic_table td.lastpost a:last-child";
-	private String _selectorPostAuthor = "#forumposts div.poster h4>a";
-	private String _selectorPostAuthorAvatar = "#forumposts div.poster img.avatar";
-	private String _selectorPostContent = "#forumposts div.postarea div.post div.inner";
-	private String _selectorPostDate = "#forumposts div.postarea div.keyinfo div.smalltext";
+	private String _selectorCompletePost = "#forumposts div.post_wrapper";
+	private String _selectorPostAuthor = "div.poster h4>a";
+	private String _selectorPostAuthorAvatar = "div.poster img.avatar";
+	private String _selectorPostContent = "div.postarea div.post div.inner";
+	private String _selectorPostDate = "div.postarea div.keyinfo div.smalltext";
 	
 	public ForumParser(URL pForumUrl)
 	{
 		this._forumUrl = pForumUrl;
+	}
+	
+	public String getSelectorPostAuthor()
+	{
+		return this._selectorPostAuthor;
+	}
+	
+	public String getSelectorPostAvatar()
+	{
+		return this._selectorPostAuthorAvatar;
+	}
+	
+	public String getSelectorPostContent()
+	{
+		return this._selectorPostContent;
+	}
+	
+	public String getSelectorPostDate()
+	{
+		return this._selectorPostDate;
 	}
 	
 	public void setSelectorPostAuthor(String pSelector)
@@ -76,6 +97,11 @@ public class ForumParser
 	public void setSelectorLastUpdateAuthor(String pSelector)
 	{
 		this._selectorLastUpdateAuthor = pSelector;
+	}
+	
+	public void setSelectorPostTotal(String pSelector)
+	{
+		this._selectorCompletePost = pSelector;
 	}
 	
 	public boolean isDocumentLoaded()
@@ -137,6 +163,11 @@ public class ForumParser
 	public Elements getPostDates()
 	{
 		return this.getElementsBySelector(this._selectorPostDate);
+	}
+	
+	public Elements getCompletePost()
+	{
+		return this.getElementsBySelector(this._selectorCompletePost);
 	}
 	
 	public Elements getElementsBySelector(String pSelector)

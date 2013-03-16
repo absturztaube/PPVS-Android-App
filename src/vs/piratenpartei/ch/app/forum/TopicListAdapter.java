@@ -1,12 +1,8 @@
 package vs.piratenpartei.ch.app.forum;
 
-import java.io.IOException;
-import java.net.URL;
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,41 +48,8 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 		holder.author.setText(item.getAuthor());
 		holder.date.setText(item.getDate());
 		holder.content.setText(item.getContent());
-		new AvatarLoaderTask(item.getAvatarLink(), holder.avatar);		
+		holder.avatar.setImageDrawable(item.getAvatar());
 		return row;
-	}
-	
-	private class AvatarLoaderTask extends AsyncTask<Void, Void, Void>
-	{    	
-		Drawable _drawable;
-		ImageView _holder;
-		String _avatarLink;
-		
-		public AvatarLoaderTask(String pLink, ImageView pHolder)
-		{
-			super();
-			this._avatarLink = pLink;
-			this._holder = pHolder;
-		}
-		
-		@Override
-		protected Void doInBackground(Void... params) 
-		{
-			try {
-				URL avatarUrl = new URL(this._avatarLink);
-				this._drawable = Drawable.createFromStream(avatarUrl.openStream(), this._avatarLink);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void result)
-		{
-			this._holder.setImageDrawable(_drawable);
-		}
-		
 	}
 	
 	static class TopicItemHolder
