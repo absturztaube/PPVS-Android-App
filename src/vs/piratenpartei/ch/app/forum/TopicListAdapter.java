@@ -1,6 +1,7 @@
 package vs.piratenpartei.ch.app.forum;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import vs.piratenpartei.ch.app.R;
@@ -20,7 +21,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	
 	Context context;
 	int ressourceLayoutId;
-	List<TopicItem> data = new ArrayList<TopicItem>();
+	private List<TopicItem> data = new ArrayList<TopicItem>();
 	
 	public TopicListAdapter(Context context, int layoutResourceId, List<TopicItem> data)
 	{
@@ -58,6 +59,21 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 		holder.content.setText(item.getContent());
 		holder.avatar.setImageDrawable(item.getAvatar());
 		return row;
+	}
+	
+	public void add(TopicItem pNewItem)
+	{
+		this.data.add(pNewItem);
+	}
+	
+	public void addAll(Collection<? extends TopicItem> pNewItems)
+	{
+		this.data.addAll(pNewItems);
+	}
+	
+	public List<TopicItem> getData()
+	{
+		return this.getData();
 	}
 	
 	static class TopicItemHolder
