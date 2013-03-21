@@ -79,9 +79,7 @@ public class ThreadActivity extends Activity
 		protected void onPostExecute(Void result)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			TopicItem[] array = new TopicItem[this._data.size()];
-			this._data.toArray(array);
-			_postList.setAdapter(new TopicListAdapter(ctx, R.layout.thread_list_item, array));
+			_postList.setAdapter(new TopicListAdapter(ctx, R.layout.thread_list_item, this._data));
 	        setProgressBarIndeterminateVisibility(false);
 		}
 		

@@ -17,11 +17,11 @@ import android.widget.TextView;
 public class BoardListAdapter extends ArrayAdapter<ThreadItem> 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.BoardListAdapter";
-	
+
 	Context context;
 	int ressourceLayoutId;
 	private List<ThreadItem> data = new ArrayList<ThreadItem>();
-	
+
 	public BoardListAdapter(Context context, int layoutResourceId, List<ThreadItem> data)
 	{
 		super(context, layoutResourceId, data);
@@ -30,7 +30,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		this.context = context;
 		this.data = data;
 	}
-	
+
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
@@ -51,49 +51,31 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		{
 			holder = (BoardItemHolder)row.getTag();
 		}
-		
+
 		ThreadItem item = data.get(position);
 		holder.starter.setText(item.getStarter());
 		holder.summary.setText(item.getTitle());
 		holder.lastUpdateAuthor.setText(item.getLastUpdateAuthor());
 		holder.lastUpdateDate.setText(item.getLastUpdateDate());
-		
+
 		return row;
 	}
-	
+
 	public void add(ThreadItem pNewItem)
 	{
-		if(!this.containsThread(pNewItem))
-		{
-			this.data.add(pNewItem);
-		}
+		this.data.add(pNewItem);
 	}
-	
+
 	public void addAll(Collection<? extends ThreadItem> pNewItems)
 	{
-		for(ThreadItem item : pNewItems)
-		{
-			this.add(item);
-		}
+		this.data.addAll(pNewItems);
 	}
-	
+
 	public List<ThreadItem> getData()
 	{
 		return this.data;
 	}
-	
-	private boolean containsThread(ThreadItem pItem)
-	{
-		for(ThreadItem item : this.data)
-		{
-			if(pItem.getTopicLink().equals(item.getTopicLink()))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	static class BoardItemHolder
 	{
 		public TextView starter;
