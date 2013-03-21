@@ -20,7 +20,6 @@ public class ForumFragment extends ListFragment
 	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
 	private BoardListAdapter _arrayAdapter;
-	private boolean _isFullPage = false;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -41,7 +40,7 @@ public class ForumFragment extends ListFragment
 					int visibleItemCount, int totalItemCount) 
 			{
 				Log.d(TAG + TAG_EXT, "onScroll(" + view.toString() + ", " + firstVisibleItem + ", " + visibleItemCount + ", " + totalItemCount + ")");
-				if(_isFullPage)
+				if(ThreadItem.LastBoardOffset >= totalItemCount)
 				{
 					if(firstVisibleItem >= (totalItemCount - visibleItemCount))
 					{
@@ -69,10 +68,12 @@ public class ForumFragment extends ListFragment
 		ThreadItem selectedItem = _arrayAdapter.getData().get(pPosition);
 		String title = selectedItem.getTitle();
 		String topicLink = selectedItem.getTopicLink();
+		int maxOffset = selectedItem.getLastPossibleOffset();
 		Intent intent = new Intent(getActivity(), ThreadActivity.class);
 		Bundle params = new Bundle();
 		params.putString("title", title);
 		params.putString("topicUrl", topicLink);
+		params.putInt("maxOffset", maxOffset);
 		intent.putExtras(params);
 		startActivity(intent);
 	}
@@ -107,7 +108,6 @@ public class ForumFragment extends ListFragment
 				{
 					_lastLoadedOffset = this._offset;
 					_newThreads = ThreadItem.getBoard(174, this._offset);
-					_isFullPage = (_newThreads.size() == ITEMS_PER_PAGE);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

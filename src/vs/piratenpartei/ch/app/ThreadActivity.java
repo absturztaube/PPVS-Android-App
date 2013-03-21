@@ -27,10 +27,10 @@ public class ThreadActivity extends Activity
 	
 	private ListView _postList;
 	private TopicListAdapter _arrayAdapter;
-	private boolean _isFullPage = false;
 	private String _topicLink;
 	private Context ctx = this;
 	private int _lastLoadedOffset = -1;
+	private int _maxOffset = 0;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) 
@@ -42,6 +42,7 @@ public class ThreadActivity extends Activity
         Bundle params = getIntent().getExtras();
         String title = params.getString("title");
         this._topicLink = params.getString("topicUrl");
+        this._maxOffset = params.getInt("maxOffset");
         TextView titleTextView = (TextView)findViewById(R.id.text_thread_title);
         titleTextView.setText(title);
         setupActionBar();
@@ -54,7 +55,7 @@ public class ThreadActivity extends Activity
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				if(_isFullPage)
+				if(_maxOffset >= totalItemCount)
 				{
 					if(firstVisibleItem >= (totalItemCount - visibleItemCount))
 					{
@@ -108,7 +109,6 @@ public class ThreadActivity extends Activity
 				try {
 					_lastLoadedOffset = this._realLink.getOffset();
 					this._data = TopicItem.loadTopic(this._realLink.getUrlString());
-					_isFullPage = (this._data.size() == ITEMS_PER_PAGE);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
