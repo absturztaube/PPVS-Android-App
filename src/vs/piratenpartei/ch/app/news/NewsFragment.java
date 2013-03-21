@@ -27,12 +27,15 @@ import android.widget.ListView;
 
 public class NewsFragment extends ListFragment 
 {	
+	private static final String TAG = "vs.piratenpartei.ch.app.news.NewsFragment";
+	
 	private ArrayList<NewsItem> _feedItems = new ArrayList<NewsItem>();
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate()");
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		new NewsLoaderTask().execute();
 	}
@@ -40,6 +43,7 @@ public class NewsFragment extends ListFragment
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
+		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
 		NewsItem clicked = this._feedItems.get(pPosition);
 		Intent intent = new Intent(getActivity(), NewsActivity.class);
 		Bundle params = new Bundle();
@@ -54,10 +58,12 @@ public class NewsFragment extends ListFragment
 	
 	private class NewsLoaderTask extends AsyncTask<Void, Void, Void>
 	{
-
+		private static final String TAG_EXT = ".NewsLoaderTask";
+		
 		@Override
 		protected Void doInBackground(Void... params) 
 		{
+			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
@@ -95,6 +101,7 @@ public class NewsFragment extends ListFragment
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			ArrayList<String> titles = new ArrayList<String>();
 			for(int i = 0; i < _feedItems.size(); i++)
 			{

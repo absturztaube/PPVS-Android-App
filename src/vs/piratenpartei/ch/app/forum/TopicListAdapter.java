@@ -3,6 +3,7 @@ package vs.piratenpartei.ch.app.forum;
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 public class TopicListAdapter extends ArrayAdapter<TopicItem> 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.forum.TopicListAdapter";
+	
 	Context context;
 	int ressourceLayoutId;
 	TopicItem data[] = null;
@@ -19,6 +22,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	public TopicListAdapter(Context context, int layoutResourceId, TopicItem[] data)
 	{
 		super(context, layoutResourceId, data);
+		Log.d(TAG, "new TopicListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
 		this.ressourceLayoutId = layoutResourceId;
 		this.context = context;
 		this.data = data;
@@ -27,6 +31,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
+		Log.d(TAG, "getView()");
 		TopicItemHolder holder = null;
 		if(row == null)
 		{

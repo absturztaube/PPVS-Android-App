@@ -35,7 +35,9 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ProjectActivity extends FragmentActivity {
+public class ProjectActivity extends FragmentActivity 
+{
+	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -57,8 +59,10 @@ public class ProjectActivity extends FragmentActivity {
 	private JournalArrayAdapter _adapter_journal;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate()");
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
@@ -89,13 +93,16 @@ public class ProjectActivity extends FragmentActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_project, menu);
 		return true;
 	}
 	
 	public void updateView(int position) {
+		Log.d(TAG, "updateView(" + position + ")");
 		if(_data != null)
 		{
 			switch(position)
@@ -151,6 +158,7 @@ public class ProjectActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
@@ -171,13 +179,17 @@ public class ProjectActivity extends FragmentActivity {
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+		
+		private static final String TAG_EXT = ".SectionsPagerAdapter";
 
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + fm.toString() + ")");
 		}
 
 		@Override
 		public Fragment getItem(int position) {
+			Log.d(TAG + TAG_EXT, "getItem(" + position + ")");
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
@@ -208,7 +220,7 @@ public class ProjectActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
+			Log.d(TAG + TAG_EXT, "getCount()");
 			return 4;
 		}
 
@@ -231,58 +243,72 @@ public class ProjectActivity extends FragmentActivity {
 
 	public static class OverviewFragment extends Fragment
 	{
+		private static final String TAG_EXT = ".OverviewFragment";
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 				Bundle savedInstanceState)
 		{
+			Log.d(TAG + TAG_EXT, "onCreateView()");
 			return inflater.inflate(R.layout.project_overview_fragment, container, false);
 		}
 		
 		public void onResume()
 		{
 			super.onResume();
+			Log.d(TAG + TAG_EXT, "onResume()");
 			((ProjectActivity) getActivity()).updateView(0);
 		}
 	}
 	
 	public static class DescriptionFragment extends Fragment
 	{
+		private static final String TAG_EXT = ".DescriptionFragment";
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 				Bundle savedInstanceState)
 		{
+			Log.d(TAG + TAG_EXT, "onCreateView()");
 			return inflater.inflate(R.layout.project_description_fragment, container, false);
 		}
 
 		public void onResume()
 		{
 			super.onResume();
+			Log.d(TAG + TAG_EXT, "onResume()");
 			((ProjectActivity) getActivity()).updateView(1);
 		}
 	}
 	
 	public static class StatusFragment extends Fragment
 	{
+		private static final String TAG_EXT = ".StatusFragment";
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 				Bundle savedInstanceState)
 		{
+			Log.d(TAG + TAG_EXT, "onCreateView()");
 			return inflater.inflate(R.layout.project_status_fragment, container, false);
 		}
 
 		public void onResume()
 		{
 			super.onResume();
+			Log.d(TAG + TAG_EXT, "onResume()");
 			((ProjectActivity) getActivity()).updateView(2);
 		}
 	}
 	
 	public static class JournalFragment extends ListFragment
 	{
+		private static final String TAG_EXT = ".JournalFragment";
 
 		public void onResume()
 		{
 			super.onResume();
+			Log.d(TAG + TAG_EXT, "onResume()");
 			ProjectActivity parent = ((ProjectActivity) getActivity());
 			parent.updateView(3);
 			setListAdapter(parent._adapter_journal);
@@ -292,10 +318,12 @@ public class ProjectActivity extends FragmentActivity {
 	
 	private class ProjectsDetailLoaderTask extends AsyncTask<Void, Void, Void>
 	{
+		private static final String TAG_EXT = ".ProjectsDetailLoaderTask";
 		
 		@Override
 		protected Void doInBackground(Void... params) 
 		{
+			Log.d(TAG + TAG_EXT, "doInBackground()");
 			setProgressBarIndeterminateVisibility(true);
 			try 
 			{
@@ -334,6 +362,7 @@ public class ProjectActivity extends FragmentActivity {
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			int index = mViewPager.getCurrentItem();
 			updateView(index);
 			updateView(index+1);
@@ -353,15 +382,18 @@ public class ProjectActivity extends FragmentActivity {
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
+		
+		private static final String TAG_EXT = ".DummySectionFragment";
 
-		public DummySectionFragment() {
+		public DummySectionFragment() 
+		{
+			Log.d(TAG + TAG_EXT, "new DummySectionFragment()");
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			// Create a new TextView and set its text to the fragment's section
-			// number argument value.
+			Log.d(TAG + TAG_EXT, "onCreateView(" + inflater.toString() + ", " + container.toString() + ", " + savedInstanceState.toString() + ")");
 			TextView textView = new TextView(getActivity());
 			textView.setGravity(Gravity.CENTER);
 			textView.setText(Integer.toString(getArguments().getInt(

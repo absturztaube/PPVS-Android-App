@@ -6,8 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import android.util.Log;
+
 public class ForumParser 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumParser";
+	
 	private URL _forumUrl;
 	private Document _dom;
 	private boolean _docLoaded = false;
@@ -26,6 +30,7 @@ public class ForumParser
 	
 	public ForumParser(URL pForumUrl)
 	{
+		Log.d(TAG, "new ForumParser(" + pForumUrl.toString() + ")");
 		this._forumUrl = pForumUrl;
 	}
 	
@@ -111,6 +116,7 @@ public class ForumParser
 	
 	public void parseDocument() throws IOException
 	{
+		Log.d(TAG, "parseDocument()");
 		this._dom = Jsoup.parse(_forumUrl, 10000);
 		this._docLoaded = true;
 	}	
@@ -172,6 +178,7 @@ public class ForumParser
 	
 	public Elements getElementsBySelector(String pSelector)
 	{
+		Log.d(TAG, "getElementsBySelector(" + pSelector + ")");
 		if(!this._docLoaded)
 		{
 			throw new IllegalStateException("Document is not loaded yet");

@@ -3,6 +3,7 @@ package vs.piratenpartei.ch.app.forum;
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 public class BoardListAdapter extends ArrayAdapter<ThreadItem> 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.forum.BoardListAdapter";
+	
 	Context context;
 	int ressourceLayoutId;
 	ThreadItem data[] = null;
@@ -18,6 +21,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	public BoardListAdapter(Context context, int layoutResourceId, ThreadItem[] data)
 	{
 		super(context, layoutResourceId, data);
+		Log.d(TAG, "new BoardListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
 		this.ressourceLayoutId = layoutResourceId;
 		this.context = context;
 		this.data = data;
@@ -26,6 +30,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
+		Log.d(TAG, "getView()");	//strange. if this line is before the prev line, eclipse shows me dead code!?!
 		BoardItemHolder holder = null;
 		if(row == null)
 		{

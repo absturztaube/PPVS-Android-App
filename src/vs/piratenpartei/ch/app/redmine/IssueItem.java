@@ -11,13 +11,10 @@ import android.util.Xml;
 
 public class IssueItem 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.redmine.IssueItem";
+	
 	private int _id;
 	private String _subject;
-	
-	public IssueItem()
-	{
-		
-	}
 	
 	public int getId()
 	{
@@ -31,6 +28,7 @@ public class IssueItem
 	
 	public static ArrayList<IssueItem> readRedmineXml(InputStream pIn) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "readRedmineXml(" + pIn.toString() + ")");
 		ArrayList<IssueItem> result = new ArrayList<IssueItem>();
 		
 		XmlPullParser parser = Xml.newPullParser();
@@ -68,6 +66,7 @@ public class IssueItem
 
 	private static IssueItem readItem(XmlPullParser pParser) throws XmlPullParserException, IOException 
 	{
+		Log.d(TAG, "readItem(" + pParser.toString() + ")");
 		IssueItem result = new IssueItem();
 		pParser.require(XmlPullParser.START_TAG, null, "issue");
 		while(pParser.next() != XmlPullParser.END_TAG)
@@ -77,7 +76,6 @@ public class IssueItem
 				continue;
 			}
 			String name = pParser.getName();
-			Log.i("[PPVS App]IssueItem.readItem()", name);
 			if(name.equals("id"))
 			{
 				result._id = Integer.parseInt(IssueItem.readText(pParser, "id"));
@@ -96,6 +94,7 @@ public class IssueItem
 
 	private static String readText(XmlPullParser pParser, String pTag) throws XmlPullParserException, IOException 
 	{
+		Log.d(TAG, "readText(" + pParser.toString() + ", " + pTag + ")");
 		pParser.require(XmlPullParser.START_TAG, null, pTag);
 		String result = pParser.nextText();
 		pParser.require(XmlPullParser.END_TAG, null, pTag);
@@ -104,6 +103,7 @@ public class IssueItem
 
 	private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException 
 	{
+		Log.d(TAG, "skip(" + parser.toString() + ")");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }

@@ -7,8 +7,12 @@ import java.util.List;
 
 import org.jsoup.select.Elements;
 
+import android.util.Log;
+
 public class ThreadItem 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.forum.ThreadItem";
+	
 	private String _title;
 	private String _author;
 	private String _link;
@@ -47,6 +51,7 @@ public class ThreadItem
 	
 	public static List<ThreadItem> getBoard(int pBoardId, int pThreadOffset) throws IOException
 	{
+		Log.d(TAG, "getBoard(" + pBoardId + ", " + pThreadOffset + ")");
 		URL boardUrl = new URL("http://forum.piratenpartei.ch/index.php/board," + pBoardId + "." + pThreadOffset + ".html");
 		List<ThreadItem> result = new ArrayList<ThreadItem>();
 		ForumParser boardParser = new ForumParser(boardUrl);

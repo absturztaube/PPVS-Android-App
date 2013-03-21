@@ -2,17 +2,24 @@ package vs.piratenpartei.ch.app;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
-public class NewsActivity extends Activity {
+public class NewsActivity extends Activity 
+{
+	
+	private static final String TAG = "vs.piratenpartei.ch.app.NewsActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d(TAG, "onCreate()");
+		
 		setContentView(R.layout.activity_news);
 		Bundle params = getIntent().getExtras();
 		
@@ -38,14 +45,17 @@ public class NewsActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
 		getMenuInflater().inflate(R.menu.activity_news, menu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this

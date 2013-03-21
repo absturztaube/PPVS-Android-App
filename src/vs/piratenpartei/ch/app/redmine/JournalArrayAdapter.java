@@ -6,6 +6,7 @@ import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem.JournalItem;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 public class JournalArrayAdapter extends ArrayAdapter<JournalItem> 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.redmine.JournalArrayAdapter";
+	
 	Context context;
 	int ressourceLayoutId;
 	JournalItem data[] = null;
@@ -21,6 +24,7 @@ public class JournalArrayAdapter extends ArrayAdapter<JournalItem>
 	public JournalArrayAdapter(Context context, int layoutResourceId, JournalItem[] data)
 	{
 		super(context, layoutResourceId, data);
+		Log.d(TAG, "new JournalArrayAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
 		this.ressourceLayoutId = layoutResourceId;
 		this.context = context;
 		this.data = data;
@@ -29,6 +33,7 @@ public class JournalArrayAdapter extends ArrayAdapter<JournalItem>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
+		Log.d(TAG, "getView()");
 		JournalItemHolder holder = null;
 		if(row == null)
 		{

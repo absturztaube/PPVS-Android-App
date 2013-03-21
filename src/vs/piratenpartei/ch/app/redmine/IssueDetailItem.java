@@ -12,10 +12,13 @@ import java.util.Locale;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.Log;
 import android.util.Xml;
 
 public class IssueDetailItem 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.redmine.IssueDetailItem";
+	
 	private String _author;
 	private String _assignee;
 	private String _priority;
@@ -96,6 +99,7 @@ public class IssueDetailItem
 	
 	public static IssueDetailItem readRedmineXml(InputStream pIn) throws IOException, XmlPullParserException, ParseException
 	{
+		Log.d(TAG, "readRedmineXml(" + pIn.toString() +")");
 		IssueDetailItem result = new IssueDetailItem();
 		try
 		{
@@ -178,6 +182,7 @@ public class IssueDetailItem
 	}
 
 	private static String readStatus(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readStatus(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "status");
 		String result = parser.getAttributeValue(null, "name");
 		parser.nextTag();
@@ -186,6 +191,7 @@ public class IssueDetailItem
 	}
 
 	private static ArrayList<JournalItem> readJournal(XmlPullParser parser) throws XmlPullParserException, IOException, ParseException {
+		Log.d(TAG, "readJournal(" + parser.toString() + ")");
 		ArrayList<JournalItem> result = new ArrayList<JournalItem>();
 		parser.require(XmlPullParser.START_TAG, null, "journals");
 		while(parser.next() != XmlPullParser.END_TAG)
@@ -208,6 +214,7 @@ public class IssueDetailItem
 	}
 
 	private static JournalItem readItem(XmlPullParser parser) throws XmlPullParserException, IOException, ParseException {
+		Log.d(TAG, "readItem(" + parser.toString() + ")");
 		JournalItem result = new JournalItem();
 		parser.require(XmlPullParser.START_TAG, null, "journal");
 		while(parser.next() != XmlPullParser.END_TAG)
@@ -239,6 +246,7 @@ public class IssueDetailItem
 	}
 
 	private static String readJournalCreationDate(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readJournalCreationDate(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "created_on");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "created_on");
@@ -246,6 +254,7 @@ public class IssueDetailItem
 	}
 
 	private static String readJournalNotes(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readJournalNotes(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "notes");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "notes");
@@ -253,6 +262,7 @@ public class IssueDetailItem
 	}
 
 	private static String readJournalAuthor(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readJournalAuthor(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "user");
 		String result = parser.getAttributeValue(null, "name");
 		parser.nextTag();
@@ -261,6 +271,7 @@ public class IssueDetailItem
 	}
 
 	private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "skip(" + parser.toString() + ")");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }
@@ -278,6 +289,7 @@ public class IssueDetailItem
 	}
 
 	private static String readEstimatedHours(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readEstimatedHours(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "estimated_hours");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "estimated_hours");
@@ -285,6 +297,7 @@ public class IssueDetailItem
 	}
 
 	private static String readDoneRatio(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readDoneRatio(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "done_ratio");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "done_ratio");
@@ -292,6 +305,7 @@ public class IssueDetailItem
 	}
 
 	private static String readDescription(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readDescription(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "description");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "description");
@@ -299,6 +313,7 @@ public class IssueDetailItem
 	}
 
 	private static String readUpdateDate(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readUpdateDate(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "updated_on");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "updated_on");
@@ -306,6 +321,7 @@ public class IssueDetailItem
 	}
 
 	private static String readCreateDate(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readCreateDate(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "created_on");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "created_on");
@@ -313,6 +329,7 @@ public class IssueDetailItem
 	}
 
 	private static String readEndDate(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readEndDate(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "due_date");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "due_date");
@@ -320,6 +337,7 @@ public class IssueDetailItem
 	}
 
 	private static String readStartDate(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readStartDate(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "start_date");
 		String result = parser.nextText();
 		parser.require(XmlPullParser.END_TAG, null, "start_date");
@@ -327,6 +345,7 @@ public class IssueDetailItem
 	}
 
 	private static String readPriority(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readPriority(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "priority");
 		String result = parser.getAttributeValue(null, "name");
 		parser.nextTag();
@@ -336,6 +355,7 @@ public class IssueDetailItem
 
 	private static String readAuthor(XmlPullParser parser) throws XmlPullParserException, IOException 
 	{
+		Log.d(TAG, "readAuthor(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "author");
 		String result = parser.getAttributeValue(null, "name");
 		parser.nextTag();
@@ -344,6 +364,7 @@ public class IssueDetailItem
 	}
 	
 	private static String readAssignedTo(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "readAssignedTo(" + parser.toString() + ")");
 		parser.require(XmlPullParser.START_TAG, null, "assigned_to");
 		String result = parser.getAttributeValue(null, "name");
 		parser.nextTag();
@@ -370,11 +391,6 @@ public class IssueDetailItem
 		public Date getCreatedOn()
 		{
 			return this._createdOn;
-		}
-		
-		public JournalItem()
-		{
-			
 		}
 	}
 }

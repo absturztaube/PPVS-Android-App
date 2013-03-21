@@ -20,7 +20,8 @@ import android.widget.TextView;
 
 public class ThreadActivity extends Activity 
 {
-
+	private static final String TAG = "vs.piratenpartei.ch.app.ThreadActivity";
+	
 	private ListView _postList;
 	private String _topicLink;
 	private Context ctx = this;
@@ -29,6 +30,7 @@ public class ThreadActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_thread);
         Bundle params = getIntent().getExtras();
@@ -46,7 +48,9 @@ public class ThreadActivity extends Activity
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
+    private void setupActionBar() 
+    {
+    	Log.d(TAG, "setupActionBar()");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
         {
         	getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,11 +59,14 @@ public class ThreadActivity extends Activity
     
     private class TopicLoaderTask extends AsyncTask<Void, Void, Void>
 	{
+    	private static final String TAG_EXT = ".TopicLoaderTask";
+    	
 		private List<TopicItem> _data = new ArrayList<TopicItem>();
     	
 		@Override
 		protected Void doInBackground(Void... params) 
 		{
+			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try {
 				this._data = TopicItem.loadTopic(_topicLink);
 			} catch (IOException e) {
@@ -71,9 +78,9 @@ public class ThreadActivity extends Activity
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			TopicItem[] array = new TopicItem[this._data.size()];
 			this._data.toArray(array);
-			Log.d("PPVS App", "Topic Recieved: " + array.length + " " + this._data.size());
 			_postList.setAdapter(new TopicListAdapter(ctx, R.layout.thread_list_item, array));
 	        setProgressBarIndeterminateVisibility(false);
 		}

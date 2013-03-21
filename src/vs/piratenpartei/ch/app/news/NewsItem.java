@@ -15,7 +15,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
-public class NewsItem {
+public class NewsItem 
+{
+	private static final String TAG = "vs.piratenpartei.ch.app.news.NewsItem";
+	
 	private String _title;
 	private String _link;
 	private String _comments;
@@ -24,13 +27,11 @@ public class NewsItem {
 	private ArrayList<String> _categories = new ArrayList<String>();
 	private String _description;
 	private String _content;
-	
-	public NewsItem()
-	{
-	}
 
 	public static ArrayList<NewsItem> readFeed(InputStream pIn) throws XmlPullParserException, IOException, ParseException
 	{
+		Log.d(TAG, "readFeed(" + pIn.toString() + ")");
+		
 		ArrayList<NewsItem> result = new ArrayList<NewsItem>();
 
 		try 
@@ -69,6 +70,7 @@ public class NewsItem {
 	
 	private static NewsItem readItem(XmlPullParser pParser) throws XmlPullParserException, IOException, ParseException
 	{
+		Log.d(TAG, "readItem(" + pParser.toString() + ")");
 		NewsItem result = new NewsItem();
 		pParser.require(XmlPullParser.START_TAG, null, "item");
 		while(pParser.next() != XmlPullParser.END_TAG)
@@ -78,7 +80,6 @@ public class NewsItem {
 				continue;
 			}
 			String name = pParser.getName();
-			Log.i("[PPVS App]NewsItem.readItem()", name);
 			if(name.equals("title"))
 			{
 				result._title = NewsItem.readText(pParser, "title");
@@ -121,6 +122,7 @@ public class NewsItem {
 	}
 	
 	private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Log.d(TAG, "skip(" + parser.toString() + ")");
 	    if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }
@@ -139,6 +141,7 @@ public class NewsItem {
 	
 	private static String readText(XmlPullParser pParser, String pTag) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "readText(" + pParser.toString() + ", " + pTag + ")");
 		pParser.require(XmlPullParser.START_TAG, null, pTag);
 		String result = pParser.nextText();
 		pParser.require(XmlPullParser.END_TAG, null, pTag);

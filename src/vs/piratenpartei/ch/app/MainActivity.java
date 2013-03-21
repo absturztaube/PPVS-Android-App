@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +19,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity {
-
+public class MainActivity extends FragmentActivity 
+{
+	
+	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a
@@ -36,29 +39,27 @@ public class MainActivity extends FragmentActivity {
 	ViewPager mViewPager;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
 		setContentView(R.layout.activity_main);
-		
-		
 
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 
-		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
@@ -69,12 +70,17 @@ public class MainActivity extends FragmentActivity {
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm) {
+		private static final String TAG_EXT = ".SectionsPagerAdapter";
+		
+		public SectionsPagerAdapter(FragmentManager fm) 
+		{
 			super(fm);
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + fm.toString() + ")");
 		}
 
 		@Override
 		public Fragment getItem(int position) {
+			Log.d(TAG + TAG_EXT, "getItem(" + position + ")");
 			Fragment fragment;
 
 			fragment = new DummySectionFragment();
@@ -102,11 +108,14 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
+			Log.d(TAG + TAG_EXT, "getCount()");
 			return 4;
 		}
 
 		@Override
-		public CharSequence getPageTitle(int position) {
+		public CharSequence getPageTitle(int position) 
+		{
+			Log.d(TAG + TAG_EXT, "getPageTitle(" + position + ")");
 			switch (position) {
 			case 0:
 				return getString(R.string.title_news);
@@ -131,13 +140,18 @@ public class MainActivity extends FragmentActivity {
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
+		
+		private static final String TAG_EXT = ".DummySectionFragment";
 
 		public DummySectionFragment() {
+			Log.d(TAG + TAG_EXT, "new DummySectionFragment()");
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
+				Bundle savedInstanceState) 
+		{
+			Log.d(TAG + TAG_EXT, "onCreateView(" + inflater.toString() + ", " + container.toString() + ", " + savedInstanceState.toString() + ")");
 			// Create a new TextView and set its text to the fragment's section
 			// number argument value.
 			TextView textView = new TextView(getActivity());

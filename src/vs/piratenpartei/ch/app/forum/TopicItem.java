@@ -14,6 +14,8 @@ import android.util.Log;
 
 public class TopicItem 
 {
+	private static final String TAG = "vs.piratenpartei.ch.app.forum.TopicItem";
+	
 	private String _author;
 	private Drawable _avatar;
 	private String _content;
@@ -41,6 +43,7 @@ public class TopicItem
 	
 	public static List<TopicItem> loadTopic(String pTopicUrl) throws IOException
 	{
+		Log.d(TAG, "loadTopic(" + pTopicUrl + ")");
 		List<TopicItem> result = new ArrayList<TopicItem>();
 		ForumParser parser = new ForumParser(new URL(pTopicUrl));
 		parser.parseDocument();
@@ -48,16 +51,13 @@ public class TopicItem
 		for(int index = 0; index < posts.size(); index++)
 		{
 			Element post = posts.get(index);
-			Log.d("PPVS App", index + ". Item");
 			TopicItem current = new TopicItem();
-			Log.d("PPVS App", " setting author");
 			Elements authors = post.select(parser.getSelectorPostAuthor());
 			if(authors.size() > 0)
 			{
 				Element author = authors.get(0);
 				current._author = author.text();
 			}
-			Log.d("PPVS App", " setting avatar");
 			Elements avatars = post.select(parser.getSelectorPostAvatar());
 			if(avatars.size() > 0)
 			{
@@ -67,21 +67,18 @@ public class TopicItem
 				Drawable avatarDrawable = Drawable.createFromStream(avatarRef.openStream(), current._author);
 				current._avatar = avatarDrawable;
 			}
-			Log.d("PPVS App", " setting content");
 			Elements contents = post.select(parser.getSelectorPostContent());
 			if(contents.size() > 0)
 			{
 				Element content = contents.get(0);
 				current._content = Html.fromHtml(content.html()).toString();
 			}
-			Log.d("PPVS App", " setting date");
 			Elements dates = post.select(parser.getSelectorPostDate());
 			if(dates.size() > 0)
 			{
 				Element date = dates.get(0);
 				current._date = Html.fromHtml(date.html()).toString();
 			}
-			Log.d("PPVS App", "Topic Object: " + current.toString());
 			result.add(current);
 		}
 		return result;
