@@ -43,7 +43,7 @@ public class ForumFragment extends ListFragment
 				Log.d(TAG + TAG_EXT, "onScroll(" + view.toString() + ", " + firstVisibleItem + ", " + visibleItemCount + ", " + totalItemCount + ")");
 				if(firstVisibleItem >= (totalItemCount - visibleItemCount))
 				{
-					new BoardLoaderTask((visibleItemCount / 50) + 1).execute();
+					//new BoardLoaderTask((visibleItemCount / 50) + 1).execute();
 				}
 			}
 		});
@@ -77,6 +77,7 @@ public class ForumFragment extends ListFragment
 			this._offset = 0;
 		}
 		
+		@SuppressWarnings("unused")
 		public BoardLoaderTask(int pPage)
 		{
 			super();
