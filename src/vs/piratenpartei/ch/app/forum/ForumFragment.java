@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 public class ForumFragment extends ListFragment 
 {
+	private int _lastLoadedOffset = -1;
 	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
 	private BoardListAdapter _arrayAdapter;
@@ -79,7 +80,7 @@ public class ForumFragment extends ListFragment
 	private class BoardLoaderTask extends AsyncTask<Void, Void, Void>
 	{
 		private static final String TAG_EXT = ".BoardLoaderTask";
-
+		
 		private int _offset;
 		private List<ThreadItem> _newThreads;
 
@@ -102,8 +103,12 @@ public class ForumFragment extends ListFragment
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try {
-				_newThreads = ThreadItem.getBoard(174, this._offset);
-				_isFullPage = (_newThreads.size() == ITEMS_PER_PAGE);
+				if(_lastLoadedOffset < this._offset)
+				{
+					_lastLoadedOffset = this._offset;
+					_newThreads = ThreadItem.getBoard(174, this._offset);
+					_isFullPage = (_newThreads.size() == ITEMS_PER_PAGE);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -114,7 +119,7 @@ public class ForumFragment extends ListFragment
 		protected void onPostExecute(Void result)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			if(getView() != null)
+			if(getView() != null && _newThreads != null)
 			{
 				Log.d(TAG + TAG_EXT, "Loaded Items: " + _newThreads.size());
 				if(_arrayAdapter == null)
