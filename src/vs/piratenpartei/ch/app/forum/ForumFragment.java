@@ -3,8 +3,6 @@ package vs.piratenpartei.ch.app.forum;
 import java.io.IOException;
 import java.util.List;
 
-import org.absturztaube.snippets.UniqueList;
-
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.ThreadActivity;
 import android.content.Intent;
@@ -18,9 +16,10 @@ import android.widget.ListView;
 
 public class ForumFragment extends ListFragment 
 {
+	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
-	private UniqueList<ThreadItem> _threadList = new UniqueList<ThreadItem>();
 	private BoardListAdapter _arrayAdapter;
+	private boolean _isFullPage = false;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -41,9 +40,13 @@ public class ForumFragment extends ListFragment
 					int visibleItemCount, int totalItemCount) 
 			{
 				Log.d(TAG + TAG_EXT, "onScroll(" + view.toString() + ", " + firstVisibleItem + ", " + visibleItemCount + ", " + totalItemCount + ")");
-				if(firstVisibleItem >= (totalItemCount - visibleItemCount))
+				if(_isFullPage)
 				{
-					new BoardLoaderTask((visibleItemCount / 50) + 1).execute();
+					if(firstVisibleItem >= (totalItemCount - visibleItemCount))
+					{
+						getActivity().setProgressBarIndeterminateVisibility(true);
+						new BoardLoaderTask(totalItemCount / ITEMS_PER_PAGE).execute();
+					}
 				}
 			}
 		});
@@ -54,6 +57,7 @@ public class ForumFragment extends ListFragment
 	{
 		super.onViewCreated(view, savedInstanceState);
 		Log.d(TAG, "onViewCreated()");
+		getActivity().setProgressBarIndeterminateVisibility(true);
 		new BoardLoaderTask().execute();
 	}
 
@@ -61,7 +65,7 @@ public class ForumFragment extends ListFragment
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
 		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pPosition + ", " + pId + ")");
-		ThreadItem selectedItem = this._threadList.get(pPosition);
+		ThreadItem selectedItem = _arrayAdapter.getData().get(pPosition);
 		String title = selectedItem.getTitle();
 		String topicLink = selectedItem.getTopicLink();
 		Intent intent = new Intent(getActivity(), ThreadActivity.class);
@@ -77,6 +81,7 @@ public class ForumFragment extends ListFragment
 		private static final String TAG_EXT = ".BoardLoaderTask";
 
 		private int _offset;
+		private List<ThreadItem> _newThreads;
 
 		public BoardLoaderTask()
 		{
@@ -89,7 +94,7 @@ public class ForumFragment extends ListFragment
 		{
 			super();
 			Log.d(TAG + TAG_EXT, "new BoardLoaderTask(" + pPage + ")");
-			this._offset = pPage * 50;
+			this._offset = pPage * ITEMS_PER_PAGE;
 		}
 
 		@Override
@@ -97,7 +102,8 @@ public class ForumFragment extends ListFragment
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try {
-				_threadList.addRange(ThreadItem.getBoard(174, this._offset));
+				_newThreads = ThreadItem.getBoard(174, this._offset);
+				_isFullPage = (_newThreads.size() == ITEMS_PER_PAGE);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -110,20 +116,20 @@ public class ForumFragment extends ListFragment
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			if(getView() != null)
 			{
-				List<ThreadItem> threads = _threadList.getArrayList();
-				Log.d("PPVS ForumFragment.BoardLoaderTask", "Loaded Items: " + threads.size());
+				Log.d(TAG + TAG_EXT, "Loaded Items: " + _newThreads.size());
 				if(_arrayAdapter == null)
 				{
-					_arrayAdapter = new BoardListAdapter(getActivity(), R.layout.forum_list_item, threads);
+					_arrayAdapter = new BoardListAdapter(getActivity(), R.layout.forum_list_item, _newThreads);
 					setListAdapter(_arrayAdapter);
 					setListShown(true);
 				}
 				else
 				{
-					_arrayAdapter.addAll(threads);
+					_arrayAdapter.addAll(_newThreads);
 					_arrayAdapter.notifyDataSetChanged();
 				}
 			}
+			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 
 	}

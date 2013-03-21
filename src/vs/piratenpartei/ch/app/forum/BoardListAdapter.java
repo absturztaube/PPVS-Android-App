@@ -20,7 +20,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	
 	Context context;
 	int ressourceLayoutId;
-	List<ThreadItem> data = new ArrayList<ThreadItem>();
+	private List<ThreadItem> data = new ArrayList<ThreadItem>();
 	
 	public BoardListAdapter(Context context, int layoutResourceId, List<ThreadItem> data)
 	{
@@ -63,12 +63,35 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	
 	public void add(ThreadItem pNewItem)
 	{
-		this.data.add(pNewItem);
+		if(!this.containsThread(pNewItem))
+		{
+			this.data.add(pNewItem);
+		}
 	}
 	
 	public void addAll(Collection<? extends ThreadItem> pNewItems)
 	{
-		this.data.addAll(pNewItems);
+		for(ThreadItem item : pNewItems)
+		{
+			this.add(item);
+		}
+	}
+	
+	public List<ThreadItem> getData()
+	{
+		return this.data;
+	}
+	
+	private boolean containsThread(ThreadItem pItem)
+	{
+		for(ThreadItem item : this.data)
+		{
+			if(pItem.getTopicLink().equals(item.getTopicLink()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	static class BoardItemHolder
