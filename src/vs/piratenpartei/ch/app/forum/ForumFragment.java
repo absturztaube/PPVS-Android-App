@@ -26,7 +26,6 @@ public class ForumFragment extends ListFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated()");
-		new BoardLoaderTask().execute();
 		this.getListView().setOnScrollListener(new AbsListView.OnScrollListener() 
 		{			
 			private static final String TAG_EXT = ".onScrollListener";
@@ -47,6 +46,14 @@ public class ForumFragment extends ListFragment
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+		Log.d(TAG, "onViewCreated()");
+		new BoardLoaderTask().execute();
 	}
 	
 	@Override
@@ -91,7 +98,6 @@ public class ForumFragment extends ListFragment
 			try {
 				_threadList.addRange(ThreadItem.getBoard(174, this._offset));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return null;
@@ -105,8 +111,11 @@ public class ForumFragment extends ListFragment
 			Log.d("PPVS ForumFragment.BoardLoaderTask", "Loaded Items: " + threads.size());
 			ThreadItem[] items = new ThreadItem[threads.size()];
 			threads.toArray(items);
-			setListAdapter(new BoardListAdapter(getActivity(), R.layout.forum_list_item, items));
-			setListShown(true);
+			if(getView() != null)
+			{
+				setListAdapter(new BoardListAdapter(getActivity(), R.layout.forum_list_item, items));
+				setListShown(true);
+			}
 		}
 		
 	}
