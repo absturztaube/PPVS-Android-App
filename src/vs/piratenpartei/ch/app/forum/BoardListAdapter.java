@@ -1,5 +1,9 @@
 package vs.piratenpartei.ch.app.forum;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
@@ -13,12 +17,12 @@ import android.widget.TextView;
 public class BoardListAdapter extends ArrayAdapter<ThreadItem> 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.BoardListAdapter";
-	
+
 	Context context;
 	int ressourceLayoutId;
-	ThreadItem data[] = null;
-	
-	public BoardListAdapter(Context context, int layoutResourceId, ThreadItem[] data)
+	private List<ThreadItem> data = new ArrayList<ThreadItem>();
+
+	public BoardListAdapter(Context context, int layoutResourceId, List<ThreadItem> data)
 	{
 		super(context, layoutResourceId, data);
 		Log.d(TAG, "new BoardListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
@@ -26,7 +30,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		this.context = context;
 		this.data = data;
 	}
-	
+
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View row = convertView;
@@ -47,16 +51,31 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 		{
 			holder = (BoardItemHolder)row.getTag();
 		}
-		
-		ThreadItem item = data[position];
+
+		ThreadItem item = data.get(position);
 		holder.starter.setText(item.getStarter());
 		holder.summary.setText(item.getTitle());
 		holder.lastUpdateAuthor.setText(item.getLastUpdateAuthor());
 		holder.lastUpdateDate.setText(item.getLastUpdateDate());
-		
+
 		return row;
 	}
-	
+
+	public void add(ThreadItem pNewItem)
+	{
+		this.data.add(pNewItem);
+	}
+
+	public void addAll(Collection<? extends ThreadItem> pNewItems)
+	{
+		this.data.addAll(pNewItems);
+	}
+
+	public List<ThreadItem> getData()
+	{
+		return this.data;
+	}
+
 	static class BoardItemHolder
 	{
 		public TextView starter;

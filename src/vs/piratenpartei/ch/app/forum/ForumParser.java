@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.util.Log;
@@ -21,12 +22,14 @@ public class ForumParser
 	private String _selectorViews = "div.topic_table td.stats";
 	private String _selectorPosts = "div.topic_table td.stats";
 	private String _selectorLastUpdateDate = "div.topic_table td.lastpost";
+	private String _selectorLastMessageLink = "div.topic_table td.lastpost a:first-child";
 	private String _selectorLastUpdateAuthor = "div.topic_table td.lastpost a:last-child";
 	private String _selectorCompletePost = "#forumposts div.post_wrapper";
 	private String _selectorPostAuthor = "div.poster h4>a";
 	private String _selectorPostAuthorAvatar = "div.poster img.avatar";
 	private String _selectorPostContent = "div.postarea div.post div.inner";
 	private String _selectorPostDate = "div.postarea div.keyinfo div.smalltext";
+	private String _selectorLastBoardLink = "div.pagesection a.navPages:last-child";
 	
 	public ForumParser(URL pForumUrl)
 	{
@@ -104,9 +107,19 @@ public class ForumParser
 		this._selectorLastUpdateAuthor = pSelector;
 	}
 	
+	public void setSelectorLastMessageLink(String pSelector)
+	{
+		this._selectorLastMessageLink = pSelector;
+	}
+	
 	public void setSelectorPostTotal(String pSelector)
 	{
 		this._selectorCompletePost = pSelector;
+	}
+	
+	public void setSelectorBoardLastPageLink(String pSelector)
+	{
+		this._selectorLastBoardLink = pSelector;
 	}
 	
 	public boolean isDocumentLoaded()
@@ -146,6 +159,11 @@ public class ForumParser
 		return this.getElementsBySelector(this._selectorLastUpdateDate);
 	}
 	
+	public Elements getLastMessageLink()
+	{
+		return this.getElementsBySelector(this._selectorLastMessageLink);
+	}
+	
 	public Elements getLastUpdateAuthors()
 	{
 		return this.getElementsBySelector(this._selectorLastUpdateAuthor);
@@ -174,6 +192,17 @@ public class ForumParser
 	public Elements getCompletePost()
 	{
 		return this.getElementsBySelector(this._selectorCompletePost);
+	}
+	
+	public Element getLastBoardPageLink()
+	{
+		Elements result = this.getElementsBySelector(this._selectorLastBoardLink);
+		Log.i(TAG, "result.size() = " + result.size());
+		if(result.size() > 0)
+		{
+			return result.get(0);
+		}
+		return null;
 	}
 	
 	public Elements getElementsBySelector(String pSelector)

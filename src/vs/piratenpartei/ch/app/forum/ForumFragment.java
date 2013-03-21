@@ -3,8 +3,6 @@ package vs.piratenpartei.ch.app.forum;
 import java.io.IOException;
 import java.util.List;
 
-import org.absturztaube.snippets.UniqueList;
-
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.ThreadActivity;
 import android.content.Intent;
@@ -18,15 +16,16 @@ import android.widget.ListView;
 
 public class ForumFragment extends ListFragment 
 {
+	private int _lastLoadedOffset = -1;
+	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
-	private UniqueList<ThreadItem> _threadList = new UniqueList<ThreadItem>();
-	
+	private BoardListAdapter _arrayAdapter;
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated()");
-		new BoardLoaderTask().execute();
 		this.getListView().setOnScrollListener(new AbsListView.OnScrollListener() 
 		{			
 			private static final String TAG_EXT = ".onScrollListener";
@@ -35,54 +34,69 @@ public class ForumFragment extends ListFragment
 			{
 				Log.d(TAG + TAG_EXT, "onScrollStateChanged(" + view.toString() + ", " + scrollState + ")");
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) 
 			{
 				Log.d(TAG + TAG_EXT, "onScroll(" + view.toString() + ", " + firstVisibleItem + ", " + visibleItemCount + ", " + totalItemCount + ")");
-				if(firstVisibleItem >= (totalItemCount - visibleItemCount))
+				if(ThreadItem.LastBoardOffset >= totalItemCount)
 				{
-					//new BoardLoaderTask((visibleItemCount / 50) + 1).execute();
+					if(firstVisibleItem >= (totalItemCount - visibleItemCount))
+					{
+						getActivity().setProgressBarIndeterminateVisibility(true);
+						new BoardLoaderTask(totalItemCount / ITEMS_PER_PAGE).execute();
+					}
 				}
 			}
 		});
 	}
-	
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+		Log.d(TAG, "onViewCreated()");
+		getActivity().setProgressBarIndeterminateVisibility(true);
+		new BoardLoaderTask().execute();
+	}
+
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
 		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pPosition + ", " + pId + ")");
-		ThreadItem selectedItem = this._threadList.get(pPosition);
+		ThreadItem selectedItem = _arrayAdapter.getData().get(pPosition);
 		String title = selectedItem.getTitle();
 		String topicLink = selectedItem.getTopicLink();
+		int maxOffset = selectedItem.getLastPossibleOffset();
 		Intent intent = new Intent(getActivity(), ThreadActivity.class);
 		Bundle params = new Bundle();
 		params.putString("title", title);
 		params.putString("topicUrl", topicLink);
+		params.putInt("maxOffset", maxOffset);
 		intent.putExtras(params);
 		startActivity(intent);
 	}
-	
+
 	private class BoardLoaderTask extends AsyncTask<Void, Void, Void>
 	{
 		private static final String TAG_EXT = ".BoardLoaderTask";
 		
 		private int _offset;
-		
+		private List<ThreadItem> _newThreads;
+
 		public BoardLoaderTask()
 		{
 			super();
 			Log.d(TAG + TAG_EXT, "new BoardLoaderTask()");
 			this._offset = 0;
 		}
-		
-		@SuppressWarnings("unused")
+
 		public BoardLoaderTask(int pPage)
 		{
 			super();
 			Log.d(TAG + TAG_EXT, "new BoardLoaderTask(" + pPage + ")");
-			this._offset = pPage * 50;
+			this._offset = pPage * ITEMS_PER_PAGE;
 		}
 
 		@Override
@@ -90,25 +104,38 @@ public class ForumFragment extends ListFragment
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try {
-				_threadList.addRange(ThreadItem.getBoard(174, this._offset));
+				if(_lastLoadedOffset < this._offset)
+				{
+					_lastLoadedOffset = this._offset;
+					_newThreads = ThreadItem.getBoard(174, this._offset);
+				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void result)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			List<ThreadItem> threads = _threadList.getArrayList();
-			Log.d("PPVS ForumFragment.BoardLoaderTask", "Loaded Items: " + threads.size());
-			ThreadItem[] items = new ThreadItem[threads.size()];
-			threads.toArray(items);
-			setListAdapter(new BoardListAdapter(getActivity(), R.layout.forum_list_item, items));
-			setListShown(true);
+			if(getView() != null && _newThreads != null)
+			{
+				Log.d(TAG + TAG_EXT, "Loaded Items: " + _newThreads.size());
+				if(_arrayAdapter == null)
+				{
+					_arrayAdapter = new BoardListAdapter(getActivity(), R.layout.forum_list_item, _newThreads);
+					setListAdapter(_arrayAdapter);
+					setListShown(true);
+				}
+				else
+				{
+					_arrayAdapter.addAll(_newThreads);
+					_arrayAdapter.notifyDataSetChanged();
+				}
+			}
+			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
-		
+
 	}
 }
