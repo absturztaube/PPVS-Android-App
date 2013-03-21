@@ -1,5 +1,9 @@
 package vs.piratenpartei.ch.app.forum;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
@@ -16,9 +20,9 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	
 	Context context;
 	int ressourceLayoutId;
-	ThreadItem data[] = null;
+	List<ThreadItem> data = new ArrayList<ThreadItem>();
 	
-	public BoardListAdapter(Context context, int layoutResourceId, ThreadItem[] data)
+	public BoardListAdapter(Context context, int layoutResourceId, List<ThreadItem> data)
 	{
 		super(context, layoutResourceId, data);
 		Log.d(TAG, "new BoardListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
@@ -48,13 +52,23 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 			holder = (BoardItemHolder)row.getTag();
 		}
 		
-		ThreadItem item = data[position];
+		ThreadItem item = data.get(position);
 		holder.starter.setText(item.getStarter());
 		holder.summary.setText(item.getTitle());
 		holder.lastUpdateAuthor.setText(item.getLastUpdateAuthor());
 		holder.lastUpdateDate.setText(item.getLastUpdateDate());
 		
 		return row;
+	}
+	
+	public void add(ThreadItem pNewItem)
+	{
+		this.data.add(pNewItem);
+	}
+	
+	public void addAll(Collection<? extends ThreadItem> pNewItems)
+	{
+		this.data.addAll(pNewItems);
 	}
 	
 	static class BoardItemHolder

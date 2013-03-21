@@ -20,7 +20,8 @@ public class ForumFragment extends ListFragment
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
 	private UniqueList<ThreadItem> _threadList = new UniqueList<ThreadItem>();
-	
+	private BoardListAdapter _arrayAdapter;
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
@@ -34,7 +35,7 @@ public class ForumFragment extends ListFragment
 			{
 				Log.d(TAG + TAG_EXT, "onScrollStateChanged(" + view.toString() + ", " + scrollState + ")");
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) 
@@ -47,7 +48,7 @@ public class ForumFragment extends ListFragment
 			}
 		});
 	}
-	
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
@@ -55,7 +56,7 @@ public class ForumFragment extends ListFragment
 		Log.d(TAG, "onViewCreated()");
 		new BoardLoaderTask().execute();
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
@@ -70,20 +71,20 @@ public class ForumFragment extends ListFragment
 		intent.putExtras(params);
 		startActivity(intent);
 	}
-	
+
 	private class BoardLoaderTask extends AsyncTask<Void, Void, Void>
 	{
 		private static final String TAG_EXT = ".BoardLoaderTask";
-		
+
 		private int _offset;
-		
+
 		public BoardLoaderTask()
 		{
 			super();
 			Log.d(TAG + TAG_EXT, "new BoardLoaderTask()");
 			this._offset = 0;
 		}
-		
+
 		public BoardLoaderTask(int pPage)
 		{
 			super();
@@ -102,21 +103,28 @@ public class ForumFragment extends ListFragment
 			}
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void result)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			List<ThreadItem> threads = _threadList.getArrayList();
-			Log.d("PPVS ForumFragment.BoardLoaderTask", "Loaded Items: " + threads.size());
-			ThreadItem[] items = new ThreadItem[threads.size()];
-			threads.toArray(items);
 			if(getView() != null)
 			{
-				setListAdapter(new BoardListAdapter(getActivity(), R.layout.forum_list_item, items));
-				setListShown(true);
+				List<ThreadItem> threads = _threadList.getArrayList();
+				Log.d("PPVS ForumFragment.BoardLoaderTask", "Loaded Items: " + threads.size());
+				if(_arrayAdapter == null)
+				{
+					_arrayAdapter = new BoardListAdapter(getActivity(), R.layout.forum_list_item, threads);
+					setListAdapter(_arrayAdapter);
+					setListShown(true);
+				}
+				else
+				{
+					_arrayAdapter.addAll(threads);
+					_arrayAdapter.notifyDataSetChanged();
+				}
 			}
 		}
-		
+
 	}
 }
