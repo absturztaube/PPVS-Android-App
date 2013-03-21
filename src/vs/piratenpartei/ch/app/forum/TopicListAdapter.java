@@ -1,5 +1,9 @@
 package vs.piratenpartei.ch.app.forum;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import vs.piratenpartei.ch.app.R;
 import android.app.Activity;
 import android.content.Context;
@@ -17,9 +21,9 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	
 	Context context;
 	int ressourceLayoutId;
-	TopicItem data[] = null;
+	private List<TopicItem> data = new ArrayList<TopicItem>();
 	
-	public TopicListAdapter(Context context, int layoutResourceId, TopicItem[] data)
+	public TopicListAdapter(Context context, int layoutResourceId, List<TopicItem> data)
 	{
 		super(context, layoutResourceId, data);
 		Log.d(TAG, "new TopicListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
@@ -49,12 +53,27 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 			holder = (TopicItemHolder)row.getTag();
 		}
 		
-		TopicItem item = data[position];
+		TopicItem item = data.get(position);
 		holder.author.setText(item.getAuthor());
 		holder.date.setText(item.getDate());
 		holder.content.setText(item.getContent());
 		holder.avatar.setImageDrawable(item.getAvatar());
 		return row;
+	}
+	
+	public void add(TopicItem pNewItem)
+	{
+		this.data.add(pNewItem);
+	}
+	
+	public void addAll(Collection<? extends TopicItem> pNewItems)
+	{
+		this.data.addAll(pNewItems);
+	}
+	
+	public List<TopicItem> getData()
+	{
+		return this.getData();
 	}
 	
 	static class TopicItemHolder

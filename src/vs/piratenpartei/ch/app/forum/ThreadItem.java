@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.util.Log;
@@ -18,6 +19,8 @@ public class ThreadItem
 	private String _link;
 	private String _lastUpdate;
 	private String _lastUpdated;
+	private int _lastPossibleOffset;
+	public static int LastBoardOffset = 1000;
 	
 	public String getTitle()
 	{
@@ -44,6 +47,11 @@ public class ThreadItem
 		return this._lastUpdated;
 	}
 	
+	public int getLastPossibleOffset()
+	{
+		return this._lastPossibleOffset;
+	}
+	
 	public static List<ThreadItem> getBoard(int pBoardId) throws IOException
 	{
 		return ThreadItem.getBoard(pBoardId, 0);
@@ -58,14 +66,25 @@ public class ThreadItem
 		boardParser.parseDocument();
 		Elements subjects = boardParser.getSubjects();
 		Elements starters = boardParser.getStarters();
+		Elements lastMessageLink = boardParser.getLastMessageLink();
 		Elements updateDates = boardParser.getLastUpdateDates();
 		Elements updateAuthors = boardParser.getLastUpdateAuthors();
+		Element boardPage = boardParser.getLastBoardPageLink();
+		if(boardPage != null)
+		{
+			String boardLink = boardPage.attr("href");
+			ForumLink lastBoardLink = ForumLink.parse(boardLink);
+			ThreadItem.LastBoardOffset = lastBoardLink.getOffset();
+		}
 		for(int index = 0; index < subjects.size(); index++)
 		{
 			ThreadItem current = new ThreadItem();
 			current._title = subjects.get(index).text();
 			current._link = subjects.get(index).attr("href");
 			current._author = starters.get(index).text();
+			String lastLink = lastMessageLink.get(index).attr("href");
+			ForumLink lnk = ForumLink.parse(lastLink);
+			current._lastPossibleOffset = lnk.getOffset();
 			current._lastUpdate = ThreadItem.detectString(updateDates.get(index).text());
 			current._lastUpdated = updateAuthors.get(index).text();
 			result.add(current);
