@@ -161,6 +161,7 @@ public class ProjectActivity extends FragmentActivity
 				JournalItem[] data_journal = new JournalItem[journal_list.size()];
 				journal_list.toArray(data_journal);
 				_adapter_journal = new JournalArrayAdapter(this, R.layout.journal_list_item, data_journal);
+				_adapter_journal.notifyDataSetChanged();
 				break;
 			}
 		}
@@ -171,13 +172,6 @@ public class ProjectActivity extends FragmentActivity
 		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
@@ -373,6 +367,7 @@ public class ProjectActivity extends FragmentActivity
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			int index = mViewPager.getCurrentItem();
+			Log.i(TAG + TAG_EXT, "pager page: " + index);
 			updateView(index);
 			updateView(index+1);
 			updateView(index-1);
