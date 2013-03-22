@@ -23,6 +23,7 @@ public class ForumFragment extends ListFragment
 	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
 	private BoardListAdapter _arrayAdapter;
+	private boolean _clearBeforeUpdate = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -97,7 +98,7 @@ public class ForumFragment extends ListFragment
 			@Override
 			public boolean onMenuItemClick(MenuItem item) 
 			{
-				_arrayAdapter.clear();
+				_clearBeforeUpdate = true;
 				_lastLoadedOffset = -1;
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				new BoardLoaderTask().execute();
@@ -158,6 +159,11 @@ public class ForumFragment extends ListFragment
 				}
 				else
 				{
+					if(_clearBeforeUpdate)
+					{
+						_arrayAdapter.clear();
+						_clearBeforeUpdate = false;
+					}
 					_arrayAdapter.addAll(_newThreads);
 					_arrayAdapter.notifyDataSetChanged();
 				}
