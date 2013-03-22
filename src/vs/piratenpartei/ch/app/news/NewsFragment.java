@@ -21,6 +21,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -36,8 +39,25 @@ public class NewsFragment extends ListFragment
 	{
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate()");
+		setHasOptionsMenu(true);
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		new NewsLoaderTask().execute();
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		inflater.inflate(R.menu.news_fragment_menu, menu);
+		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) 
+			{
+				getActivity().setProgressBarIndeterminateVisibility(true);
+				new NewsLoaderTask().execute();
+				return true;
+			}
+		});
 	}
 	
 	@Override
@@ -111,12 +131,12 @@ public class NewsFragment extends ListFragment
 			{
 				setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
 				setListShown(true);
+				getActivity().setProgressBarIndeterminateVisibility(false);
 			}
-			catch(Exception e)
+			catch(NullPointerException e)
 			{
-				e.printStackTrace();
+				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}
