@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -20,7 +23,15 @@ public class ForumFragment extends ListFragment
 	private static final int ITEMS_PER_PAGE = 25;
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
 	private BoardListAdapter _arrayAdapter;
+	private boolean _clearBeforeUpdate = false;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		this.setHasOptionsMenu(true);
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
@@ -77,6 +88,24 @@ public class ForumFragment extends ListFragment
 		intent.putExtras(params);
 		startActivity(intent);
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		inflater.inflate(R.menu.forum_fragment_menu, menu);
+		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) 
+			{
+				_clearBeforeUpdate = true;
+				_lastLoadedOffset = -1;
+				getActivity().setProgressBarIndeterminateVisibility(true);
+				new BoardLoaderTask().execute();
+				return true;
+			}
+		});
+	}
 
 	private class BoardLoaderTask extends AsyncTask<Void, Void, Void>
 	{
@@ -130,11 +159,23 @@ public class ForumFragment extends ListFragment
 				}
 				else
 				{
+					if(_clearBeforeUpdate)
+					{
+						_arrayAdapter.clear();
+						_clearBeforeUpdate = false;
+					}
 					_arrayAdapter.addAll(_newThreads);
 					_arrayAdapter.notifyDataSetChanged();
 				}
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
+			try
+			{
+				getActivity().setProgressBarIndeterminateVisibility(false);
+			}
+			catch(NullPointerException ex)
+			{
+				Log.w(TAG + TAG_EXT, "Activity does not exists anymore");
+			}
 		}
 
 	}
