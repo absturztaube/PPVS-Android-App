@@ -43,5 +43,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="last_post_string">Letzter Post:</string>
     <string name="string_avatar">Profilbild</string>
+    
+    <string name="menu_refresh">Aktualisieren</string>
 
 </resources>

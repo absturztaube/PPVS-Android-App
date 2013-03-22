@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +40,13 @@ public class ProjectsFragment extends Fragment
 	private String _xml_status = "&status_id=open";
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		this.setHasOptionsMenu(true);
+	}
+	
+	@Override
 	public void onResume()
 	{
 		super.onResume();
@@ -50,6 +60,22 @@ public class ProjectsFragment extends Fragment
 	{
 		Log.d(TAG, "onCreateView()");
 		return inflater.inflate(R.layout.projects_fragment, container, false);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		inflater.inflate(R.menu.projects_fragment_menu, menu);
+		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) 
+			{
+				getActivity().setProgressBarIndeterminateVisibility(true);
+				new ProjectsLoaderTask().execute();
+				return true;
+			}
+		});
 	}
 	
 	@Override 
@@ -204,12 +230,12 @@ public class ProjectsFragment extends Fragment
 			{
 				ListView proj_list = (ListView)getActivity().findViewById(R.id.list_projects);
 				proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
+				getActivity().setProgressBarIndeterminateVisibility(false);
 			}
-			catch(Exception e)
+			catch(NullPointerException e)
 			{
-				e.printStackTrace();
+				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

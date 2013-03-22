@@ -21,21 +21,8 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity 
 {
-	
 	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
 	ViewPager mViewPager;
 
 	@Override
@@ -43,17 +30,12 @@ public class MainActivity extends FragmentActivity
 	{
 		Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
-
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
 		setContentView(R.layout.activity_main);
-
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
-
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-
 	}
 
 	@Override
@@ -63,11 +45,7 @@ public class MainActivity extends FragmentActivity
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
+	
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 		private static final String TAG_EXT = ".SectionsPagerAdapter";

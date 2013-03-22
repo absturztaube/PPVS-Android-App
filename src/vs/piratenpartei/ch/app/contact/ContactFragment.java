@@ -14,14 +14,14 @@ import android.widget.Button;
 public class ContactFragment extends Fragment
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.contact.ContactFragment";
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		Log.d(TAG, "onCreateView()");
 		return inflater.inflate(R.layout.contact_fragment, container, false);
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
@@ -59,9 +59,17 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(getString(R.string.config_facebook)));
+				Intent intent;
+				try {
+					getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
+					intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.config_facebook_app_intent)));
+				} 
+				catch (Exception e) 
+				{
+					intent = new Intent();
+					intent.setAction(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse(getString(R.string.config_facebook)));
+				}
 				startActivity(intent);
 			}
 		});

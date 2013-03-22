@@ -15,6 +15,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -67,6 +69,27 @@ public class ThreadActivity extends Activity
 		});
         this.setProgressBarIndeterminateVisibility(true);
         new TopicLoaderTask().execute();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+    	getMenuInflater().inflate(R.menu.actiivity_thread, menu);
+    	menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+    	{
+
+			@Override
+			public boolean onMenuItemClick(MenuItem arg0) 
+			{
+				_lastLoadedOffset = -1;
+				_arrayAdapter = null;
+				setProgressBarIndeterminateVisibility(true);
+				new TopicLoaderTask().execute();
+				return true;
+			}
+    		
+    	});
+    	return true;
     }
 
     /**
