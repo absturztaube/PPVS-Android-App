@@ -230,12 +230,12 @@ public class ProjectsFragment extends Fragment
 			{
 				ListView proj_list = (ListView)getActivity().findViewById(R.id.list_projects);
 				proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
+				getActivity().setProgressBarIndeterminateVisibility(false);
 			}
-			catch(Exception e)
+			catch(NullPointerException e)
 			{
-				e.printStackTrace();
+				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

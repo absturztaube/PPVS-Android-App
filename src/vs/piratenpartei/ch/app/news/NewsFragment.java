@@ -131,12 +131,12 @@ public class NewsFragment extends ListFragment
 			{
 				setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
 				setListShown(true);
+				getActivity().setProgressBarIndeterminateVisibility(false);
 			}
-			catch(Exception e)
+			catch(NullPointerException e)
 			{
-				e.printStackTrace();
+				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 		
 	}

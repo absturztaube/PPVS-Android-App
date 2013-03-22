@@ -168,7 +168,14 @@ public class ForumFragment extends ListFragment
 					_arrayAdapter.notifyDataSetChanged();
 				}
 			}
-			getActivity().setProgressBarIndeterminateVisibility(false);
+			try
+			{
+				getActivity().setProgressBarIndeterminateVisibility(false);
+			}
+			catch(NullPointerException ex)
+			{
+				Log.w(TAG + TAG_EXT, "Activity does not exists anymore");
+			}
 		}
 
 	}
