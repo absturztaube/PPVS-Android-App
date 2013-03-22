@@ -88,7 +88,8 @@ public class ProjectActivity extends FragmentActivity
 		
 		TextView subject_text = (TextView)findViewById(R.id.project_detail_title);
 		subject_text.setText(params.getString("issue_subject"));
-		
+
+		setProgressBarIndeterminateVisibility(true);
 		new ProjectsDetailLoaderTask().execute();
 	}
 
@@ -96,8 +97,17 @@ public class ProjectActivity extends FragmentActivity
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_project, menu);
+		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			@Override
+			public boolean onMenuItemClick(MenuItem item) 
+			{
+				setProgressBarIndeterminateVisibility(true);
+				new ProjectsDetailLoaderTask().execute();
+				return true;
+			}
+		});
 		return true;
 	}
 	
@@ -324,7 +334,6 @@ public class ProjectActivity extends FragmentActivity
 		protected Void doInBackground(Void... params) 
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
-			setProgressBarIndeterminateVisibility(true);
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
