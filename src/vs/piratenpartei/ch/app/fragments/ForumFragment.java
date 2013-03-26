@@ -1,10 +1,12 @@
-package vs.piratenpartei.ch.app.forum;
+package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
 import java.util.List;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.activities.ThreadActivity;
+import vs.piratenpartei.ch.app.forum.ThreadItem;
+import vs.piratenpartei.ch.app.helpers.ForumParser;
 import vs.piratenpartei.ch.app.listadapters.BoardListAdapter;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -137,7 +139,7 @@ public class ForumFragment extends ListFragment
 				if(_lastLoadedOffset < this._offset)
 				{
 					_lastLoadedOffset = this._offset;
-					_newThreads = ThreadItem.getBoard(174, this._offset);
+					_newThreads = ForumParser.getBoard(174, this._offset);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

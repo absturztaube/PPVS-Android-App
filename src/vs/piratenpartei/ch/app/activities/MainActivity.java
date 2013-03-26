@@ -1,8 +1,8 @@
 package vs.piratenpartei.ch.app.activities;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.forum.ForumFragment;
 import vs.piratenpartei.ch.app.fragments.ContactFragment;
+import vs.piratenpartei.ch.app.fragments.ForumFragment;
 import vs.piratenpartei.ch.app.fragments.NewsFragment;
 import vs.piratenpartei.ch.app.fragments.ProjectsFragment;
 import android.os.Bundle;

@@ -7,6 +7,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import vs.piratenpartei.ch.app.forum.ForumLink;
+import vs.piratenpartei.ch.app.forum.ThreadItem;
+import vs.piratenpartei.ch.app.forum.ThreadItemCollection;
+
 import android.util.Log;
 
 public class ForumParser 
@@ -213,5 +217,54 @@ public class ForumParser
 			throw new IllegalStateException("Document is not loaded yet");
 		}
 		return this._dom.select(pSelector);		
+	}
+	
+
+	
+	public static ThreadItemCollection getBoard(int pBoardId) throws IOException
+	{
+		return getBoard(pBoardId, 0);
+	}
+	
+	public static ThreadItemCollection getBoard(int pBoardId, int pThreadOffset) throws IOException
+	{
+		Log.d(TAG, "getBoard(" + pBoardId + ", " + pThreadOffset + ")");
+		URL boardUrl = new URL("http://forum.piratenpartei.ch/index.php/board," + pBoardId + "." + pThreadOffset + ".html");
+		ThreadItemCollection result = new ThreadItemCollection();
+		ForumParser boardParser = new ForumParser(boardUrl);
+		boardParser.parseDocument();
+		Elements subjects = boardParser.getSubjects();
+		Elements starters = boardParser.getStarters();
+		Elements lastMessageLink = boardParser.getLastMessageLink();
+		Elements updateDates = boardParser.getLastUpdateDates();
+		Elements updateAuthors = boardParser.getLastUpdateAuthors();
+		Element boardPage = boardParser.getLastBoardPageLink();
+		if(boardPage != null)
+		{
+			String boardLink = boardPage.attr("href");
+			ForumLink lastBoardLink = ForumLink.parse(boardLink);
+			ThreadItem.LastBoardOffset = lastBoardLink.getOffset();
+		}
+		for(int index = 0; index < subjects.size(); index++)
+		{
+			ThreadItem current = new ThreadItem();
+			current.setTitle(subjects.get(index).text());
+			current.setTopicLink(subjects.get(index).attr("href"));
+			current.setStarter(starters.get(index).text());
+			String lastLink = lastMessageLink.get(index).attr("href");
+			ForumLink lnk = ForumLink.parse(lastLink);
+			current.setLastPossibleOffset(lnk.getOffset());
+			current.setLastUpdateDate(detectString(updateDates.get(index).text()));
+			current.setLastUpdateAuthor(updateAuthors.get(index).text());
+			result.add(current);
+		}
+		return result;
+	}
+	
+	private static String detectString(String pInput)
+	{
+		String[] tempSplitted = pInput.split("\\sby\\s");
+		String date = tempSplitted[0];
+		return date;
 	}
 }
