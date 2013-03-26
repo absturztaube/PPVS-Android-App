@@ -9,6 +9,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xml.sax.XMLReader;
 
+import vs.piratenpartei.ch.app.helpers.ForumParser;
+
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;

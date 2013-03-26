@@ -1,4 +1,4 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.forum.ForumLink;
 import vs.piratenpartei.ch.app.forum.TopicItem;
-import vs.piratenpartei.ch.app.forum.TopicListAdapter;
+import vs.piratenpartei.ch.app.listadapters.TopicListAdapter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package vs.piratenpartei.ch.app.redmine;
+package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +12,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
-import vs.piratenpartei.ch.app.ProjectActivity;
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.helpers.Intents;
+import vs.piratenpartei.ch.app.helpers.RedmineParser;
+import vs.piratenpartei.ch.app.redmine.IssueItem;
+import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +37,7 @@ public class ProjectsFragment extends Fragment
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.redmine.ProjectsFragment";
 	
-	private ArrayList<IssueItem> _issues = new ArrayList<IssueItem>();
+	private IssueItemCollection _issues = new IssueItemCollection();
 	private String _xml_sort_attribute = "sort=updated_on:desc&limit=100";
 	private String _xml_tracker_id = "";
 	private String _xml_status = "&status_id=open";
@@ -166,9 +169,7 @@ public class ProjectsFragment extends Fragment
 					long arg3) {
 				Log.d(TAG + TAG_EXT, "onItemClick(" + arg0.toString() + ", " + arg1.toString() + ", " + arg2 + ", " + arg3 + ")");
 				IssueItem clicked = _issues.get(arg2);
-				Intent intent = new Intent(getActivity(), ProjectActivity.class);
-				intent.putExtra("issue_id", clicked.getId());
-				intent.putExtra("issue_subject", clicked.getSubject());
+				Intent intent = Intents.getIssueDetailIntent(getActivity(), clicked);
 				startActivity(intent);
 			}
 			
@@ -195,7 +196,7 @@ public class ProjectsFragment extends Fragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_issues = IssueItem.readRedmineXml(in);
+						_issues = RedmineParser.readIssuesList(in);
 						in.close();
 					}
 				}

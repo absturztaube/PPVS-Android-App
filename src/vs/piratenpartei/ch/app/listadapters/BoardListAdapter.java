@@ -1,10 +1,11 @@
-package vs.piratenpartei.ch.app.forum;
+package vs.piratenpartei.ch.app.listadapters;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.forum.ThreadItem;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;

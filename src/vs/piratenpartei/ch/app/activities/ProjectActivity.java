@@ -1,9 +1,8 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -12,9 +11,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
+import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.helpers.RedmineParser;
+import vs.piratenpartei.ch.app.listadapters.JournalArrayAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
-import vs.piratenpartei.ch.app.redmine.IssueDetailItem.JournalItem;
-import vs.piratenpartei.ch.app.redmine.JournalArrayAdapter;
+import vs.piratenpartei.ch.app.redmine.JournalItem;
+import vs.piratenpartei.ch.app.redmine.JournalItemCollection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -157,7 +159,7 @@ public class ProjectActivity extends FragmentActivity
 				estHours.setText(_data.getEstimatedHours());
 				break;
 			case 3:
-				ArrayList<JournalItem> journal_list = _data.getJournal();
+				JournalItemCollection journal_list = _data.getJournal();
 				JournalItem[] data_journal = new JournalItem[journal_list.size()];
 				journal_list.toArray(data_journal);
 				_adapter_journal = new JournalArrayAdapter(this, R.layout.journal_list_item, data_journal);
@@ -340,7 +342,7 @@ public class ProjectActivity extends FragmentActivity
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_data = IssueDetailItem.readRedmineXml(in);
+						_data = RedmineParser.readIssueDetail(in);
 						in.close();
 					}
 				}

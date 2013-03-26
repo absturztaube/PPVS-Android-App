@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.ThreadActivity;
+import vs.piratenpartei.ch.app.activities.ThreadActivity;
+import vs.piratenpartei.ch.app.listadapters.BoardListAdapter;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;

@@ -1,5 +1,6 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
+import vs.piratenpartei.ch.app.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;

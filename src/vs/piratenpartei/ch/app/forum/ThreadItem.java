@@ -8,6 +8,8 @@ import java.util.List;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import vs.piratenpartei.ch.app.helpers.ForumParser;
+
 import android.util.Log;
 
 public class ThreadItem 

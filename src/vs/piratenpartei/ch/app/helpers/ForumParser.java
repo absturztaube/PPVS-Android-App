@@ -1,4 +1,4 @@
-package vs.piratenpartei.ch.app.forum;
+package vs.piratenpartei.ch.app.helpers;
 
 import java.io.IOException;
 import java.net.URL;

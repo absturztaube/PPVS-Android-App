@@ -1,24 +1,9 @@
 package vs.piratenpartei.ch.app.redmine;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.util.Log;
-import android.util.Xml;
 
 public class IssueDetailItem 
-{
-	private static final String TAG = "vs.piratenpartei.ch.app.redmine.IssueDetailItem";
-	
+{	
 	private String _author;
 	private String _assignee;
 	private String _priority;
@@ -30,11 +15,16 @@ public class IssueDetailItem
 	private int _progress;
 	private String _status;
 	private String _estimatedHours;
-	private ArrayList<JournalItem> _journal = new ArrayList<JournalItem>();
+	private JournalItemCollection _journal = new JournalItemCollection();
 	
 	public String getAuthor()
 	{
 		return this._author;
+	}
+	
+	public void setAuthor(String pAuthor)
+	{
+		this._author = pAuthor;
 	}
 	
 	public String getAssignedTo()
@@ -42,9 +32,19 @@ public class IssueDetailItem
 		return this._assignee;
 	}
 	
+	public void setAssignedTo(String pAssignedTo)
+	{
+		this._assignee = pAssignedTo;
+	}
+	
 	public String getPriority()
 	{
 		return this._priority;
+	}
+	
+	public void setPriority(String pPriority)
+	{
+		this._priority = pPriority;
 	}
 	
 	public Date getStartDate()
@@ -52,9 +52,19 @@ public class IssueDetailItem
 		return this._startDate;
 	}
 	
+	public void setStartDate(Date pStartDate)
+	{
+		this._startDate = pStartDate;
+	}
+	
 	public Date getDueDate()
 	{
 		return this._dueDate;
+	}
+	
+	public void setDueDate(Date pDueDate)
+	{
+		this._dueDate = pDueDate;
 	}
 	
 	public Date getCreatedOn()
@@ -62,9 +72,19 @@ public class IssueDetailItem
 		return this._createdOn;
 	}
 	
+	public void setCreatedOn(Date pCreatedOn)
+	{
+		this._createdOn = pCreatedOn;
+	}
+	
 	public Date getUpdatedOn()
 	{
 		return this._updatedOn;
+	}
+	
+	public void setUpdatedOn(Date pUpdatedOn)
+	{
+		this._updatedOn = pUpdatedOn;
 	}
 	
 	public String getDescription()
@@ -72,9 +92,19 @@ public class IssueDetailItem
 		return this._description;
 	}
 	
+	public void setDescription(String pDescription)
+	{
+		this._description = pDescription;
+	}
+	
 	public int getProgress()
 	{
 		return this._progress;
+	}
+	
+	public void setProgress(int pProgress)
+	{
+		this._progress = pProgress;
 	}
 	
 	public String getStatus()
@@ -82,315 +112,33 @@ public class IssueDetailItem
 		return this._status;
 	}
 	
+	public void setStatus(String pStatus)
+	{
+		this._status = pStatus;
+	}
+	
 	public String getEstimatedHours()
 	{
 		return this._estimatedHours;
 	}
 	
-	public ArrayList<JournalItem> getJournal()
+	public void setEstimatedHours(String pEstimatedHours)
+	{
+		this._estimatedHours = pEstimatedHours;
+	}
+	
+	public JournalItemCollection getJournal()
 	{
 		return this._journal;
 	}
 	
-	public IssueDetailItem()
+	public void setJournal(JournalItemCollection pJournal)
 	{
-		
+		this._journal = pJournal;
 	}
 	
-	public static IssueDetailItem readRedmineXml(InputStream pIn) throws IOException, XmlPullParserException, ParseException
+	public void addJournalItem(JournalItem pJournalItem)
 	{
-		Log.d(TAG, "readRedmineXml(" + pIn.toString() +")");
-		IssueDetailItem result = new IssueDetailItem();
-		try
-		{
-			XmlPullParser parser = Xml.newPullParser();
-			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-			parser.setInput(pIn, null);
-			parser.nextTag();
-			parser.require(XmlPullParser.START_TAG, null, "issue");
-			while(parser.next() != XmlPullParser.END_TAG)
-			{
-				if(parser.getEventType() != XmlPullParser.START_TAG)
-				{
-					continue;
-				}
-				String name = parser.getName();
-				if(name.equals("author"))
-				{
-					result._author = IssueDetailItem.readAuthor(parser);
-				}
-				else if(name.equals("assigned_to"))
-				{
-					result._assignee = IssueDetailItem.readAssignedTo(parser);
-				}
-				else if(name.equals("priority"))
-				{
-					result._priority = IssueDetailItem.readPriority(parser);
-				}
-				else if(name.equals("start_date"))
-				{
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-					result._startDate = df.parse(IssueDetailItem.readStartDate(parser));
-				}
-				else if(name.equals("due_date"))
-				{
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-					result._dueDate = df.parse(IssueDetailItem.readEndDate(parser));
-				}
-				else if(name.equals("created_on"))
-				{
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZ", Locale.getDefault());
-					result._createdOn = df.parse(IssueDetailItem.readCreateDate(parser));
-				}
-				else if(name.equals("updated_on"))
-				{
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZ", Locale.getDefault());
-					result._updatedOn = df.parse(IssueDetailItem.readUpdateDate(parser));
-				}
-				else if(name.equals("description"))
-				{
-					result._description = IssueDetailItem.readDescription(parser);
-				}
-				else if(name.equals("done_ratio"))
-				{
-					result._progress = Integer.parseInt(IssueDetailItem.readDoneRatio(parser));
-				}
-				else if(name.equals("status"))
-				{
-					result._status = IssueDetailItem.readStatus(parser);
-				}
-				else if(name.equals("estimated_hours"))
-				{
-					result._estimatedHours = IssueDetailItem.readEstimatedHours(parser);
-				}
-				else if(name.equals("journals"))
-				{
-					result._journal = IssueDetailItem.readJournal(parser);
-				}
-				else
-				{
-					IssueDetailItem.skip(parser);
-				}
-			}
-		}
-		finally
-		{
-			pIn.close();
-		}
-		
-		return result;
-	}
-
-	private static String readStatus(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readStatus(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "status");
-		String result = parser.getAttributeValue(null, "name");
-		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, null, "status");
-		return result;
-	}
-
-	private static ArrayList<JournalItem> readJournal(XmlPullParser parser) throws XmlPullParserException, IOException, ParseException {
-		Log.d(TAG, "readJournal(" + parser.toString() + ")");
-		ArrayList<JournalItem> result = new ArrayList<JournalItem>();
-		parser.require(XmlPullParser.START_TAG, null, "journals");
-		while(parser.next() != XmlPullParser.END_TAG)
-		{
-			if(parser.getEventType() != XmlPullParser.START_TAG)
-			{
-				continue;
-			}
-			String name = parser.getName();
-			if(name.equals("journal"))
-			{
-				result.add(IssueDetailItem.readItem(parser));
-			}
-			else
-			{
-				IssueDetailItem.skip(parser);
-			}
-		}
-		return result;
-	}
-
-	private static JournalItem readItem(XmlPullParser parser) throws XmlPullParserException, IOException, ParseException {
-		Log.d(TAG, "readItem(" + parser.toString() + ")");
-		JournalItem result = new JournalItem();
-		parser.require(XmlPullParser.START_TAG, null, "journal");
-		while(parser.next() != XmlPullParser.END_TAG)
-		{
-			if(parser.getEventType() != XmlPullParser.START_TAG)
-			{
-				continue;
-			}
-			String name = parser.getName();
-			if(name.equals("user"))
-			{
-				result._author = IssueDetailItem.readJournalAuthor(parser);
-			}
-			else if(name.equals("notes"))
-			{
-				result._notes = IssueDetailItem.readJournalNotes(parser);
-			}
-			else if(name.equals("created_on"))
-			{
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZ", Locale.getDefault());
-				result._createdOn = df.parse(IssueDetailItem.readJournalCreationDate(parser));
-			}
-			else
-			{
-				IssueDetailItem.skip(parser);
-			}
-		}
-		return result;
-	}
-
-	private static String readJournalCreationDate(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readJournalCreationDate(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "created_on");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "created_on");
-		return result;
-	}
-
-	private static String readJournalNotes(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readJournalNotes(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "notes");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "notes");
-		return result;
-	}
-
-	private static String readJournalAuthor(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readJournalAuthor(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "user");
-		String result = parser.getAttributeValue(null, "name");
-		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, null, "user");
-		return result;
-	}
-
-	private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "skip(" + parser.toString() + ")");
-		if (parser.getEventType() != XmlPullParser.START_TAG) {
-	        throw new IllegalStateException();
-	    }
-	    int depth = 1;
-	    while (depth != 0) {
-	        switch (parser.next()) {
-	        case XmlPullParser.END_TAG:
-	            depth--;
-	            break;
-	        case XmlPullParser.START_TAG:
-	            depth++;
-	            break;
-	        }
-	    }
-	}
-
-	private static String readEstimatedHours(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readEstimatedHours(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "estimated_hours");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "estimated_hours");
-		return result;
-	}
-
-	private static String readDoneRatio(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readDoneRatio(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "done_ratio");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "done_ratio");
-		return result;
-	}
-
-	private static String readDescription(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readDescription(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "description");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "description");
-		return result;
-	}
-
-	private static String readUpdateDate(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readUpdateDate(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "updated_on");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "updated_on");
-		return result;
-	}
-
-	private static String readCreateDate(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readCreateDate(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "created_on");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "created_on");
-		return result;
-	}
-
-	private static String readEndDate(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readEndDate(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "due_date");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "due_date");
-		return result;
-	}
-
-	private static String readStartDate(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readStartDate(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "start_date");
-		String result = parser.nextText();
-		parser.require(XmlPullParser.END_TAG, null, "start_date");
-		return result;
-	}
-
-	private static String readPriority(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readPriority(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "priority");
-		String result = parser.getAttributeValue(null, "name");
-		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, null, "priority");
-		return result;
-	}
-
-	private static String readAuthor(XmlPullParser parser) throws XmlPullParserException, IOException 
-	{
-		Log.d(TAG, "readAuthor(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "author");
-		String result = parser.getAttributeValue(null, "name");
-		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, null, "author");
-		return result;
-	}
-	
-	private static String readAssignedTo(XmlPullParser parser) throws XmlPullParserException, IOException {
-		Log.d(TAG, "readAssignedTo(" + parser.toString() + ")");
-		parser.require(XmlPullParser.START_TAG, null, "assigned_to");
-		String result = parser.getAttributeValue(null, "name");
-		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, null, "assigned_to");
-		return result;
-	}
-
-	public static class JournalItem
-	{
-		private String _author;
-		private String _notes;
-		private Date _createdOn;
-		
-		public String getAuthor()
-		{
-			return this._author;
-		}
-		
-		public String getNotes()
-		{
-			return this._notes;
-		}
-		
-		public Date getCreatedOn()
-		{
-			return this._createdOn;
-		}
+		this._journal.add(pJournalItem);
 	}
 }

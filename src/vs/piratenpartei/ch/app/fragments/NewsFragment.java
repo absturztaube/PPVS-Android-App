@@ -1,11 +1,8 @@
-package vs.piratenpartei.ch.app.news;
+package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,8 +11,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
-import vs.piratenpartei.ch.app.NewsActivity;
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.helpers.Intents;
+import vs.piratenpartei.ch.app.helpers.RssParser;
+import vs.piratenpartei.ch.app.news.NewsItem;
+import vs.piratenpartei.ch.app.news.NewsItemCollection;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ public class NewsFragment extends ListFragment
 {	
 	private static final String TAG = "vs.piratenpartei.ch.app.news.NewsFragment";
 	
-	private ArrayList<NewsItem> _feedItems = new ArrayList<NewsItem>();
+	private NewsItemCollection _feedItems = new NewsItemCollection();
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -65,14 +65,7 @@ public class NewsFragment extends ListFragment
 	{
 		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
 		NewsItem clicked = this._feedItems.get(pPosition);
-		Intent intent = new Intent(getActivity(), NewsActivity.class);
-		Bundle params = new Bundle();
-		params.putString("title", clicked.getTitle());
-		params.putString("author", clicked.getCreator());
-		Date pubDate = clicked.getPublishDate();
-		params.putString("date", DateFormat.getInstance().format(pubDate));
-		params.putString("content", clicked.getContent());
-		intent.putExtras(params);
+		Intent intent = Intents.getNewsDetailIntent(getActivity(), clicked);
 		startActivity(intent);
 	}
 	
@@ -96,7 +89,7 @@ public class NewsFragment extends ListFragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_feedItems = NewsItem.readFeed(in);
+						_feedItems = RssParser.readFeed(in);
 						in.close();
 					}
 				}

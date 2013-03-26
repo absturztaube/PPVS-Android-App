@@ -1,8 +1,8 @@
-package vs.piratenpartei.ch.app.contact;
+package vs.piratenpartei.ch.app.fragments;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.helpers.Intents;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,9 +33,7 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(getString(R.string.config_website)));
+				Intent intent = Intents.getWebsiteIntent(getActivity());
 				startActivity(intent);
 			}
 		});
@@ -45,11 +43,7 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_SENDTO);
-				intent.setType("text/plain");
-				intent.setData(Uri.parse("mailto:" + getString(R.string.config_email)));
-				intent.putExtra(Intent.EXTRA_SUBJECT, "[" + getString(R.string.app_name) + "]");
+				Intent intent = Intents.getMailToIntent(getActivity());
 				startActivity(Intent.createChooser(intent, getString(R.string.btn_mail) + "..."));
 			}
 		});
@@ -59,17 +53,7 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent;
-				try {
-					getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
-					intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.config_facebook_app_intent)));
-				} 
-				catch (Exception e) 
-				{
-					intent = new Intent();
-					intent.setAction(Intent.ACTION_VIEW);
-					intent.setData(Uri.parse(getString(R.string.config_facebook)));
-				}
+				Intent intent = Intents.getFacebookIntent(getActivity());
 				startActivity(intent);
 			}
 		});
@@ -79,9 +63,7 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(getString(R.string.config_googleplus)));
+				Intent intent = Intents.getGooglePlusIntent(getActivity());
 				startActivity(intent);
 			}
 		});
@@ -91,9 +73,7 @@ public class ContactFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(getString(R.string.config_twitter)));
+				Intent intent = Intents.getTwitterIntent(getActivity());
 				startActivity(intent);
 			}
 		});

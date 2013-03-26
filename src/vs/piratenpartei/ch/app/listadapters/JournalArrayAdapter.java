@@ -1,9 +1,9 @@
-package vs.piratenpartei.ch.app.redmine;
+package vs.piratenpartei.ch.app.listadapters;
 
 import java.text.DateFormat;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.redmine.IssueDetailItem.JournalItem;
+import vs.piratenpartei.ch.app.redmine.JournalItem;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
