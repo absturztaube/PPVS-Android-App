@@ -131,8 +131,6 @@ public class MainActivity extends FragmentActivity
 				Bundle savedInstanceState) 
 		{
 			Log.d(TAG + TAG_EXT, "onCreateView(" + inflater.toString() + ", " + container.toString() + ", " + savedInstanceState.toString() + ")");
-			// Create a new TextView and set its text to the fragment's section
-			// number argument value.
 			TextView textView = new TextView(getActivity());
 			textView.setGravity(Gravity.CENTER);
 			textView.setText(Integer.toString(getArguments().getInt(

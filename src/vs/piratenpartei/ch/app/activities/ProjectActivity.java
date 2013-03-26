@@ -40,20 +40,7 @@ import android.widget.TextView;
 public class ProjectActivity extends FragmentActivity 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
-
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
 	ViewPager mViewPager;
 
 	private int _xml_id;
@@ -69,16 +56,12 @@ public class ProjectActivity extends FragmentActivity
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
 		setContentView(R.layout.activity_project);
-
-		// Show the Up button in the action bar.
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 
-		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -179,11 +162,7 @@ public class ProjectActivity extends FragmentActivity
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
+	
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		
 		private static final String TAG_EXT = ".SectionsPagerAdapter";
@@ -378,15 +357,8 @@ public class ProjectActivity extends FragmentActivity
 		
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
+	public static class DummySectionFragment extends Fragment 
+	{
 		public static final String ARG_SECTION_NUMBER = "section_number";
 		
 		private static final String TAG_EXT = ".DummySectionFragment";

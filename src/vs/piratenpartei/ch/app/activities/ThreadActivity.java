@@ -92,9 +92,6 @@ public class ThreadActivity extends Activity
     	return true;
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() 
     {
