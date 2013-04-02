@@ -1,13 +1,11 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.forum.ForumLink;
-import vs.piratenpartei.ch.app.forum.TopicItem;
-import vs.piratenpartei.ch.app.forum.TopicListAdapter;
+import vs.piratenpartei.ch.app.forum.TopicItemCollection;
+import vs.piratenpartei.ch.app.helpers.ForumParser;
+import vs.piratenpartei.ch.app.listadapters.TopicListAdapter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -30,14 +28,14 @@ public class ThreadActivity extends Activity
 	private ListView _postList;
 	private TopicListAdapter _arrayAdapter;
 	private String _topicLink;
-	private Context ctx = this;
+	private Context _context = this;
 	private int _lastLoadedOffset = -1;
 	private int _maxOffset = 0;
 	
     @Override
-    protected void onCreate(Bundle savedInstanceState) 
+    protected void onCreate(Bundle pSavedInstanceState) 
     {
-        super.onCreate(savedInstanceState);
+        super.onCreate(pSavedInstanceState);
         Log.d(TAG, "onCreate()");
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_thread);
@@ -51,18 +49,18 @@ public class ThreadActivity extends Activity
         this._postList = (ListView)findViewById(R.id.list_thread_posts);
         this._postList.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			public void onScrollStateChanged(AbsListView pView, int pScrollState) {
 			}
 			
 			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
-				if(_maxOffset >= totalItemCount)
+			public void onScroll(AbsListView pView, int pFirstVisibleItem,
+					int pVisibleItemCount, int pTotalItemCount) {
+				if(_maxOffset >= pTotalItemCount)
 				{
-					if(firstVisibleItem >= (totalItemCount - visibleItemCount))
+					if(pFirstVisibleItem >= (pTotalItemCount - pVisibleItemCount))
 					{
 						setProgressBarIndeterminateVisibility(true);
-						new TopicLoaderTask(totalItemCount / ITEMS_PER_PAGE).execute();
+						new TopicLoaderTask(pTotalItemCount / ITEMS_PER_PAGE).execute();
 					}
 				}
 			}
@@ -72,14 +70,14 @@ public class ThreadActivity extends Activity
     }
     
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public boolean onCreateOptionsMenu(Menu pMenu)
     {
-    	getMenuInflater().inflate(R.menu.actiivity_thread, menu);
-    	menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+    	getMenuInflater().inflate(R.menu.actiivity_thread, pMenu);
+    	pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
     	{
 
 			@Override
-			public boolean onMenuItemClick(MenuItem arg0) 
+			public boolean onMenuItemClick(MenuItem pClickedItem) 
 			{
 				_lastLoadedOffset = -1;
 				_arrayAdapter = null;
@@ -92,9 +90,6 @@ public class ThreadActivity extends Activity
     	return true;
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() 
     {
@@ -110,7 +105,7 @@ public class ThreadActivity extends Activity
     	private static final String TAG_EXT = ".TopicLoaderTask";
     	
     	private ForumLink _realLink;
-		private List<TopicItem> _data = new ArrayList<TopicItem>();
+		private TopicItemCollection _data = new TopicItemCollection();
     	
 		public TopicLoaderTask()
 		{
@@ -124,14 +119,14 @@ public class ThreadActivity extends Activity
 		}
 		
 		@Override
-		protected Void doInBackground(Void... params) 
+		protected Void doInBackground(Void... pParams) 
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			if(_lastLoadedOffset < this._realLink.getOffset())
 			{
 				try {
 					_lastLoadedOffset = this._realLink.getOffset();
-					this._data = TopicItem.loadTopic(this._realLink.getUrlString());
+					this._data = ForumParser.loadTopic(this._realLink.getUrlString());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -140,12 +135,12 @@ public class ThreadActivity extends Activity
 		}
 		
 		@Override
-		protected void onPostExecute(Void result)
+		protected void onPostExecute(Void pResult)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			if(_arrayAdapter == null)
 			{
-				_arrayAdapter = new TopicListAdapter(ctx, R.layout.thread_list_item, this._data);
+				_arrayAdapter = new TopicListAdapter(_context, R.layout.thread_list_item, this._data);
 				_postList.setAdapter(_arrayAdapter);
 			}
 			else

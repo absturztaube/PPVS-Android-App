@@ -1,30 +1,23 @@
 package vs.piratenpartei.ch.app.forum;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import android.util.Log;
-
 public class ThreadItem 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.forum.ThreadItem";
-	
 	private String _title;
 	private String _author;
 	private String _link;
 	private String _lastUpdate;
 	private String _lastUpdated;
 	private int _lastPossibleOffset;
-	public static int LastBoardOffset = 1000;
+	public static int LastBoardOffset = Integer.MAX_VALUE;
 	
 	public String getTitle()
 	{
 		return this._title;
+	}
+	
+	public void setTitle(String pTitle)
+	{
+		this._title = pTitle;
 	}
 	
 	public String getStarter()
@@ -32,9 +25,19 @@ public class ThreadItem
 		return this._author;
 	}
 	
+	public void setStarter(String pStarter)
+	{
+		this._author = pStarter;
+	}
+	
 	public String getTopicLink()
 	{
 		return this._link;
+	}
+	
+	public void setTopicLink(String pLink)
+	{
+		this._link = pLink;
 	}
 	
 	public String getLastUpdateDate()
@@ -42,9 +45,19 @@ public class ThreadItem
 		return this._lastUpdate;
 	}
 	
+	public void setLastUpdateDate(String pLastUpdateDate)
+	{
+		this._lastUpdate = pLastUpdateDate;
+	}
+	
 	public String getLastUpdateAuthor()
 	{
 		return this._lastUpdated;
+	}
+	
+	public void setLastUpdateAuthor(String pLastUpdateAuthor)
+	{
+		this._lastUpdated = pLastUpdateAuthor;
 	}
 	
 	public int getLastPossibleOffset()
@@ -52,50 +65,8 @@ public class ThreadItem
 		return this._lastPossibleOffset;
 	}
 	
-	public static List<ThreadItem> getBoard(int pBoardId) throws IOException
+	public void setLastPossibleOffset(int pLastPossibleOffset)
 	{
-		return ThreadItem.getBoard(pBoardId, 0);
-	}
-	
-	public static List<ThreadItem> getBoard(int pBoardId, int pThreadOffset) throws IOException
-	{
-		Log.d(TAG, "getBoard(" + pBoardId + ", " + pThreadOffset + ")");
-		URL boardUrl = new URL("http://forum.piratenpartei.ch/index.php/board," + pBoardId + "." + pThreadOffset + ".html");
-		List<ThreadItem> result = new ArrayList<ThreadItem>();
-		ForumParser boardParser = new ForumParser(boardUrl);
-		boardParser.parseDocument();
-		Elements subjects = boardParser.getSubjects();
-		Elements starters = boardParser.getStarters();
-		Elements lastMessageLink = boardParser.getLastMessageLink();
-		Elements updateDates = boardParser.getLastUpdateDates();
-		Elements updateAuthors = boardParser.getLastUpdateAuthors();
-		Element boardPage = boardParser.getLastBoardPageLink();
-		if(boardPage != null)
-		{
-			String boardLink = boardPage.attr("href");
-			ForumLink lastBoardLink = ForumLink.parse(boardLink);
-			ThreadItem.LastBoardOffset = lastBoardLink.getOffset();
-		}
-		for(int index = 0; index < subjects.size(); index++)
-		{
-			ThreadItem current = new ThreadItem();
-			current._title = subjects.get(index).text();
-			current._link = subjects.get(index).attr("href");
-			current._author = starters.get(index).text();
-			String lastLink = lastMessageLink.get(index).attr("href");
-			ForumLink lnk = ForumLink.parse(lastLink);
-			current._lastPossibleOffset = lnk.getOffset();
-			current._lastUpdate = ThreadItem.detectString(updateDates.get(index).text());
-			current._lastUpdated = updateAuthors.get(index).text();
-			result.add(current);
-		}
-		return result;
-	}
-	
-	private static String detectString(String pInput)
-	{
-		String[] tempSplitted = pInput.split("\\sby\\s");
-		String date = tempSplitted[0];
-		return date;
+		this._lastPossibleOffset = pLastPossibleOffset;
 	}
 }
