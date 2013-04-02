@@ -306,6 +306,7 @@ public class ForumParser
 						try {
 							src = new URL(pSource);
 							Drawable image = Drawable.createFromStream(src.openStream(), pSource);
+							image.setBounds(0, 0, 0 + Math.max(image.getIntrinsicWidth(), 32), 0 + Math.max(image.getIntrinsicHeight(), 32));
 							return image;
 						} catch (IOException e) {
 							Log.w(TAG, e.getMessage());
