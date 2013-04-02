@@ -1,9 +1,10 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
-import vs.piratenpartei.ch.app.contact.ContactFragment;
-import vs.piratenpartei.ch.app.forum.ForumFragment;
-import vs.piratenpartei.ch.app.news.NewsFragment;
-import vs.piratenpartei.ch.app.redmine.ProjectsFragment;
+import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.fragments.ContactFragment;
+import vs.piratenpartei.ch.app.fragments.ForumFragment;
+import vs.piratenpartei.ch.app.fragments.NewsFragment;
+import vs.piratenpartei.ch.app.fragments.ProjectsFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,27 +23,28 @@ import android.widget.TextView;
 public class MainActivity extends FragmentActivity 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
-	SectionsPagerAdapter mSectionsPagerAdapter;
-	ViewPager mViewPager;
+	
+	private SectionsPagerAdapter _sectionPagerAdapter;
+	private ViewPager _viewPager;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
+	protected void onCreate(Bundle pSavedInstanceState) 
 	{
 		Log.d(TAG, "onCreate()");
-		super.onCreate(savedInstanceState);
+		super.onCreate(pSavedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
+		_sectionPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		_viewPager = (ViewPager) findViewById(R.id.pager);
+		_viewPager.setAdapter(_sectionPagerAdapter);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
+	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		getMenuInflater().inflate(R.menu.activity_main, pMenu);
 		return true;
 	}
 	
@@ -50,23 +52,23 @@ public class MainActivity extends FragmentActivity
 
 		private static final String TAG_EXT = ".SectionsPagerAdapter";
 		
-		public SectionsPagerAdapter(FragmentManager fm) 
+		public SectionsPagerAdapter(FragmentManager pFragmentManager) 
 		{
-			super(fm);
-			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + fm.toString() + ")");
+			super(pFragmentManager);
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + pFragmentManager.toString() + ")");
 		}
 
 		@Override
-		public Fragment getItem(int position) {
-			Log.d(TAG + TAG_EXT, "getItem(" + position + ")");
+		public Fragment getItem(int pPosition) {
+			Log.d(TAG + TAG_EXT, "getItem(" + pPosition + ")");
 			Fragment fragment;
 
 			fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, pPosition + 1);
 			fragment.setArguments(args);
 			
-			switch(position)
+			switch(pPosition)
 			{
 				case 0:
 					fragment = new NewsFragment();
@@ -91,10 +93,10 @@ public class MainActivity extends FragmentActivity
 		}
 
 		@Override
-		public CharSequence getPageTitle(int position) 
+		public CharSequence getPageTitle(int pPosition) 
 		{
-			Log.d(TAG + TAG_EXT, "getPageTitle(" + position + ")");
-			switch (position) {
+			Log.d(TAG + TAG_EXT, "getPageTitle(" + pPosition + ")");
+			switch (pPosition) {
 			case 0:
 				return getString(R.string.title_news);
 			case 1:
@@ -126,12 +128,10 @@ public class MainActivity extends FragmentActivity
 		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) 
+		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
+				Bundle pSavedInstanceState) 
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView(" + inflater.toString() + ", " + container.toString() + ", " + savedInstanceState.toString() + ")");
-			// Create a new TextView and set its text to the fragment's section
-			// number argument value.
+			Log.d(TAG + TAG_EXT, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
 			TextView textView = new TextView(getActivity());
 			textView.setGravity(Gravity.CENTER);
 			textView.setText(Integer.toString(getArguments().getInt(

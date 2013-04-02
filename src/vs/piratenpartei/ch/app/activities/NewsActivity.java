@@ -1,5 +1,6 @@
-package vs.piratenpartei.ch.app;
+package vs.piratenpartei.ch.app.activities;
 
+import vs.piratenpartei.ch.app.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -11,12 +12,11 @@ import android.support.v4.app.NavUtils;
 
 public class NewsActivity extends Activity 
 {
-	
 	private static final String TAG = "vs.piratenpartei.ch.app.NewsActivity";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate(Bundle pSavedInstanceState) {
+		super.onCreate(pSavedInstanceState);
 		
 		Log.d(TAG, "onCreate()");
 		
@@ -45,30 +45,23 @@ public class NewsActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
+	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
-		getMenuInflater().inflate(R.menu.activity_news, menu);
+		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		getMenuInflater().inflate(R.menu.activity_news, pMenu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(MenuItem pItem) 
 	{
-		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
-		switch (item.getItemId()) {
+		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		switch (pItem.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(pItem);
 	}
 
 }
