@@ -12,12 +12,11 @@ import android.support.v4.app.NavUtils;
 
 public class NewsActivity extends Activity 
 {
-	
 	private static final String TAG = "vs.piratenpartei.ch.app.NewsActivity";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate(Bundle pSavedInstanceState) {
+		super.onCreate(pSavedInstanceState);
 		
 		Log.d(TAG, "onCreate()");
 		
@@ -46,23 +45,23 @@ public class NewsActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
+	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
-		getMenuInflater().inflate(R.menu.activity_news, menu);
+		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		getMenuInflater().inflate(R.menu.activity_news, pMenu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(MenuItem pItem) 
 	{
-		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
-		switch (item.getItemId()) {
+		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		switch (pItem.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(pItem);
 	}
 
 }

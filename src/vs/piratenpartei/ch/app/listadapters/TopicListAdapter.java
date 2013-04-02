@@ -1,11 +1,9 @@
 package vs.piratenpartei.ch.app.listadapters;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.forum.TopicItem;
+import vs.piratenpartei.ch.app.forum.TopicItemCollection;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -20,28 +18,28 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.forum.TopicListAdapter";
 	
-	Context context;
-	int ressourceLayoutId;
-	private List<TopicItem> data = new ArrayList<TopicItem>();
+	private Context _context;
+	private int _ressourceLayoutId;
+	private TopicItemCollection _data = new TopicItemCollection();
 	
-	public TopicListAdapter(Context context, int layoutResourceId, List<TopicItem> data)
+	public TopicListAdapter(Context pContext, int pLayoutResourceId, TopicItemCollection pData)
 	{
-		super(context, layoutResourceId, data);
-		Log.d(TAG, "new TopicListAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
-		this.ressourceLayoutId = layoutResourceId;
-		this.context = context;
-		this.data = data;
+		super(pContext, pLayoutResourceId, pData);
+		Log.d(TAG, "new TopicListAdapter(" + pContext.toString() + ", " + pLayoutResourceId + ", " + pData.toString() + ")");
+		this._ressourceLayoutId = pLayoutResourceId;
+		this._context = pContext;
+		this._data = pData;
 	}
 	
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int pPosition, View pConvertView, ViewGroup pParent)
 	{
-		View row = convertView;
+		View row = pConvertView;
 		Log.d(TAG, "getView()");
 		TopicItemHolder holder = null;
 		if(row == null)
 		{
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			row = inflater.inflate(ressourceLayoutId, parent, false);
+			LayoutInflater inflater = ((Activity)_context).getLayoutInflater();
+			row = inflater.inflate(_ressourceLayoutId, pParent, false);
 			holder = new TopicItemHolder();
 			holder.author = (TextView)row.findViewById(R.id.post_list_author);
 			holder.content = (TextView)row.findViewById(R.id.post_list_content);
@@ -54,7 +52,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 			holder = (TopicItemHolder)row.getTag();
 		}
 		
-		TopicItem item = data.get(position);
+		TopicItem item = _data.get(pPosition);
 		holder.author.setText(item.getAuthor());
 		holder.date.setText(item.getDate());
 		holder.content.setText(item.getContent());
@@ -64,17 +62,17 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	
 	public void add(TopicItem pNewItem)
 	{
-		this.data.add(pNewItem);
+		this._data.add(pNewItem);
 	}
 	
 	public void addAll(Collection<? extends TopicItem> pNewItems)
 	{
-		this.data.addAll(pNewItems);
+		this._data.addAll(pNewItems);
 	}
 	
-	public List<TopicItem> getData()
+	public TopicItemCollection getData()
 	{
-		return this.getData();
+		return this._data;
 	}
 	
 	static class TopicItemHolder

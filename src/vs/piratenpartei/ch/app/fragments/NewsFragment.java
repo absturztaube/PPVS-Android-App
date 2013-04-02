@@ -35,9 +35,9 @@ public class NewsFragment extends ListFragment
 	private NewsItemCollection _feedItems = new NewsItemCollection();
 		
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(Bundle pSavedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(pSavedInstanceState);
 		Log.d(TAG, "onCreate()");
 		setHasOptionsMenu(true);
 		getActivity().setProgressBarIndeterminateVisibility(true);
@@ -45,13 +45,13 @@ public class NewsFragment extends ListFragment
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
-		inflater.inflate(R.menu.news_fragment_menu, menu);
-		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+		pInflater.inflate(R.menu.news_fragment_menu, pMenu);
+		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			
 			@Override
-			public boolean onMenuItemClick(MenuItem item) 
+			public boolean onMenuItemClick(MenuItem pItem) 
 			{
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				new NewsLoaderTask().execute();
@@ -74,7 +74,7 @@ public class NewsFragment extends ListFragment
 		private static final String TAG_EXT = ".NewsLoaderTask";
 		
 		@Override
-		protected Void doInBackground(Void... params) 
+		protected Void doInBackground(Void... pParams) 
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try 
@@ -112,7 +112,7 @@ public class NewsFragment extends ListFragment
 		}
 		
 		@Override
-		protected void onPostExecute(Void result)
+		protected void onPostExecute(Void pResult)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
 			ArrayList<String> titles = new ArrayList<String>();

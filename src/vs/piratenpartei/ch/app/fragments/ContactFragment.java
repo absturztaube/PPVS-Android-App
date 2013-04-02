@@ -16,23 +16,23 @@ public class ContactFragment extends Fragment
 	private static final String TAG = "vs.piratenpartei.ch.app.contact.ContactFragment";
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState)
 	{
 		Log.d(TAG, "onCreateView()");
-		return inflater.inflate(R.layout.contact_fragment, container, false);
+		return pInflater.inflate(R.layout.contact_fragment, pContainer, false);
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState)
+	public void onActivityCreated(Bundle pSavedInstanceState)
 	{
-		super.onActivityCreated(savedInstanceState);
+		super.onActivityCreated(pSavedInstanceState);
 		Log.d(TAG, "onActivityCreated()");
 		Button btn_webpage = (Button)getActivity().findViewById(R.id.btn_webpage);
 		btn_webpage.setOnClickListener(new View.OnClickListener() {
 			private static final String TAG_EXT = ".btn_webpage.OnClickListener";
 			@Override
-			public void onClick(View v) {
-				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
+			public void onClick(View pView) {
+				Log.d(TAG + TAG_EXT, "onClick(" + pView.toString() + ")");
 				Intent intent = Intents.getWebsiteIntent(getActivity());
 				startActivity(intent);
 			}
@@ -41,8 +41,8 @@ public class ContactFragment extends Fragment
 		btn_mail.setOnClickListener(new View.OnClickListener() {
 			private static final String TAG_EXT = ".btn_mail.OnClickListener";
 			@Override
-			public void onClick(View v) {
-				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
+			public void onClick(View pView) {
+				Log.d(TAG + TAG_EXT, "onClick(" + pView.toString() + ")");
 				Intent intent = Intents.getMailToIntent(getActivity());
 				startActivity(Intent.createChooser(intent, getString(R.string.btn_mail) + "..."));
 			}
@@ -51,8 +51,8 @@ public class ContactFragment extends Fragment
 		btn_facebook.setOnClickListener(new View.OnClickListener() {
 			private static final String TAG_EXT = ".btn_facebook.OnClickListener";
 			@Override
-			public void onClick(View v) {
-				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
+			public void onClick(View pView) {
+				Log.d(TAG + TAG_EXT, "onClick(" + pView.toString() + ")");
 				Intent intent = Intents.getFacebookIntent(getActivity());
 				startActivity(intent);
 			}
@@ -61,8 +61,8 @@ public class ContactFragment extends Fragment
 		btn_googleplus.setOnClickListener(new View.OnClickListener() {
 			private static final String TAG_EXT = ".btn_googleplus.OnClickListener";
 			@Override
-			public void onClick(View v) {
-				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
+			public void onClick(View pView) {
+				Log.d(TAG + TAG_EXT, "onClick(" + pView.toString() + ")");
 				Intent intent = Intents.getGooglePlusIntent(getActivity());
 				startActivity(intent);
 			}
@@ -71,8 +71,8 @@ public class ContactFragment extends Fragment
 		btn_twitter.setOnClickListener(new View.OnClickListener() {
 			private static final String TAG_EXT = ".btn_twitter.OnClickListener";
 			@Override
-			public void onClick(View v) {
-				Log.d(TAG + TAG_EXT, "onClick(" + v.toString() + ")");
+			public void onClick(View pView) {
+				Log.d(TAG + TAG_EXT, "onClick(" + pView.toString() + ")");
 				Intent intent = Intents.getTwitterIntent(getActivity());
 				startActivity(intent);
 			}

@@ -13,10 +13,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.helpers.RedmineParser;
-import vs.piratenpartei.ch.app.listadapters.JournalArrayAdapter;
+import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
-import vs.piratenpartei.ch.app.redmine.JournalItem;
-import vs.piratenpartei.ch.app.redmine.JournalItemCollection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,17 +38,17 @@ import android.widget.TextView;
 public class ProjectActivity extends FragmentActivity 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
-	SectionsPagerAdapter mSectionsPagerAdapter;
-	ViewPager mViewPager;
-
-	private int _xml_id;
+	
+	private SectionsPagerAdapter _sectionsPagerAdapter;
+	private ViewPager _viewPager;
+	private int _xmlId;
 	private IssueDetailItem _data;
-	private JournalArrayAdapter _adapter_journal;
+	private JournalListAdapter _adapterJournal;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
+	protected void onCreate(Bundle pSavedInstanceState) 
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(pSavedInstanceState);
 		Log.d(TAG, "onCreate()");
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -59,17 +57,17 @@ public class ProjectActivity extends FragmentActivity
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
+		_sectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		_viewPager = (ViewPager) findViewById(R.id.pager);
+		_viewPager.setAdapter(_sectionsPagerAdapter);
 
 		Bundle params = getIntent().getExtras();
-		this._xml_id = params.getInt("issue_id");
+		this._xmlId = params.getInt("issue_id");
 		
 		TextView id_text = (TextView)findViewById(R.id.project_detail_id);
-		id_text.setText(this._xml_id + "");
+		id_text.setText(this._xmlId + "");
 		
 		TextView subject_text = (TextView)findViewById(R.id.project_detail_title);
 		subject_text.setText(params.getString("issue_subject"));
@@ -79,14 +77,14 @@ public class ProjectActivity extends FragmentActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
+	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + menu.toString() + ")");
-		getMenuInflater().inflate(R.menu.activity_project, menu);
-		menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		getMenuInflater().inflate(R.menu.activity_project, pMenu);
+		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
 			@Override
-			public boolean onMenuItemClick(MenuItem item) 
+			public boolean onMenuItemClick(MenuItem pItem) 
 			{
 				setProgressBarIndeterminateVisibility(true);
 				new ProjectsDetailLoaderTask().execute();
@@ -96,11 +94,11 @@ public class ProjectActivity extends FragmentActivity
 		return true;
 	}
 	
-	public void updateView(int position) {
-		Log.d(TAG, "updateView(" + position + ")");
+	public void updateView(int pPosition) {
+		Log.d(TAG, "updateView(" + pPosition + ")");
 		if(_data != null)
 		{
-			switch(position)
+			switch(pPosition)
 			{
 			case 0:
 				TextView author = (TextView)findViewById(R.id.text_project_detail_author);
@@ -142,44 +140,41 @@ public class ProjectActivity extends FragmentActivity
 				estHours.setText(_data.getEstimatedHours());
 				break;
 			case 3:
-				JournalItemCollection journal_list = _data.getJournal();
-				JournalItem[] data_journal = new JournalItem[journal_list.size()];
-				journal_list.toArray(data_journal);
-				_adapter_journal = new JournalArrayAdapter(this, R.layout.journal_list_item, data_journal);
-				_adapter_journal.notifyDataSetChanged();
+				_adapterJournal = new JournalListAdapter(this, R.layout.journal_list_item, _data.getJournal());
+				_adapterJournal.notifyDataSetChanged();
 				break;
 			}
 		}
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.d(TAG, "onOptionsItemSelected(" + item.toString() + ")");
-		switch (item.getItemId()) {
+	public boolean onOptionsItemSelected(MenuItem pItem) {
+		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		switch (pItem.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(pItem);
 	}
 	
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		
 		private static final String TAG_EXT = ".SectionsPagerAdapter";
 
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
-			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + fm.toString() + ")");
+		public SectionsPagerAdapter(FragmentManager pFragmentManager) {
+			super(pFragmentManager);
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + pFragmentManager.toString() + ")");
 		}
 
 		@Override
-		public Fragment getItem(int position) {
-			Log.d(TAG + TAG_EXT, "getItem(" + position + ")");
+		public Fragment getItem(int pPosition) {
+			Log.d(TAG + TAG_EXT, "getItem(" + pPosition + ")");
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
 			Fragment fragment;
-			switch(position)
+			switch(pPosition)
 			{
 			case 0:
 				fragment = new OverviewFragment();
@@ -196,7 +191,7 @@ public class ProjectActivity extends FragmentActivity
 			default:
 				fragment = new DummySectionFragment();
 				Bundle args = new Bundle();
-				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, pPosition + 1);
 				fragment.setArguments(args);
 				break;
 			}
@@ -210,8 +205,8 @@ public class ProjectActivity extends FragmentActivity
 		}
 
 		@Override
-		public CharSequence getPageTitle(int position) {
-			switch (position) {
+		public CharSequence getPageTitle(int pPosition) {
+			switch (pPosition) {
 			case 0:
 				return getString(R.string.issue_overview);
 			case 1:
@@ -231,11 +226,11 @@ public class ProjectActivity extends FragmentActivity
 		private static final String TAG_EXT = ".OverviewFragment";
 		
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-				Bundle savedInstanceState)
+		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
+				Bundle pSavedInstanceState)
 		{
 			Log.d(TAG + TAG_EXT, "onCreateView()");
-			return inflater.inflate(R.layout.project_overview_fragment, container, false);
+			return pInflater.inflate(R.layout.project_overview_fragment, pContainer, false);
 		}
 		
 		public void onResume()
@@ -251,11 +246,11 @@ public class ProjectActivity extends FragmentActivity
 		private static final String TAG_EXT = ".DescriptionFragment";
 		
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-				Bundle savedInstanceState)
+		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
+				Bundle pSavedInstanceState)
 		{
 			Log.d(TAG + TAG_EXT, "onCreateView()");
-			return inflater.inflate(R.layout.project_description_fragment, container, false);
+			return pInflater.inflate(R.layout.project_description_fragment, pContainer, false);
 		}
 
 		public void onResume()
@@ -271,11 +266,11 @@ public class ProjectActivity extends FragmentActivity
 		private static final String TAG_EXT = ".StatusFragment";
 		
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-				Bundle savedInstanceState)
+		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
+				Bundle pSavedInstanceState)
 		{
 			Log.d(TAG + TAG_EXT, "onCreateView()");
-			return inflater.inflate(R.layout.project_status_fragment, container, false);
+			return pInflater.inflate(R.layout.project_status_fragment, pContainer, false);
 		}
 
 		public void onResume()
@@ -296,7 +291,7 @@ public class ProjectActivity extends FragmentActivity
 			Log.d(TAG + TAG_EXT, "onResume()");
 			ProjectActivity parent = ((ProjectActivity) getActivity());
 			parent.updateView(3);
-			setListAdapter(parent._adapter_journal);
+			setListAdapter(parent._adapterJournal);
 			setListShown(true);
 		}
 	}
@@ -306,13 +301,13 @@ public class ProjectActivity extends FragmentActivity
 		private static final String TAG_EXT = ".ProjectsDetailLoaderTask";
 		
 		@Override
-		protected Void doInBackground(Void... params) 
+		protected Void doInBackground(Void... pParams) 
 		{
 			Log.d(TAG + TAG_EXT, "doInBackground()");
 			try 
 			{
 				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(getString(R.string.config_issues_detail_xml) + _xml_id + ".xml?include=journals");
+				HttpGet httpget = new HttpGet(getString(R.string.config_issues_detail_xml) + _xmlId + ".xml?include=journals");
 				HttpResponse response;
 				response = client.execute(httpget);
 				if(response.getStatusLine().getStatusCode() == 200)
@@ -326,28 +321,28 @@ public class ProjectActivity extends FragmentActivity
 					}
 				}
 			} 
-			catch (ClientProtocolException e) 
+			catch (ClientProtocolException exception) 
 			{
-				Log.e("[PPVS App]:ProjectsFragment -> ClientProtocolException", e.getMessage());
+				Log.e("[PPVS App]:ProjectsFragment -> ClientProtocolException", exception.getMessage());
 			}
-			catch (IOException e) 
+			catch (IOException exception) 
 			{
-				Log.e("[PPVS App]:ProjectsFragment -> IOException", e.getMessage());
+				Log.e("[PPVS App]:ProjectsFragment -> IOException", exception.getMessage());
 			} catch (XmlPullParserException e) {
 				Log.e("[PPVS App]:ProjectsFragment -> XmlPullParserException", e.getMessage());
 			}
-			catch (Exception e)
+			catch (Exception exception)
 			{
-				e.printStackTrace();
+				exception.printStackTrace();
 			}
 			return null;
 		}
 		
 		@Override
-		protected void onPostExecute(Void result)
+		protected void onPostExecute(Void pResult)
 		{
 			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			int index = mViewPager.getCurrentItem();
+			int index = _viewPager.getCurrentItem();
 			Log.i(TAG + TAG_EXT, "pager page: " + index);
 			updateView(index);
 			updateView(index+1);
@@ -369,9 +364,9 @@ public class ProjectActivity extends FragmentActivity
 		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			Log.d(TAG + TAG_EXT, "onCreateView(" + inflater.toString() + ", " + container.toString() + ", " + savedInstanceState.toString() + ")");
+		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
+				Bundle pSavedInstanceState) {
+			Log.d(TAG + TAG_EXT, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
 			TextView textView = new TextView(getActivity());
 			textView.setGravity(Gravity.CENTER);
 			textView.setText(Integer.toString(getArguments().getInt(

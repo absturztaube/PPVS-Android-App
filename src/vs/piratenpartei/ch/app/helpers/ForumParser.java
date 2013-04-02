@@ -6,11 +6,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.xml.sax.XMLReader;
 
 import vs.piratenpartei.ch.app.forum.ForumLink;
 import vs.piratenpartei.ch.app.forum.ThreadItem;
 import vs.piratenpartei.ch.app.forum.ThreadItemCollection;
+import vs.piratenpartei.ch.app.forum.TopicItem;
+import vs.piratenpartei.ch.app.forum.TopicItemCollection;
 
+import android.graphics.drawable.Drawable;
+import android.text.Editable;
+import android.text.Html;
 import android.util.Log;
 
 public class ForumParser 
@@ -256,6 +262,72 @@ public class ForumParser
 			current.setLastPossibleOffset(lnk.getOffset());
 			current.setLastUpdateDate(detectString(updateDates.get(index).text()));
 			current.setLastUpdateAuthor(updateAuthors.get(index).text());
+			result.add(current);
+		}
+		return result;
+	}
+	
+	public static TopicItemCollection loadTopic(String pTopicUrl) throws IOException
+	{
+		Log.d(TAG, "loadTopic(" + pTopicUrl + ")");
+		TopicItemCollection result = new TopicItemCollection();
+		ForumParser parser = new ForumParser(new URL(pTopicUrl));
+		parser.parseDocument();
+		Elements posts = parser.getCompletePost();
+		for(int index = 0; index < posts.size(); index++)
+		{
+			Element post = posts.get(index);
+			TopicItem current = new TopicItem();
+			Elements authors = post.select(parser.getSelectorPostAuthor());
+			if(authors.size() > 0)
+			{
+				Element author = authors.get(0);
+				current.setAuthor(author.text());
+			}
+			Elements avatars = post.select(parser.getSelectorPostAvatar());
+			if(avatars.size() > 0)
+			{
+				Element avatar = avatars.get(0);
+				String avatarUrl = avatar.attr("src");
+				URL avatarRef = new URL(avatarUrl);
+				Drawable avatarDrawable = Drawable.createFromStream(avatarRef.openStream(), current.getAuthor());
+				current.setAvatar(avatarDrawable);
+			}
+			Elements contents = post.select(parser.getSelectorPostContent());
+			if(contents.size() > 0)
+			{
+				Element content = contents.get(0);
+				current.setContent(Html.fromHtml(content.html(), new Html.ImageGetter() {
+					
+					@Override
+					public Drawable getDrawable(String pSource) {
+						Log.i(TAG, "Getting Image from: " + pSource);
+						URL src;
+						try {
+							src = new URL(pSource);
+							Drawable image = Drawable.createFromStream(src.openStream(), pSource);
+							return image;
+						} catch (IOException e) {
+							Log.w(TAG, e.getMessage());
+							e.printStackTrace();
+						}
+						return null;
+					}
+				}, new Html.TagHandler() {
+					
+					@Override
+					public void handleTag(boolean pOpening, String pTag, Editable pOutput,
+							XMLReader pXmlReader) {
+						//do nothing
+					}
+				}));
+			}
+			Elements dates = post.select(parser.getSelectorPostDate());
+			if(dates.size() > 0)
+			{
+				Element date = dates.get(0);
+				current.setDate(Html.fromHtml(date.html()).toString());
+			}
 			result.add(current);
 		}
 		return result;
