@@ -1,9 +1,10 @@
-package vs.piratenpartei.ch.app.redmine;
+package vs.piratenpartei.ch.app.listadapters;
 
 import java.text.DateFormat;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.redmine.IssueDetailItem.JournalItem;
+import vs.piratenpartei.ch.app.redmine.JournalItem;
+import vs.piratenpartei.ch.app.redmine.JournalItemCollection;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -13,32 +14,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class JournalArrayAdapter extends ArrayAdapter<JournalItem> 
+public class JournalListAdapter extends ArrayAdapter<JournalItem> 
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.redmine.JournalArrayAdapter";
 	
-	Context context;
-	int ressourceLayoutId;
-	JournalItem data[] = null;
+	private Context _context;
+	private int _ressourceLayoutId;
+	private JournalItemCollection _data = null;
 	
-	public JournalArrayAdapter(Context context, int layoutResourceId, JournalItem[] data)
+	public JournalListAdapter(Context pContext, int pLayoutResourceId, JournalItemCollection pData)
 	{
-		super(context, layoutResourceId, data);
-		Log.d(TAG, "new JournalArrayAdapter(" + context.toString() + ", " + layoutResourceId + ", " + data.toString() + ")");
-		this.ressourceLayoutId = layoutResourceId;
-		this.context = context;
-		this.data = data;
+		super(pContext, pLayoutResourceId, pData);
+		Log.d(TAG, "new JournalListAdapter(" + pContext.toString() + ", " + pLayoutResourceId + ", " + pData.toString() + ")");
+		this._ressourceLayoutId = pLayoutResourceId;
+		this._context = pContext;
+		this._data = pData;
 	}
 	
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int pPosition, View pConvertView, ViewGroup pParent)
 	{
-		View row = convertView;
+		View row = pConvertView;
 		Log.d(TAG, "getView()");
 		JournalItemHolder holder = null;
 		if(row == null)
 		{
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			row = inflater.inflate(ressourceLayoutId, parent, false);
+			LayoutInflater inflater = ((Activity)_context).getLayoutInflater();
+			row = inflater.inflate(_ressourceLayoutId, pParent, false);
 			holder = new JournalItemHolder();
 			holder.header = (TextView)row.findViewById(R.id.text_list_item_header);
 			holder.footer = (TextView)row.findViewById(R.id.text_list_item_footer);
@@ -50,7 +51,7 @@ public class JournalArrayAdapter extends ArrayAdapter<JournalItem>
 			holder = (JournalItemHolder)row.getTag();
 		}
 		
-		JournalItem journal = data[position];
+		JournalItem journal = _data.get(pPosition);
 		holder.header.setText(journal.getAuthor());
 		holder.footer.setText(DateFormat.getInstance().format(journal.getCreatedOn()));
 		holder.content.setText(journal.getNotes());
