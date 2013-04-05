@@ -13,9 +13,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.helpers.Intents;
-import vs.piratenpartei.ch.app.helpers.RssParser;
 import vs.piratenpartei.ch.app.news.NewsItem;
 import vs.piratenpartei.ch.app.news.NewsItemCollection;
+import vs.piratenpartei.ch.parser.rss.RssParser;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -89,7 +89,9 @@ public class NewsFragment extends ListFragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_feedItems = RssParser.readFeed(in);
+						RssParser parser = new RssParser();
+						parser.initParser(in);
+						_feedItems = parser.getFeed();
 						in.close();
 					}
 				}
