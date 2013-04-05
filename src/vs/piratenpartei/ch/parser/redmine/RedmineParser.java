@@ -111,7 +111,7 @@ public class RedmineParser extends AbstractXmlParser
 	public IssueItem getIssueItem() throws XmlPullParserException, IOException
 	{
 		IssueItem result = new IssueItem();
-		this._parser.require(XmlPullParser.END_TAG, null, "issue");
+		//this._parser.require(XmlPullParser.END_TAG, null, "issue");
 		while(this._parser.next() != XmlPullParser.END_TAG)
 		{
 			if(this._parser.getEventType() != XmlPullParser.START_TAG)
