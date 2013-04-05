@@ -1,6 +1,7 @@
 package vs.piratenpartei.ch.parser.redmine;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -15,6 +16,11 @@ import android.util.Log;
 
 public class RedmineParser extends AbstractXmlParser
 {
+	public RedmineParser(InputStream pIn) throws XmlPullParserException,
+			IOException {
+		super(pIn);
+	}
+
 	private static final String TAG = "vs.piratenpartei.ch.app.helpers.RedmineParser";
 	
 	public IssueItemCollection getIssuesList() throws XmlPullParserException, IOException
@@ -111,7 +117,7 @@ public class RedmineParser extends AbstractXmlParser
 	public IssueItem getIssueItem() throws XmlPullParserException, IOException
 	{
 		IssueItem result = new IssueItem();
-		//this._parser.require(XmlPullParser.END_TAG, null, "issue");
+		this._parser.require(XmlPullParser.START_TAG, null, "issue");
 		while(this._parser.next() != XmlPullParser.END_TAG)
 		{
 			if(this._parser.getEventType() != XmlPullParser.START_TAG)

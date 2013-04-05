@@ -89,8 +89,7 @@ public class NewsFragment extends ListFragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						RssParser parser = new RssParser();
-						parser.initParser(in);
+						RssParser parser = new RssParser(in);
 						_feedItems = parser.getFeed();
 						in.close();
 					}

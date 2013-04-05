@@ -17,7 +17,7 @@ public abstract class AbstractXmlParser
 {
 	protected XmlPullParser _parser;
 	
-	public void initParser(InputStream pIn) throws XmlPullParserException, IOException
+	public AbstractXmlParser(InputStream pIn) throws XmlPullParserException, IOException
 	{
 		this._parser = Xml.newPullParser();
 		this._parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);

@@ -1,6 +1,7 @@
 package vs.piratenpartei.ch.parser.rss;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,11 @@ public class RssParser extends AbstractXmlParser
 {
 	private static final String TAG = "vs.piratenpartei.ch.app.helpers.RssParser";
 
+	public RssParser(InputStream pIn) throws XmlPullParserException, IOException
+	{
+		super(pIn);
+	}
+	
 	public NewsItemCollection getFeed() throws XmlPullParserException, IOException, ParseException
 	{
 		Log.d(TAG, "getFeed()");

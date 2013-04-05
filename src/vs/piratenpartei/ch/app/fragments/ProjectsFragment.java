@@ -197,8 +197,7 @@ public class ProjectsFragment extends Fragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						RedmineParser parser = new RedmineParser();
-						parser.initParser(in);
+						RedmineParser parser = new RedmineParser(in);
 						_issues = parser.getIssuesList();
 						in.close();
 					}
