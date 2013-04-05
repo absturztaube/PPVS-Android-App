@@ -14,9 +14,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.helpers.Intents;
-import vs.piratenpartei.ch.app.helpers.RedmineParser;
 import vs.piratenpartei.ch.app.redmine.IssueItem;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
+import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -197,7 +197,9 @@ public class ProjectsFragment extends Fragment
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_issues = RedmineParser.readIssuesList(in);
+						RedmineParser parser = new RedmineParser();
+						parser.initParser(in);
+						_issues = parser.getIssuesList();
 						in.close();
 					}
 				}

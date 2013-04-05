@@ -2,6 +2,7 @@ package vs.piratenpartei.ch.app.activities;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.fragments.ContactFragment;
+import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.fragments.ForumFragment;
 import vs.piratenpartei.ch.app.fragments.NewsFragment;
 import vs.piratenpartei.ch.app.fragments.ProjectsFragment;
@@ -12,13 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity 
 {
@@ -109,35 +105,4 @@ public class MainActivity extends FragmentActivity
 			return null;
 		}
 	}
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-		
-		private static final String TAG_EXT = ".DummySectionFragment";
-
-		public DummySectionFragment() {
-			Log.d(TAG + TAG_EXT, "new DummySectionFragment()");
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
-				Bundle pSavedInstanceState) 
-		{
-			Log.d(TAG + TAG_EXT, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return textView;
-		}
-	}
-
 }

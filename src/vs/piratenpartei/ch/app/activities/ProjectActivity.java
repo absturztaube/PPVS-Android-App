@@ -12,9 +12,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.helpers.RedmineParser;
+import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
+import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -316,7 +316,9 @@ public class ProjectActivity extends FragmentActivity
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						_data = RedmineParser.readIssueDetail(in);
+						RedmineParser parser = new RedmineParser();
+						parser.initParser(in);
+						_data = parser.getIssueDetailItem();
 						in.close();
 					}
 				}
@@ -351,28 +353,4 @@ public class ProjectActivity extends FragmentActivity
 		}
 		
 	}
-
-	public static class DummySectionFragment extends Fragment 
-	{
-		public static final String ARG_SECTION_NUMBER = "section_number";
-		
-		private static final String TAG_EXT = ".DummySectionFragment";
-
-		public DummySectionFragment() 
-		{
-			Log.d(TAG + TAG_EXT, "new DummySectionFragment()");
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
-				Bundle pSavedInstanceState) {
-			Log.d(TAG + TAG_EXT, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return textView;
-		}
-	}
-
 }
