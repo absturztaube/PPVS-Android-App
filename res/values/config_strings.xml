@@ -7,7 +7,7 @@
     <string name="config_facebook_app_intent">fb://profile/385164908189129</string>
     <string name="config_googleplus">https://plus.google.com/112596815441394554834/posts</string>
     <string name="config_twitter">https://twitter.com/PPSVS</string>
-    <string name="config_issues_xml">http://projects.piratenpartei.ch/projects/section-vs/</string>
+    <string name="config_issues_xml">http://projects.piratenpartei.ch/projects/section-vs</string>
     <string name="config_tracker_information_id">14</string>
     <string name="config_tracker_task_id">16</string>
     <string name="config_tracker_motion_id">17</string>

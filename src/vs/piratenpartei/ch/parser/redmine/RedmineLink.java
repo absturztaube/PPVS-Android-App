@@ -14,7 +14,75 @@ public class RedmineLink
 	private String _baseUrl;
 	private String _subPage;
 	private String _dataType;
-	private List<RedmineLinkParameter> _parameters;
+	private RedmineLinkParameterCollection _parameters;
+	
+	public RedmineLink(String pBaseUrl, String pSubPage, String pDataType, RedmineLinkParameterCollection pParameters)
+	{
+		this._baseUrl = pBaseUrl;
+		this._subPage = pSubPage;
+		this._dataType = pDataType;
+		this._parameters = pParameters;
+	}
+	
+	public String getHost()
+	{
+		return this._baseUrl;
+	}
+	
+	public void setHost(String pBaseUrl)
+	{
+		this._baseUrl = pBaseUrl;
+	}
+	
+	public String getSubPage()
+	{
+		return this._subPage;
+	}
+	
+	public void setSubPage(String pSubPage)
+	{
+		this._subPage = pSubPage;
+	}
+	
+	public String getDataType()
+	{
+		return this._dataType;
+	}
+	
+	public void setDataType(String pDataType)
+	{
+		this._dataType = pDataType;
+	}
+	
+	public void addParameter(RedmineLinkParameter pParameter)
+	{
+		this._parameters.add(pParameter);
+	}
+	
+	public void removeParameter(String pParameterName)
+	{
+		this._parameters.remove(pParameterName);
+	}
+	
+	public void updateParameter(String pParameterName, String pValue)
+	{
+		this._parameters.update(pParameterName, pValue);
+	}
+	
+	public void removeParameter(RedmineLinkParameter pParameter)
+	{
+		this._parameters.remove(pParameter);
+	}
+	
+	public RedmineLinkParameterCollection getParameterCollection()
+	{
+		return this._parameters;
+	}
+	
+	public void setParameterCollection(RedmineLinkParameterCollection pParameters)
+	{
+		this._parameters = pParameters;
+	}
 	
 	public String getUrlString()
 	{

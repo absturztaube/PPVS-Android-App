@@ -10,9 +10,7 @@ public class RedmineLinkSortParameter extends RedmineLinkParameter
 	
 	public RedmineLinkSortParameter(String pField, String pDirection)
 	{
-		super("sort", "");
-		this._field = pField;
-		this._direction = pDirection;
+		super("sort", pField + ":" + pDirection);
 	}
 	
 	public String getField()
@@ -45,14 +43,14 @@ public class RedmineLinkSortParameter extends RedmineLinkParameter
 	protected void loadValue()
 	{
 		String[] parts = this._value.split(":");
-		if(parts.length == 2)
+		if(parts.length >= 2)
 		{
 			this._field = parts[0];
 			this._direction = parts[1];
 		}
 		else
 		{
-			throw new IndexOutOfBoundsException("Value does contain corrupt data");
+			throw new IndexOutOfBoundsException("Value does contain corrupt data (Value: '" + this._value + "')");
 		}
 	}
 }

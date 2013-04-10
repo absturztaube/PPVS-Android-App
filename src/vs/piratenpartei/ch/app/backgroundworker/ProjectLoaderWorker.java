@@ -12,34 +12,32 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
-import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
+import vs.piratenpartei.ch.parser.redmine.RedmineLink;
 import vs.piratenpartei.ch.parser.redmine.RedmineParser;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-public class ProjectLoaderWorker extends AsyncTask<Void, Void, IssueItemCollection> {
+public class ProjectLoaderWorker extends AsyncTask<RedmineLink, Void, IssueItemCollection> {
 
 	private static final String TAG = ".ProjectsLoaderTask";
-	private Context _context;
+	private IAsyncTaskAction<IssueItemCollection, ArrayList<String>> _onComplete;
 	
-	public ProjectLoaderWorker(Context pContext)
+	public ProjectLoaderWorker(IAsyncTaskAction<IssueItemCollection, ArrayList<String>> pOnComplete)
 	{
-		this._context = pContext;
+		this._onComplete = pOnComplete;
 	}
 
 	@Override
-	protected IssueItemCollection doInBackground(Void... pParams) 
+	protected IssueItemCollection doInBackground(RedmineLink... pParams) 
 	{
 		Log.d(TAG, "doInBackground()");
+		RedmineLink link = pParams[0];
 		IssueItemCollection result = new IssueItemCollection();
 		try 
 		{
 			HttpClient client = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet(this._context.getString(R.string.config_issues_xml) + "issues.xml?" + _xml_sort_attribute + _xml_tracker_id + _xml_status);
+			HttpGet httpget = new HttpGet(link.getUrlString());
 			HttpResponse response;
 			response = client.execute(httpget);
 			if(response.getStatusLine().getStatusCode() == 200)
@@ -68,7 +66,7 @@ public class ProjectLoaderWorker extends AsyncTask<Void, Void, IssueItemCollecti
 		{
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 	
 	@Override
@@ -82,9 +80,7 @@ public class ProjectLoaderWorker extends AsyncTask<Void, Void, IssueItemCollecti
 		}
 		try
 		{
-			ListView proj_list = (ListView)this._context.getActivity().findViewById(R.id.list_projects);
-			proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
-			getActivity().setProgressBarIndeterminateVisibility(false);
+			this._onComplete.onComplete(pResult, titles);
 		}
 		catch(NullPointerException e)
 		{
