@@ -17,10 +17,14 @@ public abstract class AbstractXmlParser
 {
 	protected XmlPullParser _parser;
 	
-	public AbstractXmlParser(InputStream pIn) throws XmlPullParserException, IOException
+	public AbstractXmlParser() throws XmlPullParserException, IOException
 	{
 		this._parser = Xml.newPullParser();
 		this._parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+	}
+	
+	public void setInput(InputStream pIn) throws XmlPullParserException, IOException
+	{
 		this._parser.setInput(pIn, null);
 		this._parser.nextTag();
 	}
@@ -82,4 +86,6 @@ public abstract class AbstractXmlParser
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZ", Locale.getDefault());
 		return df.parse(pXmlDate);
 	}
+	
+	public abstract <Result> Result parse() throws XmlPullParserException, IOException, ParseException;
 }

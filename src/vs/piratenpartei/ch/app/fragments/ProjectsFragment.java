@@ -1,10 +1,11 @@
 package vs.piratenpartei.ch.app.fragments;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
 import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
-import vs.piratenpartei.ch.app.backgroundworker.ProjectLoaderWorker;
 import vs.piratenpartei.ch.app.helpers.Intents;
 import vs.piratenpartei.ch.app.redmine.IssueItem;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
@@ -12,6 +13,7 @@ import vs.piratenpartei.ch.parser.redmine.RedmineLink;
 import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameter;
 import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameterCollection;
 import vs.piratenpartei.ch.parser.redmine.RedmineLinkSortParameter;
+import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,7 +53,19 @@ public class ProjectsFragment extends Fragment
 		super.onResume();
 		Log.d(TAG, "onResume()");
 		getActivity().setProgressBarIndeterminateVisibility(true);
-		new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(this._redmineLink);
+		getIssuesFromRedmine();
+	}
+
+	public void getIssuesFromRedmine() {
+		try {
+			new AsyncXmlParserTask<IssueItemCollection>(new RedmineParser(), new ProjectLoaderCompleteAction()).execute(_redmineLink.getUrlString());
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -71,7 +85,7 @@ public class ProjectsFragment extends Fragment
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(_redmineLink);
+				getIssuesFromRedmine();
 				return true;
 			}
 		});
@@ -108,7 +122,7 @@ public class ProjectsFragment extends Fragment
 					break;
 				}
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(_redmineLink);
+				getIssuesFromRedmine();
 			}
 
 			@Override
@@ -117,7 +131,7 @@ public class ProjectsFragment extends Fragment
 				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
 				_redmineLink.removeParameter("tracker_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(_redmineLink);
+				getIssuesFromRedmine();
 			}
 		});
 		tracker_spinner.setSelection(0);
@@ -144,7 +158,7 @@ public class ProjectsFragment extends Fragment
 					break;
 				}
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(_redmineLink);
+				getIssuesFromRedmine();
 			}
 
 			@Override
@@ -153,7 +167,7 @@ public class ProjectsFragment extends Fragment
 				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
 				_redmineLink.removeParameter("status_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectLoaderWorker(new ProjectLoaderCompleteAction()).execute(_redmineLink);
+				getIssuesFromRedmine();
 			}
 		});
 		status_spinner.setSelection(1);
@@ -173,14 +187,21 @@ public class ProjectsFragment extends Fragment
 		});
 	}
 	
-	private class ProjectLoaderCompleteAction implements IAsyncTaskAction<IssueItemCollection, ArrayList<String>>
+	private class ProjectLoaderCompleteAction implements IAsyncTaskAction<IssueItemCollection>
 	{
 		@Override
-		public void onComplete(IssueItemCollection pResult, ArrayList<String> pParameter) 
+		public void onComplete(IssueItemCollection pResult) 
 		{
 			_issues = pResult;
+			String[] titles = new String[_issues.size()];
+			int index = 0;
+			for(IssueItem item : _issues)
+			{
+				titles[index] = "[" + item.getId() + "]" + item.getSubject();
+				index++;
+			}
 			ListView proj_list = (ListView)getActivity().findViewById(R.id.list_projects);
-			proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, pParameter));
+			proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
 			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
 	}

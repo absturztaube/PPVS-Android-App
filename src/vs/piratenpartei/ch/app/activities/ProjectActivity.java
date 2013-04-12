@@ -316,7 +316,8 @@ public class ProjectActivity extends FragmentActivity
 					if(entity != null)
 					{
 						InputStream in = entity.getContent();
-						RedmineParser parser = new RedmineParser(in);
+						RedmineParser parser = new RedmineParser();
+						parser.setInput(in);
 						_data = parser.getIssueDetailItem();
 						in.close();
 					}
