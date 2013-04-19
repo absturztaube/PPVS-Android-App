@@ -1,22 +1,19 @@
 package vs.piratenpartei.ch.app.activities;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
+import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
 import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
+import vs.piratenpartei.ch.parser.redmine.RedmineLink;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameter;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameterCollection;
 import vs.piratenpartei.ch.parser.redmine.RedmineParser;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -41,7 +38,7 @@ public class ProjectActivity extends FragmentActivity
 	
 	private SectionsPagerAdapter _sectionsPagerAdapter;
 	private ViewPager _viewPager;
-	private int _xmlId;
+	private RedmineLink _issueLink;
 	private IssueDetailItem _data;
 	private JournalListAdapter _adapterJournal;
 
@@ -64,16 +61,31 @@ public class ProjectActivity extends FragmentActivity
 		_viewPager.setAdapter(_sectionsPagerAdapter);
 
 		Bundle params = getIntent().getExtras();
-		this._xmlId = params.getInt("issue_id");
+		RedmineLinkParameterCollection linkParameters = new RedmineLinkParameterCollection();
+		linkParameters.add(new RedmineLinkParameter("include", "journals"));
+		this._issueLink = new RedmineLink(getString(R.string.config_issues_detail_xml), params.getInt("issue_id") + "", RedmineLink.DATA_TYPE_XML, linkParameters);
 		
 		TextView id_text = (TextView)findViewById(R.id.project_detail_id);
-		id_text.setText(this._xmlId + "");
+		id_text.setText(this._issueLink.getSubPage() + "");
 		
 		TextView subject_text = (TextView)findViewById(R.id.project_detail_title);
 		subject_text.setText(params.getString("issue_subject"));
 
 		setProgressBarIndeterminateVisibility(true);
-		new ProjectsDetailLoaderTask().execute();
+		getIssueDetail();
+	}
+	
+	private void getIssueDetail()
+	{
+		try {
+			new AsyncXmlParserTask<IssueDetailItem>(new RedmineParser(), new OnCompleteAction()).execute(this._issueLink.getUrlString());
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -87,7 +99,7 @@ public class ProjectActivity extends FragmentActivity
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
 				setProgressBarIndeterminateVisibility(true);
-				new ProjectsDetailLoaderTask().execute();
+				getIssueDetail();
 				return true;
 			}
 		});
@@ -296,6 +308,24 @@ public class ProjectActivity extends FragmentActivity
 		}
 	}
 	
+	private class OnCompleteAction implements IAsyncTaskAction<IssueDetailItem>
+	{
+
+		@Override
+		public void onComplete(IssueDetailItem pResult) 
+		{
+			_data = pResult;
+			int index = _viewPager.getCurrentItem();
+			updateView(index);
+			updateView(index+1);
+			updateView(index-1);
+			setProgressBarIndeterminateVisibility(false);
+		}
+		
+	}
+	
+	/*
+	
 	private class ProjectsDetailLoaderTask extends AsyncTask<Void, Void, Void>
 	{
 		private static final String TAG_EXT = ".ProjectsDetailLoaderTask";
@@ -353,4 +383,6 @@ public class ProjectActivity extends FragmentActivity
 		}
 		
 	}
+	
+	//*/
 }
