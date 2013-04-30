@@ -128,16 +128,28 @@ public class ProjectActivity extends FragmentActivity
 				priority.setText(_data.getPriority());
 				
 				TextView startDate = (TextView)findViewById(R.id.text_project_detail_startdate);
-				startDate.setText(DateFormat.getInstance().format(_data.getStartDate()));
+				if(_data.getStartDate() != null)
+				{
+					startDate.setText(DateFormat.getInstance().format(_data.getStartDate()));
+				}
 				
 				TextView dueDate = (TextView)findViewById(R.id.text_project_detail_duedate);
-				dueDate.setText(DateFormat.getInstance().format(_data.getDueDate()));
+				if(_data.getDueDate() != null)
+				{
+					dueDate.setText(DateFormat.getInstance().format(_data.getDueDate()));
+				}
 				
 				TextView createdOn = (TextView)findViewById(R.id.text_project_detail_created);
-				createdOn.setText(DateFormat.getInstance().format(_data.getCreatedOn()));
+				if(_data.getCreatedOn() != null)
+				{
+					createdOn.setText(DateFormat.getInstance().format(_data.getCreatedOn()));
+				}
 				
 				TextView updatedOn = (TextView)findViewById(R.id.text_project_detail_updated);
-				updatedOn.setText(DateFormat.getInstance().format(_data.getUpdatedOn()));
+				if(_data.getUpdatedOn() != null)
+				{
+					updatedOn.setText(DateFormat.getInstance().format(_data.getUpdatedOn()));
+				}
 				break;
 			case 1:
 				TextView description = (TextView)findViewById(R.id.text_project_desc);

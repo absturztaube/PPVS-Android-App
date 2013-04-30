@@ -92,19 +92,35 @@ public class RedmineParser extends AbstractXmlParser
 			}
 			else if(tagName.equals("start_date"))
 			{
-				result.setStartDate(RedmineParser.convertXmlDate(this.getText(tagName)));
+				String date = this.getText(tagName);
+				if(date.length() != 0)
+				{
+					result.setStartDate(RedmineParser.convertXmlDate(date));
+				}
 			}
 			else if(tagName.equals("due_date"))
 			{
-				result.setDueDate(RedmineParser.convertXmlDate(this.getText(tagName)));
+				String date = this.getText(tagName);
+				if(date.length() != 0)
+				{
+					result.setDueDate(RedmineParser.convertXmlDate(date));
+				}
 			}
 			else if(tagName.equals("created_on"))
 			{
-				result.setCreatedOn(RedmineParser.convertXmlDateTime(this.getText(tagName)));
+				String date = this.getText(tagName);
+				if(date.length() != 0)
+				{
+					result.setCreatedOn(RedmineParser.convertXmlDateTime(date));
+				}
 			}
 			else if(tagName.equals("updated_on"))
 			{
-				result.setUpdatedOn(RedmineParser.convertXmlDateTime(this.getText(tagName)));
+				String date = this.getText(tagName);
+				if(date.length() != 0)
+				{
+					result.setUpdatedOn(RedmineParser.convertXmlDateTime(date));
+				}
 			}
 			else if(tagName.equals("description"))
 			{
