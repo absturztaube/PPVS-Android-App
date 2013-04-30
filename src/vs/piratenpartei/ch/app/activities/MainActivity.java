@@ -16,6 +16,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 
+/**
+ * The main activity contains a pager that displays for layout fragments:
+ * {@link NewsFragment}, {@link ForumFragment}, {@link ProjectsFragment}, {@link ContactFragment} 
+ * @author absturztaube
+ * @see NewsFragment
+ * @see ForumFragment
+ * @see ProjectsFragment
+ * @see ContactFragment
+ */
 public class MainActivity extends FragmentActivity 
 {
 	private static final String TAG = "MainActivity";
@@ -23,12 +32,19 @@ public class MainActivity extends FragmentActivity
 	private SectionsPagerAdapter _sectionPagerAdapter;
 	private ViewPager _viewPager;
 
+	/**
+	 * Creates the activity
+	 */
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) 
 	{
 		super.onCreate(pSavedInstanceState);
 		Log.d(TAG, "onCreate(Bundle)");
+		
+		//Activate the progress thingy in the action bar
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
+		//Setting up the layout
 		setContentView(R.layout.activity_main);
 		_sectionPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
@@ -36,6 +52,10 @@ public class MainActivity extends FragmentActivity
 		_viewPager.setAdapter(_sectionPagerAdapter);
 	}
 
+	/**
+	 * Creates the options menu for this activity
+	 * @params pMenu is the menu container to set up
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
@@ -44,26 +64,41 @@ public class MainActivity extends FragmentActivity
 		return true;
 	}
 	
+	/**
+	 * Simple view pager adapter, that handles the fragments displayed by the pager
+	 * @author absturztaube
+	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 		private static final String TAG_EXT = ".SectionsPagerAdapter";
 		
+		/**
+		 * Creates a new pager adapter
+		 * @param pFragmentManager see {@link FragmentPagerAdapter}
+		 */
 		public SectionsPagerAdapter(FragmentManager pFragmentManager) 
 		{
 			super(pFragmentManager);
 			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(FragmentManager)");
 		}
 
+		/**
+		 * Gets an item from the adapter
+		 */
 		@Override
 		public Fragment getItem(int pPosition) {
 			Log.d(TAG + TAG_EXT, "getItem(int)");
+			
+			//Create an empty fragment
+			//so the app doesn't crash if you add
+			//new pages to the pager
 			Fragment fragment;
-
 			fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, pPosition + 1);
 			fragment.setArguments(args);
 			
+			//Getting the proper fragment depending on its position
 			switch(pPosition)
 			{
 				case 0:
@@ -82,12 +117,18 @@ public class MainActivity extends FragmentActivity
 			return fragment;
 		}
 
+		/**
+		 * Gets the number of fragments in this adapter
+		 */
 		@Override
 		public int getCount() {
 			Log.d(TAG + TAG_EXT, "getCount()");
 			return 4;
 		}
 
+		/**
+		 * Gets the page titles
+		 */
 		@Override
 		public CharSequence getPageTitle(int pPosition) 
 		{

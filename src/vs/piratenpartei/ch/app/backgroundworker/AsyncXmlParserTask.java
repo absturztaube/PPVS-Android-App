@@ -13,11 +13,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import vs.piratenpartei.ch.parser.AbstractXmlParser;
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
-@SuppressLint("ShowToast")
 public class AsyncXmlParserTask<Result> extends
 		AsyncTask<String, Void, List<Result>> 
 {

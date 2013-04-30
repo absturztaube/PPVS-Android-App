@@ -14,16 +14,32 @@ import vs.piratenpartei.ch.app.news.NewsItem;
 import vs.piratenpartei.ch.app.news.NewsItemCollection;
 import vs.piratenpartei.ch.parser.AbstractXmlParser;
 
+/**
+ * Class that parses RSS from an URL.
+ * @author absturztaube
+ */
 public class RssParser extends AbstractXmlParser 
 {
 	private static final String TAG = "RssParser";
 
+	/**
+	 * Creates the Parser
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	public RssParser() throws XmlPullParserException, IOException
 	{
 		super();
 		Log.d(TAG, "new RssParser()");
 	}
 	
+	/**
+	 * Gets all items in an rss feed
+	 * @return returns an item collection containing all feed items
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public NewsItemCollection getFeed() throws XmlPullParserException, IOException, ParseException
 	{
 		Log.d(TAG, "getFeed()");
