@@ -16,11 +16,12 @@ import vs.piratenpartei.ch.parser.AbstractXmlParser;
 
 public class RssParser extends AbstractXmlParser 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.helpers.RssParser";
+	private static final String TAG = "RssParser";
 
 	public RssParser() throws XmlPullParserException, IOException
 	{
 		super();
+		Log.d(TAG, "new RssParser()");
 	}
 	
 	public NewsItemCollection getFeed() throws XmlPullParserException, IOException, ParseException
@@ -52,6 +53,7 @@ public class RssParser extends AbstractXmlParser
 
 	public NewsItem getFeedItem() throws XmlPullParserException, IOException, ParseException
 	{
+		Log.d(TAG, "getFeedItem()");
 		NewsItem result = new NewsItem();
 		this._parser.require(XmlPullParser.START_TAG, null, "item");
 		while(this._parser.next() != XmlPullParser.END_TAG)
@@ -105,7 +107,9 @@ public class RssParser extends AbstractXmlParser
 	@SuppressWarnings("unchecked")
 	@Override
 	public <Result> Result parse() throws XmlPullParserException, IOException,
-			ParseException {
+			ParseException 
+	{
+		Log.d(TAG, "parse()");
 		return (Result)this.getFeed();
 	}
 }

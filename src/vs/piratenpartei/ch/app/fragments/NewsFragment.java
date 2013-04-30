@@ -24,7 +24,7 @@ import android.widget.ListView;
 
 public class NewsFragment extends ListFragment 
 {	
-	private static final String TAG = "vs.piratenpartei.ch.app.news.NewsFragment";
+	private static final String TAG = "NewsFragment";
 	
 	private NewsItemCollection _feedItems = new NewsItemCollection();
 		
@@ -32,7 +32,7 @@ public class NewsFragment extends ListFragment
 	public void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
-		Log.d(TAG, "onCreate()");
+		Log.d(TAG, "onCreate(Bundle)");
 		setHasOptionsMenu(true);
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		getNewsItems();
@@ -41,12 +41,16 @@ public class NewsFragment extends ListFragment
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.news_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			private static final String TAG_EXT = "Menu[0]";
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
+				Log.d(TAG + TAG_EXT, "onMenuItemClick(MenuItem)");
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				getNewsItems();
 				return true;
@@ -57,7 +61,7 @@ public class NewsFragment extends ListFragment
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
-		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+		Log.d(TAG, "onListItemClick(ListView, View, int, long)");
 		NewsItem clicked = this._feedItems.get(pPosition);
 		Intent intent = Intents.getNewsDetailIntent(getActivity(), clicked);
 		startActivity(intent);
@@ -65,6 +69,7 @@ public class NewsFragment extends ListFragment
 	
 	private void getNewsItems()
 	{
+		Log.d(TAG, "getNewsItems()");
 		try {
 			new AsyncXmlParserTask<NewsItemCollection>(new RssParser(), new NewsLoadedAction()).execute(getString(R.string.config_news_rss));
 		} catch (XmlPullParserException e) {
@@ -78,10 +83,13 @@ public class NewsFragment extends ListFragment
 	
 	private class NewsLoadedAction implements IAsyncTaskAction<NewsItemCollection>
 	{
+		private static final String TAG_EXT = "NewsLoadedAction";
 
 		@Override
 		public void onComplete(NewsItemCollection pResult) 
 		{
+			Log.d(TAG + TAG_EXT, "onComplete(NewsItemCollection)");
+			
 			_feedItems = pResult;
 			ArrayList<String> titles = new ArrayList<String>();
 			for(int i = 0; i < pResult.size(); i++)

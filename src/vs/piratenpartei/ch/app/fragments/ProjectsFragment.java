@@ -31,7 +31,7 @@ import android.widget.Spinner;
 
 public class ProjectsFragment extends Fragment 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.redmine.ProjectsFragment";
+	private static final String TAG = "ProjectsFragment";
 	
 	private IssueItemCollection _issues = new IssueItemCollection();
 	private RedmineLink _redmineLink;
@@ -40,6 +40,7 @@ public class ProjectsFragment extends Fragment
 	public void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
 		this._redmineLink = new RedmineLink(this.getString(R.string.config_issues_xml), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
 		this._redmineLink.addParameter(new RedmineLinkSortParameter("updated_on", RedmineLinkSortParameter.SORT_DESC));
 		this._redmineLink.addParameter(new RedmineLinkParameter("limit", "100"));
@@ -56,7 +57,9 @@ public class ProjectsFragment extends Fragment
 		getIssuesFromRedmine();
 	}
 
-	public void getIssuesFromRedmine() {
+	public void getIssuesFromRedmine() 
+	{
+		Log.d(TAG, "getIssuesFromRedmine()");
 		try {
 			new AsyncXmlParserTask<IssueItemCollection>(new RedmineParser(), new ProjectLoaderCompleteAction()).execute(_redmineLink.getUrlString());
 		} catch (XmlPullParserException e) {
@@ -71,19 +74,23 @@ public class ProjectsFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState)
 	{
-		Log.d(TAG, "onCreateView()");
+		Log.d(TAG, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 		return pInflater.inflate(R.layout.projects_fragment, pContainer, false);
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.projects_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			private static final String TAG_EXT = ".Menu[0]";
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
+				Log.d(TAG + TAG_EXT, "onMenuItemClick(MenuItem)");
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				getIssuesFromRedmine();
 				return true;
@@ -95,17 +102,17 @@ public class ProjectsFragment extends Fragment
 	public void onActivityCreated(Bundle pSavedInstanceState)
 	{
 		super.onActivityCreated(pSavedInstanceState);
-		Log.d(TAG, "onActivityCreated()");
+		Log.d(TAG, "onActivityCreated(Bundle)");
 		Spinner tracker_spinner = (Spinner)getActivity().findViewById(R.id.project_type);
 		tracker_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() 
 		{
-			private static final String TAG_EXT = ".tracker_spinner.onItemSelectedListener";
+			private static final String TAG_EXT = ".tracker_spinner";
 			
 			@Override
 			public void onItemSelected(AdapterView<?> pAdapterView, View pView,
 					int pPosition, long pId) 
 			{
-				Log.d(TAG + TAG_EXT, "onItemSelected(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+				Log.d(TAG + TAG_EXT, "onItemSelected(AdapterView<?>, View, int, long)");
 				switch(pPosition)
 				{
 				case 0:
@@ -128,7 +135,7 @@ public class ProjectsFragment extends Fragment
 			@Override
 			public void onNothingSelected(AdapterView<?> pAdapterView) 
 			{
-				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
+				Log.d(TAG + TAG_EXT, "onNothingSelected(AdapterView<?>)");
 				_redmineLink.removeParameter("tracker_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				getIssuesFromRedmine();
@@ -139,12 +146,12 @@ public class ProjectsFragment extends Fragment
 		Spinner status_spinner = (Spinner)getActivity().findViewById(R.id.project_state);
 		status_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() 
 		{
-			private static final String TAG_EXT = ".status_spinner.onItemSelectedListener";
+			private static final String TAG_EXT = ".status_spinner";
 			@Override
 			public void onItemSelected(AdapterView<?> pAdapterView, View pView,
 					int pPosition, long pId) 
 			{
-				Log.d(TAG + TAG_EXT, "onItemSelected(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+				Log.d(TAG + TAG_EXT, "onItemSelected(AdapterView<?>, View, int, long)");
 				switch(pPosition)
 				{
 				case 0:
@@ -164,7 +171,7 @@ public class ProjectsFragment extends Fragment
 			@Override
 			public void onNothingSelected(AdapterView<?> pAdapterView) 
 			{
-				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
+				Log.d(TAG + TAG_EXT, "onNothingSelected(AdapterView<?>)");
 				_redmineLink.removeParameter("status_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
 				getIssuesFromRedmine();
@@ -173,12 +180,13 @@ public class ProjectsFragment extends Fragment
 		status_spinner.setSelection(1);
 		
 		ListView list_projects = (ListView)getActivity().findViewById(R.id.list_projects);
-		list_projects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			private static final String TAG_EXT = ".list_projects.onItemClickListener";
+		list_projects.setOnItemClickListener(new AdapterView.OnItemClickListener() 
+		{
+			private static final String TAG_EXT = ".list_projects";
 			@Override
 			public void onItemClick(AdapterView<?> pAdapterView, View pView, int pPosition,
 					long pId) {
-				Log.d(TAG + TAG_EXT, "onItemClick(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+				Log.d(TAG + TAG_EXT, "onItemClick(AdapterView<?>, View, int, long)");
 				IssueItem clicked = _issues.get(pPosition);
 				Intent intent = Intents.getIssueDetailIntent(getActivity(), clicked);
 				startActivity(intent);
@@ -189,9 +197,12 @@ public class ProjectsFragment extends Fragment
 	
 	private class ProjectLoaderCompleteAction implements IAsyncTaskAction<IssueItemCollection>
 	{
+		private static final String TAG_EXT = ".ProjectLoaderCompleteAction";
+		
 		@Override
 		public void onComplete(IssueItemCollection pResult) 
 		{
+			Log.d(TAG + TAG_EXT, "onComplete(IssueItemCollection)");
 			_issues = pResult;
 			String[] titles = new String[_issues.size()];
 			int index = 0;

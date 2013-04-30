@@ -1,4 +1,4 @@
-package vs.piratenpartei.ch.app.forum;
+package vs.piratenpartei.ch.parser.forum;
 
 public class ForumLink 
 {
@@ -7,12 +7,45 @@ public class ForumLink
 	
 	private String _baseUrl = "http://forum.piratenpartei.ch/index.php/";
 	private String _type = "board";
-	private int _id = 147;
+	private int _id = 174;
 	private int _offset = 0;
+	
+	public ForumLink()
+	{
+		this("http://forum.piratenpartei.ch/index.php/");
+	}
+	
+	public ForumLink(String pBaseUrl)
+	{
+		this(pBaseUrl, ForumLink.TYPE_BOARD);
+	}
+	
+	public ForumLink(String pBaseUrl, String pType)
+	{
+		this(pBaseUrl, pType, 174, 0);
+	}
+	
+	public ForumLink(String pBaseUrl, String pType, int pId)
+	{
+		this(pBaseUrl, pType, pId, 0);
+	}
+	
+	public ForumLink(String pBaseUrl, String pType, int pId, int pOffset)
+	{
+		this._baseUrl = pBaseUrl;
+		this._type = pType;
+		this._id = pId;
+		this._offset = pOffset;
+	}
 	
 	public String getBaseUrl()
 	{
 		return this._baseUrl;
+	}
+	
+	public void setBaseUrl(String pBaseUrl)
+	{
+		this._baseUrl = pBaseUrl;
 	}
 	
 	public String getType()
@@ -47,7 +80,7 @@ public class ForumLink
 	
 	public String getUrlString()
 	{
-		return this._baseUrl + this._type + "," + this._id + "." + this._offset;
+		return this._baseUrl + this._type + "," + this._id + "." + this._offset + ".html";
 	}
 	
 	public static ForumLink parse(String pString)

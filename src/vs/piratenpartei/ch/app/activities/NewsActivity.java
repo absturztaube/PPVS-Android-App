@@ -12,13 +12,13 @@ import android.support.v4.app.NavUtils;
 
 public class NewsActivity extends Activity 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.NewsActivity";
+	private static final String TAG = "NewsActivity";
 
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
 		
-		Log.d(TAG, "onCreate()");
+		Log.d(TAG, "onCreate(Bundle)");
 		
 		setContentView(R.layout.activity_news);
 		Bundle params = getIntent().getExtras();
@@ -47,7 +47,7 @@ public class NewsActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		Log.d(TAG, "onCreateOptionsMenu(Menu)");
 		getMenuInflater().inflate(R.menu.activity_news, pMenu);
 		return true;
 	}
@@ -55,7 +55,7 @@ public class NewsActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem pItem) 
 	{
-		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);

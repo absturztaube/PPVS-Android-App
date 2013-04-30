@@ -20,7 +20,7 @@ public class RedmineParser extends AbstractXmlParser
 		super();
 	}
 
-	private static final String TAG = "vs.piratenpartei.ch.app.helpers.RedmineParser";
+	private static final String TAG = "RedmineParser";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -68,6 +68,7 @@ public class RedmineParser extends AbstractXmlParser
 	
 	public IssueDetailItem getIssueDetailItem() throws XmlPullParserException, IOException, ParseException
 	{
+		Log.d(TAG, "getIssueDetailItem()");
 		IssueDetailItem result = new IssueDetailItem();
 		this._parser.require(XmlPullParser.START_TAG, null, "issue");
 		while(this._parser.next() != XmlPullParser.END_TAG)
@@ -135,6 +136,7 @@ public class RedmineParser extends AbstractXmlParser
 	
 	public IssueItem getIssueItem() throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getIssueItem()");
 		IssueItem result = new IssueItem();
 		this._parser.require(XmlPullParser.START_TAG, null, "issue");
 		while(this._parser.next() != XmlPullParser.END_TAG)
@@ -162,6 +164,7 @@ public class RedmineParser extends AbstractXmlParser
 
 	public JournalItemCollection getIssueJournal() throws XmlPullParserException, IOException, ParseException
 	{
+		Log.d(TAG, "getIssueJournal()");
 		JournalItemCollection result = new JournalItemCollection();
 		this._parser.require(XmlPullParser.START_TAG, null, "journals");
 		while(this._parser.next() != XmlPullParser.END_TAG)
@@ -185,6 +188,7 @@ public class RedmineParser extends AbstractXmlParser
 	
 	public JournalItem getIssueJournalItem() throws ParseException, XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getIssueJournalItem()");
 		JournalItem result = new JournalItem();
 		this._parser.require(XmlPullParser.START_TAG, null, "journal");
 		while(this._parser.next() != XmlPullParser.END_TAG)

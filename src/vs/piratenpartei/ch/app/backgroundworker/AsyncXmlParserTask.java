@@ -13,9 +13,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import vs.piratenpartei.ch.parser.AbstractXmlParser;
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+@SuppressLint("ShowToast")
 public class AsyncXmlParserTask<Result> extends
 		AsyncTask<String, Void, List<Result>> 
 {
@@ -26,6 +28,7 @@ public class AsyncXmlParserTask<Result> extends
 	
 	public AsyncXmlParserTask(AbstractXmlParser pParser, IAsyncTaskAction<Result> pOnCompleteAction)
 	{
+		Log.d(TAG, "new AsyncXmlParserTask(AbstractXmlParser, IAsyncTaskAction<Result>)");
 		this._parser = pParser;
 		this._onCompleteAction = pOnCompleteAction;
 	}
@@ -34,7 +37,7 @@ public class AsyncXmlParserTask<Result> extends
 	@Override
 	protected List<Result> doInBackground(String... params) 
 	{
-		Log.d(TAG, "doInBackground()");
+		Log.d(TAG, "doInBackground(String[])");
 		List<Result> result = new ArrayList<Result>();
 		for(String currentUrl : params)
 		{
@@ -58,15 +61,15 @@ public class AsyncXmlParserTask<Result> extends
 			} 
 			catch (ClientProtocolException exception) 
 			{
-				Log.e("[PPVS App]:ProjectsFragment -> ClientProtocolException", exception.getMessage());
+				exception.getStackTrace();
 			}
 			catch (IOException exception) 
 			{
-				Log.e("[PPVS App]:ProjectsFragment -> IOException", exception.getMessage());
+				exception.getStackTrace();
 			}
 			catch (Exception exception)
 			{
-				exception.printStackTrace();
+				exception.getStackTrace();
 			}
 		}
 		return result;
@@ -75,10 +78,16 @@ public class AsyncXmlParserTask<Result> extends
 	@Override
 	protected void onPostExecute(List<Result> pResult)
 	{
-		Log.d(TAG, "onPostExecute()");
 		for(Result result : pResult)
 		{
-			this._onCompleteAction.onComplete(result);
+			try
+			{
+				this._onCompleteAction.onComplete(result);
+			}
+			catch(NullPointerException ex)
+			{
+				ex.printStackTrace();
+			}
 		}
 	}
 }

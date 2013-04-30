@@ -34,7 +34,7 @@ import android.widget.TextView;
 
 public class ProjectActivity extends FragmentActivity 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
+	private static final String TAG = "ProjectActivity";
 	
 	private SectionsPagerAdapter _sectionsPagerAdapter;
 	private ViewPager _viewPager;
@@ -46,7 +46,8 @@ public class ProjectActivity extends FragmentActivity
 	protected void onCreate(Bundle pSavedInstanceState) 
 	{
 		super.onCreate(pSavedInstanceState);
-		Log.d(TAG, "onCreate()");
+		
+		Log.d(TAG, "onCreate(Bundle)");
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
@@ -70,20 +71,24 @@ public class ProjectActivity extends FragmentActivity
 		
 		TextView subject_text = (TextView)findViewById(R.id.project_detail_title);
 		subject_text.setText(params.getString("issue_subject"));
-
+		
 		setProgressBarIndeterminateVisibility(true);
 		getIssueDetail();
 	}
 	
 	private void getIssueDetail()
 	{
-		try {
+		Log.d(TAG, "getIssueDetail()");
+		try 
+		{
 			new AsyncXmlParserTask<IssueDetailItem>(new RedmineParser(), new OnCompleteAction()).execute(this._issueLink.getUrlString());
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (XmlPullParserException e) 
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
@@ -91,7 +96,7 @@ public class ProjectActivity extends FragmentActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		Log.d(TAG, "onCreateOptionsMenu(Menu)");
 		getMenuInflater().inflate(R.menu.activity_project, pMenu);
 		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
@@ -107,7 +112,7 @@ public class ProjectActivity extends FragmentActivity
 	}
 	
 	public void updateView(int pPosition) {
-		Log.d(TAG, "updateView(" + pPosition + ")");
+		Log.d(TAG, "updateView(int)");
 		if(_data != null)
 		{
 			switch(pPosition)
@@ -161,7 +166,7 @@ public class ProjectActivity extends FragmentActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem pItem) {
-		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
@@ -176,15 +181,12 @@ public class ProjectActivity extends FragmentActivity
 
 		public SectionsPagerAdapter(FragmentManager pFragmentManager) {
 			super(pFragmentManager);
-			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + pFragmentManager.toString() + ")");
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(FragmentManager)");
 		}
 
 		@Override
 		public Fragment getItem(int pPosition) {
-			Log.d(TAG + TAG_EXT, "getItem(" + pPosition + ")");
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
+			Log.d(TAG + TAG_EXT, "getItem(int)");
 			Fragment fragment;
 			switch(pPosition)
 			{
@@ -217,7 +219,9 @@ public class ProjectActivity extends FragmentActivity
 		}
 
 		@Override
-		public CharSequence getPageTitle(int pPosition) {
+		public CharSequence getPageTitle(int pPosition) 
+		{
+			Log.d(TAG + TAG_EXT, "getPageTitle(int)");
 			switch (pPosition) {
 			case 0:
 				return getString(R.string.issue_overview);
@@ -241,7 +245,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_overview_fragment, pContainer, false);
 		}
 		
@@ -261,7 +265,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_description_fragment, pContainer, false);
 		}
 
@@ -281,7 +285,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_status_fragment, pContainer, false);
 		}
 
@@ -310,10 +314,12 @@ public class ProjectActivity extends FragmentActivity
 	
 	private class OnCompleteAction implements IAsyncTaskAction<IssueDetailItem>
 	{
+		private static final String TAG_EXT = ".OnCompleteAction";
 
 		@Override
 		public void onComplete(IssueDetailItem pResult) 
 		{
+			Log.d(TAG + TAG_EXT, "onComplete(IssueDetailItem)");
 			_data = pResult;
 			int index = _viewPager.getCurrentItem();
 			updateView(index);

@@ -11,26 +11,32 @@ import java.util.Locale;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.Log;
 import android.util.Xml;
 
 public abstract class AbstractXmlParser 
 {
+	private static final String TAG = "AbstractXmlParser";
+	
 	protected XmlPullParser _parser;
 	
 	public AbstractXmlParser() throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "new AbstractXmlParser()");
 		this._parser = Xml.newPullParser();
 		this._parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 	}
 	
 	public void setInput(InputStream pIn) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "setInput(InputStream)");
 		this._parser.setInput(pIn, null);
 		this._parser.nextTag();
 	}
 	
 	protected void skip() throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "skip()");
 		if (this._parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }
@@ -49,6 +55,7 @@ public abstract class AbstractXmlParser
 	
 	protected String getText(String pTag) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getText(String)");
 		this._parser.require(XmlPullParser.START_TAG, null, pTag);
 		String result = this._parser.nextText();
 		this._parser.require(XmlPullParser.END_TAG, null, pTag);
@@ -57,11 +64,13 @@ public abstract class AbstractXmlParser
 	
 	protected Integer getTextAsInt(String pTag) throws NumberFormatException, XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getTextAsInt(String)");
 		return Integer.parseInt(this.getText(pTag));
 	}
 	
 	protected String getAttributeWithInnerXml(String pTag, String pAttributeName) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getAttributeWithInnerXml(String, String)");
 		this._parser.require(XmlPullParser.START_TAG, null, pTag);
 		String result = this._parser.getAttributeValue(null, pAttributeName);
 		this._parser.nextTag();
@@ -70,6 +79,7 @@ public abstract class AbstractXmlParser
 	
 	protected String getAttributeWithoutInnerXml(String pTag, String pAttributeName) throws XmlPullParserException, IOException
 	{
+		Log.d(TAG, "getAttributeWithoutInnerXml(String, String)");
 		String result = this.getAttributeWithInnerXml(pTag, pAttributeName);
 		this._parser.require(XmlPullParser.END_TAG, null, pTag);
 		return result;
@@ -77,12 +87,14 @@ public abstract class AbstractXmlParser
 	
 	public static Date convertXmlDate(String pXmlDate) throws ParseException
 	{
+		Log.d(TAG, "convertXmlDate(String)");
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 		return df.parse(pXmlDate);
 	}
 	
 	public static Date convertXmlDateTime(String pXmlDate) throws ParseException
 	{
+		Log.d(TAG, "convertXmlDataTime(String)");
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZ", Locale.getDefault());
 		return df.parse(pXmlDate);
 	}

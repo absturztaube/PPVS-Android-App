@@ -24,7 +24,7 @@ public class DummySectionFragment extends Fragment
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
 			Bundle pSavedInstanceState) 
 	{
-		Log.d(TAG, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
+		Log.d(TAG, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 		TextView textView = new TextView(getActivity());
 		textView.setGravity(Gravity.CENTER);
 		textView.setText(Integer.toString(getArguments().getInt(

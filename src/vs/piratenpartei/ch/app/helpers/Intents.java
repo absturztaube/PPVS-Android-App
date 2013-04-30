@@ -12,11 +12,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 public class Intents 
 {
+	private static final String TAG = "Intents";
+	
 	public static Intent getNewsDetailIntent(Context pContext, NewsItem pNewsItem)
 	{
+		Log.d(TAG, "getNewsDetailIntent(Context, NewsItem)");
 		Intent intent = new Intent(pContext, NewsActivity.class);
 		Bundle params = new Bundle();
 		params.putString("title", pNewsItem.getTitle());
@@ -30,6 +34,7 @@ public class Intents
 	
 	public static Intent getIssueDetailIntent(Context pContext, IssueItem pIssueItem)
 	{
+		Log.d(TAG, "getIssueDetailIntent(Context, IssueItem)");
 		Intent intent = new Intent(pContext, ProjectActivity.class);
 		intent.putExtra("issue_id", pIssueItem.getId());
 		intent.putExtra("issue_subject", pIssueItem.getSubject());
@@ -38,6 +43,7 @@ public class Intents
 	
 	public static Intent getWebsiteIntent(Context pContext)
 	{
+		Log.d(TAG, "getWebsiteIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(pContext.getString(R.string.config_website)));
@@ -46,6 +52,7 @@ public class Intents
 	
 	public static Intent getMailToIntent(Context pContext)
 	{
+		Log.d(TAG, "getMailToIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_SENDTO);
 		intent.setType("text/plain");
@@ -56,6 +63,7 @@ public class Intents
 	
 	public static Intent getFacebookIntent(Context pContext)
 	{
+		Log.d(TAG, "getFacebookIntent(Context)");
 		Intent intent;
 		try {
 			pContext.getPackageManager().getPackageInfo("com.facebook.katana", 0);
@@ -72,6 +80,7 @@ public class Intents
 	
 	public static Intent getGooglePlusIntent(Context pContext)
 	{
+		Log.d(TAG, "getGooglePlusIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(pContext.getString(R.string.config_googleplus)));
@@ -80,6 +89,7 @@ public class Intents
 	
 	public static Intent getTwitterIntent(Context pContext)
 	{
+		Log.d(TAG, "getTwitterIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(pContext.getString(R.string.config_twitter)));

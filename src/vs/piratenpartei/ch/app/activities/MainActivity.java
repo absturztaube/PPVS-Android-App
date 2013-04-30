@@ -18,7 +18,7 @@ import android.view.Window;
 
 public class MainActivity extends FragmentActivity 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
+	private static final String TAG = "MainActivity";
 	
 	private SectionsPagerAdapter _sectionPagerAdapter;
 	private ViewPager _viewPager;
@@ -26,8 +26,8 @@ public class MainActivity extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) 
 	{
-		Log.d(TAG, "onCreate()");
 		super.onCreate(pSavedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 		_sectionPagerAdapter = new SectionsPagerAdapter(
@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		Log.d(TAG, "onCreateOptionsMenu(Menu)");
 		getMenuInflater().inflate(R.menu.activity_main, pMenu);
 		return true;
 	}
@@ -51,12 +51,12 @@ public class MainActivity extends FragmentActivity
 		public SectionsPagerAdapter(FragmentManager pFragmentManager) 
 		{
 			super(pFragmentManager);
-			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + pFragmentManager.toString() + ")");
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(FragmentManager)");
 		}
 
 		@Override
 		public Fragment getItem(int pPosition) {
-			Log.d(TAG + TAG_EXT, "getItem(" + pPosition + ")");
+			Log.d(TAG + TAG_EXT, "getItem(int)");
 			Fragment fragment;
 
 			fragment = new DummySectionFragment();
@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public CharSequence getPageTitle(int pPosition) 
 		{
-			Log.d(TAG + TAG_EXT, "getPageTitle(" + pPosition + ")");
+			Log.d(TAG + TAG_EXT, "getPageTitle(int)");
 			switch (pPosition) {
 			case 0:
 				return getString(R.string.title_news);
