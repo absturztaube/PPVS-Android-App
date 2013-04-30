@@ -38,12 +38,9 @@
     <string name="issue_label_createdon">Erstellt am</string>
     <string name="issue_label_updatedon">Letztes Update am</string>
     <string name="issue_label_progress">Stand</string>
-    <string name="title_activity_thread">ThreadActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="last_post_string">Letzter Post:</string>
     <string name="string_avatar">Profilbild</string>
     
     <string name="menu_refresh">Aktualisieren</string>
-
+	<string name="tracker_all">Alle</string>
 </resources>

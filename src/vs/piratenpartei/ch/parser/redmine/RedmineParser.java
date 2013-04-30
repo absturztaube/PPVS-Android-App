@@ -10,13 +10,15 @@ import vs.piratenpartei.ch.app.redmine.IssueItem;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
 import vs.piratenpartei.ch.app.redmine.JournalItem;
 import vs.piratenpartei.ch.app.redmine.JournalItemCollection;
+import vs.piratenpartei.ch.app.redmine.Tracker;
+import vs.piratenpartei.ch.app.redmine.TrackerCollection;
 import vs.piratenpartei.ch.parser.AbstractXmlParser;
 import android.util.Log;
 
 public class RedmineParser extends AbstractXmlParser
 {
 	public RedmineParser() throws XmlPullParserException,
-			IOException {
+	IOException {
 		super();
 	}
 
@@ -27,6 +29,7 @@ public class RedmineParser extends AbstractXmlParser
 	public <Result> Result parse() throws XmlPullParserException, IOException, ParseException 
 	{
 		Log.d(TAG, "parse()");
+
 		if(this._parser.getEventType() == XmlPullParser.START_TAG)
 		{
 			String tagName = this._parser.getName();
@@ -41,7 +44,52 @@ public class RedmineParser extends AbstractXmlParser
 		}
 		return null;
 	}
-	
+
+	public TrackerCollection getTrackerList() throws XmlPullParserException, IOException
+	{
+		Log.d(TAG, "getTrackerList()");
+		TrackerCollection result = new TrackerCollection();
+		this._parser.require(XmlPullParser.START_TAG, null, "issues");
+		while(this._parser.next() != XmlPullParser.END_TAG)
+		{
+			if(this._parser.getEventType() != XmlPullParser.START_TAG)
+			{
+				continue;
+			}
+			String tagName = this._parser.getName();
+			if(tagName.equals("issue"))
+			{
+				while(this._parser.next() != XmlPullParser.END_TAG)
+				{
+					if(this._parser.getEventType() != XmlPullParser.START_TAG)
+					{
+						continue;
+					}
+					String innerTagName = this._parser.getName();
+					if(innerTagName.equals("tracker"))
+					{
+						int id = Integer.parseInt(this._parser.getAttributeValue(null, "id"));
+						if(!result.containsTracker(id))
+						{
+							String name = this._parser.getAttributeValue(null, "name");
+							result.add(new Tracker(id, name));
+						}
+						this._parser.nextTag();
+					}
+					else
+					{
+						this.skip();
+					}
+				}
+			}
+			else
+			{
+				this.skip();
+			}
+		}
+		return result;
+	}
+
 	public IssueItemCollection getIssuesList() throws XmlPullParserException, IOException
 	{
 		Log.d(TAG, "getIssueList()");
@@ -65,7 +113,7 @@ public class RedmineParser extends AbstractXmlParser
 		}
 		return result;
 	}
-	
+
 	public IssueDetailItem getIssueDetailItem() throws XmlPullParserException, IOException, ParseException
 	{
 		Log.d(TAG, "getIssueDetailItem()");
@@ -149,7 +197,7 @@ public class RedmineParser extends AbstractXmlParser
 		}
 		return result;
 	}
-	
+
 	public IssueItem getIssueItem() throws XmlPullParserException, IOException
 	{
 		Log.d(TAG, "getIssueItem()");
@@ -201,7 +249,7 @@ public class RedmineParser extends AbstractXmlParser
 		}
 		return result;
 	}
-	
+
 	public JournalItem getIssueJournalItem() throws ParseException, XmlPullParserException, IOException
 	{
 		Log.d(TAG, "getIssueJournalItem()");
