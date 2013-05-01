@@ -8,7 +8,7 @@ public class ThreadItem
 	private String _lastUpdate;
 	private String _lastUpdated;
 	private int _lastPossibleOffset;
-	public static int LastBoardOffset = Integer.MAX_VALUE;
+	public static int LastBoardOffset = 0;
 	
 	public String getTitle()
 	{

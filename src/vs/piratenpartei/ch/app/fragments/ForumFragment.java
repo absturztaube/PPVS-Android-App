@@ -62,10 +62,13 @@ public class ForumFragment extends ListFragment
 					int pVisibleItemCount, int pTotalItemCount) 
 			{
 				Log.d(TAG + TAG_EXT, "onScroll(AbsListView, int, int, int)");
+				Log.i(TAG + TAG_EXT, "if(" + ThreadItem.LastBoardOffset + " >= " + pTotalItemCount + ")");
 				if(ThreadItem.LastBoardOffset >= pTotalItemCount)
 				{
-					if(pFirstVisibleItem >= (pTotalItemCount - pVisibleItemCount))
+					Log.i(TAG + TAG_EXT, "if(" + pFirstVisibleItem + " >= (" + pTotalItemCount + " - " + pVisibleItemCount + ")");
+					if(pFirstVisibleItem >= (pTotalItemCount - pVisibleItemCount - 5))
 					{
+						Log.i(TAG + TAG_EXT, "loading next page...");
 						getActivity().setProgressBarIndeterminateVisibility(true);
 						new BoardLoaderTask(pTotalItemCount / ITEMS_PER_PAGE).execute();
 					}

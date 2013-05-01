@@ -128,7 +128,7 @@ public class ForumParser extends AbstractWebParser
 	
 	public Element getLastBoardPageLink()
 	{
-		Elements result = this.getElementsByPredefinedSelector(ForumParser.LAST_MESSAGE_LINK);
+		Elements result = this.getElementsByPredefinedSelector(ForumParser.LAST_BOARD_LINK);
 		Log.i(TAG, "result.size() = " + result.size());
 		if(result.size() > 0)
 		{
