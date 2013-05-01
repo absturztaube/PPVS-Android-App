@@ -38,12 +38,24 @@
     <string name="issue_label_createdon">Erstellt am</string>
     <string name="issue_label_updatedon">Letztes Update am</string>
     <string name="issue_label_progress">Stand</string>
-    <string name="title_activity_thread">ThreadActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="last_post_string">Letzter Post:</string>
     <string name="string_avatar">Profilbild</string>
     
     <string name="menu_refresh">Aktualisieren</string>
-
+	<string name="tracker_all">Alle</string>
+	<string name="menu_settings">Einstellungen</string>
+	<string name="menu_share">Teilen</string>
+	<string name="menu_view">Öffnen</string>
+	
+	<string name="pref_data">Daten</string>
+	<string name="pref_data_export_cal">PPVS Kalender exportieren</string>
+	<string name="pref_data_export_cal_sum">PPVS Kalender wird als .ICS Datei bereitgestellt</string>
+	
+	<string name="pref_about">Über</string>
+	<string name="pref_about_author_title">Programmiert von</string>
+	<string name="pref_about_author_summary">Absturztaube</string>
+	<string name="pref_about_github_title">Project Seite</string>
+	<string name="pref_about_github_summary">GitHub</string>
+	<string name="pref_about_license_title">Software-Lizenz</string>
+	<string name="pref_about_license_summary">GNU-GPL3</string>
 </resources>

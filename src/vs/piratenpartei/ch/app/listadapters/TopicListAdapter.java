@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class TopicListAdapter extends ArrayAdapter<TopicItem> 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.forum.TopicListAdapter";
+	private static final String TAG = "TopicListAdapter";
 	
 	private Context _context;
 	private int _ressourceLayoutId;
@@ -25,7 +25,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	public TopicListAdapter(Context pContext, int pLayoutResourceId, TopicItemCollection pData)
 	{
 		super(pContext, pLayoutResourceId, pData);
-		Log.d(TAG, "new TopicListAdapter(" + pContext.toString() + ", " + pLayoutResourceId + ", " + pData.toString() + ")");
+		Log.d(TAG, "new TopicListAdapter(Context, int, TopicItemCollection)");
 		this._ressourceLayoutId = pLayoutResourceId;
 		this._context = pContext;
 		this._data = pData;
@@ -34,7 +34,7 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	public View getView(int pPosition, View pConvertView, ViewGroup pParent)
 	{
 		View row = pConvertView;
-		Log.d(TAG, "getView()");
+		Log.d(TAG, "getView(int, View, ViewGroup)");
 		TopicItemHolder holder = null;
 		if(row == null)
 		{
@@ -62,16 +62,19 @@ public class TopicListAdapter extends ArrayAdapter<TopicItem>
 	
 	public void add(TopicItem pNewItem)
 	{
+		Log.d(TAG, "add(TopicItem)");
 		this._data.add(pNewItem);
 	}
 	
 	public void addAll(Collection<? extends TopicItem> pNewItems)
 	{
+		Log.d(TAG, "addAll(Collection<? extends TopicItem>)");
 		this._data.addAll(pNewItems);
 	}
 	
 	public TopicItemCollection getData()
 	{
+		Log.d(TAG, "getData()");
 		return this._data;
 	}
 	

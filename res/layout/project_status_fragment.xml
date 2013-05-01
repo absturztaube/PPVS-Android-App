@@ -36,8 +36,8 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:padding="5dp" />
-
+                android:padding="5dp"
+                android:textIsSelectable="false" />
         </LinearLayout>
 
         <TextView
@@ -58,7 +58,8 @@
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textIsSelectable="false" />
 
         <TextView
             android:id="@+id/TextView02"
@@ -78,8 +79,8 @@
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textIsSelectable="false" />
     </LinearLayout>
 
 </ScrollView>
