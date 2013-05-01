@@ -1,24 +1,23 @@
 package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
+import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
+import vs.piratenpartei.ch.app.backgroundworker.TrackerLoaderTask;
 import vs.piratenpartei.ch.app.helpers.Intents;
-import vs.piratenpartei.ch.app.helpers.RedmineParser;
 import vs.piratenpartei.ch.app.redmine.IssueItem;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
+import vs.piratenpartei.ch.app.redmine.Tracker;
+import vs.piratenpartei.ch.app.redmine.TrackerCollection;
+import vs.piratenpartei.ch.parser.redmine.RedmineLink;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameter;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameterCollection;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkSortParameter;
+import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,93 +34,119 @@ import android.widget.Spinner;
 
 public class ProjectsFragment extends Fragment 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.redmine.ProjectsFragment";
-	
+	private static final String TAG = "ProjectsFragment";
+
 	private IssueItemCollection _issues = new IssueItemCollection();
-	private String _xml_sort_attribute = "sort=updated_on:desc&limit=100";
-	private String _xml_tracker_id = "";
-	private String _xml_status = "&status_id=open";
-	
+	private RedmineLink _redmineLink;
+	private TrackerCollection _trackers = new TrackerCollection();
+
 	@Override
 	public void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
+		this._redmineLink = new RedmineLink(this.getString(R.string.config_issues_xml), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
+		this._redmineLink.addParameter(new RedmineLinkSortParameter("updated_on", RedmineLinkSortParameter.SORT_DESC));
+		this._redmineLink.addParameter(new RedmineLinkParameter("limit", "100"));
+		this._redmineLink.addParameter(new RedmineLinkParameter("status_id", "open"));
 		this.setHasOptionsMenu(true);
 	}
-	
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
 		Log.d(TAG, "onResume()");
 		getActivity().setProgressBarIndeterminateVisibility(true);
-		new ProjectsLoaderTask().execute();
+		getTrackers();
 	}
-	
+
+	public void getIssuesFromRedmine() 
+	{
+		Log.d(TAG, "getIssuesFromRedmine()");
+		try {
+			new AsyncXmlParserTask<IssueItemCollection>(new RedmineParser(), new ProjectLoaderCompleteAction()).execute(_redmineLink.getUrlString());
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void getTrackers()
+	{
+		Log.d(TAG, "getTrackers()");
+		RedmineLink link = new RedmineLink(this.getString(R.string.config_issues_xml), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
+		link.addParameter(new RedmineLinkParameter("set_filter", "1"));
+		link.addParameter(new RedmineLinkParameter("status_id", "*"));
+		link.addParameter(new RedmineLinkParameter("limit", "100"));
+		new TrackerLoaderTask(new TrackerLoaderCompleteAction()).execute(link);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState)
 	{
-		Log.d(TAG, "onCreateView()");
+		Log.d(TAG, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 		return pInflater.inflate(R.layout.projects_fragment, pContainer, false);
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.projects_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			
+		pMenu.findItem(R.id.projects_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			private static final String TAG_EXT = ".Menu[0]";
+
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
+				Log.d(TAG + TAG_EXT, "onMenuItemClick(MenuItem)");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectsLoaderTask().execute();
+				getIssuesFromRedmine();
 				return true;
 			}
 		});
 	}
-	
+
 	@Override 
 	public void onActivityCreated(Bundle pSavedInstanceState)
 	{
 		super.onActivityCreated(pSavedInstanceState);
-		Log.d(TAG, "onActivityCreated()");
+		Log.d(TAG, "onActivityCreated(Bundle)");
 		Spinner tracker_spinner = (Spinner)getActivity().findViewById(R.id.project_type);
 		tracker_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() 
 		{
-			private static final String TAG_EXT = ".tracker_spinner.onItemSelectedListener";
-			
+			private static final String TAG_EXT = ".tracker_spinner";
+
 			@Override
 			public void onItemSelected(AdapterView<?> pAdapterView, View pView,
 					int pPosition, long pId) 
 			{
-				Log.d(TAG + TAG_EXT, "onItemSelected(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
-				switch(pPosition)
+				Log.d(TAG + TAG_EXT, "onItemSelected(AdapterView<?>, View, int, long)");
+				if(pPosition > 0)
 				{
-				case 0:
-					_xml_tracker_id = "";
-					break;
-				case 1:
-					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_information_id);
-					break;
-				case 2:
-					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_task_id);
-					break;
-				case 3:
-					_xml_tracker_id = "&tracker_id=" + getString(R.string.config_tracker_motion_id);
-					break;
+					Tracker selectedTracker = _trackers.get(pPosition - 1);
+					_redmineLink.addParameter(new RedmineLinkParameter("tracker_id", selectedTracker.getId() + ""));
+				}
+				else
+				{
+					_redmineLink.removeParameter("tracker_id");
 				}
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectsLoaderTask().execute();
+				getIssuesFromRedmine();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> pAdapterView) 
 			{
-				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
-				_xml_tracker_id = "";
+				Log.d(TAG + TAG_EXT, "onNothingSelected(AdapterView<?>)");
+				_redmineLink.removeParameter("tracker_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectsLoaderTask().execute();
+				getIssuesFromRedmine();
 			}
 		});
 		tracker_spinner.setSelection(0);
@@ -129,116 +154,95 @@ public class ProjectsFragment extends Fragment
 		Spinner status_spinner = (Spinner)getActivity().findViewById(R.id.project_state);
 		status_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() 
 		{
-			private static final String TAG_EXT = ".status_spinner.onItemSelectedListener";
+			private static final String TAG_EXT = ".status_spinner";
 			@Override
 			public void onItemSelected(AdapterView<?> pAdapterView, View pView,
 					int pPosition, long pId) 
 			{
-				Log.d(TAG + TAG_EXT, "onItemSelected(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+				Log.d(TAG + TAG_EXT, "onItemSelected(AdapterView<?>, View, int, long)");
 				switch(pPosition)
 				{
 				case 0:
-					_xml_status = "&status_id=*";
+					_redmineLink.updateParameter("status_id", "*");
 					break;
 				case 1:
-					_xml_status = "&status_id=open";
+					_redmineLink.updateParameter("status_id", "open");
 					break;
 				case 2:
-					_xml_status = "&status_id=closed";
+					_redmineLink.updateParameter("status_id", "closed");
 					break;
 				}
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectsLoaderTask().execute();
+				getIssuesFromRedmine();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> pAdapterView) 
 			{
-				Log.d(TAG + TAG_EXT, "onNothingSelected(" + pAdapterView.toString() + ")");
-				_xml_status = "";
+				Log.d(TAG + TAG_EXT, "onNothingSelected(AdapterView<?>)");
+				_redmineLink.removeParameter("status_id");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new ProjectsLoaderTask().execute();
+				getIssuesFromRedmine();
 			}
 		});
 		status_spinner.setSelection(1);
-		
+
 		ListView list_projects = (ListView)getActivity().findViewById(R.id.list_projects);
-		list_projects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			private static final String TAG_EXT = ".list_projects.onItemClickListener";
+		list_projects.setOnItemClickListener(new AdapterView.OnItemClickListener() 
+		{
+			private static final String TAG_EXT = ".list_projects";
 			@Override
 			public void onItemClick(AdapterView<?> pAdapterView, View pView, int pPosition,
 					long pId) {
-				Log.d(TAG + TAG_EXT, "onItemClick(" + pAdapterView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+				Log.d(TAG + TAG_EXT, "onItemClick(AdapterView<?>, View, int, long)");
 				IssueItem clicked = _issues.get(pPosition);
 				Intent intent = Intents.getIssueDetailIntent(getActivity(), clicked);
 				startActivity(intent);
 			}
-			
+
 		});
 	}
-	
-	private class ProjectsLoaderTask extends AsyncTask<Void, Void, Void>
+
+	private class ProjectLoaderCompleteAction implements IAsyncTaskAction<IssueItemCollection>
 	{
-		private static final String TAG_EXT = ".ProjectsLoaderTask";
+		private static final String TAG_EXT = ".ProjectLoaderCompleteAction";
 
 		@Override
-		protected Void doInBackground(Void... pParams) 
+		public void onComplete(IssueItemCollection pResult) 
 		{
-			Log.d(TAG + TAG_EXT, "doInBackground()");
-			try 
+			Log.d(TAG + TAG_EXT, "onComplete(IssueItemCollection)");
+			_issues = pResult;
+			String[] titles = new String[_issues.size()];
+			int index = 0;
+			for(IssueItem item : _issues)
 			{
-				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(getString(R.string.config_issues_xml) + "issues.xml?" + _xml_sort_attribute + _xml_tracker_id + _xml_status);
-				HttpResponse response;
-				response = client.execute(httpget);
-				if(response.getStatusLine().getStatusCode() == 200)
-				{
-					HttpEntity entity = response.getEntity();
-					if(entity != null)
-					{
-						InputStream in = entity.getContent();
-						_issues = RedmineParser.readIssuesList(in);
-						in.close();
-					}
-				}
-			} 
-			catch (ClientProtocolException e) 
-			{
-				Log.e("[PPVS App]:ProjectsFragment -> ClientProtocolException", e.getMessage());
+				titles[index] = "[" + item.getId() + "]" + item.getSubject();
+				index++;
 			}
-			catch (IOException e) 
-			{
-				Log.e("[PPVS App]:ProjectsFragment -> IOException", e.getMessage());
-			} catch (XmlPullParserException e) {
-				Log.e("[PPVS App]:ProjectsFragment -> XmlPullParserException", e.getMessage());
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			return null;
+			ListView proj_list = (ListView)getActivity().findViewById(R.id.list_projects);
+			proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
+			getActivity().setProgressBarIndeterminateVisibility(false);
 		}
-		
+	}
+
+	private class TrackerLoaderCompleteAction implements IAsyncTaskAction<TrackerCollection>
+	{
+		private static final String TAG_EXT = ".TrackerLoaderCompleteAction";
+
 		@Override
-		protected void onPostExecute(Void pResult)
+		public void onComplete(TrackerCollection pResult) 
 		{
-			Log.d(TAG + TAG_EXT, "onPostExecute()");
-			ArrayList<String> titles = new ArrayList<String>();
-			for(int i = 0; i < _issues.size(); i++)
+			Log.d(TAG + TAG_EXT, "onComplete(TrackerCollection)");
+			_trackers = pResult;
+			String[] trackers = new String[pResult.size() + 1];
+			trackers[0] = getActivity().getString(R.string.tracker_all);
+			for(int i = 0; i < pResult.size(); i++)
 			{
-				titles.add("[" + _issues.get(i).getId() + "] " + _issues.get(i).getSubject());
+				trackers[i + 1] = pResult.get(i).getName();
 			}
-			try
-			{
-				ListView proj_list = (ListView)getActivity().findViewById(R.id.list_projects);
-				proj_list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, titles));
-				getActivity().setProgressBarIndeterminateVisibility(false);
-			}
-			catch(NullPointerException e)
-			{
-				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
-			}
+			Spinner trackerView = (Spinner)getActivity().findViewById(R.id.project_type);
+			trackerView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, trackers));
+			getIssuesFromRedmine();
 		}
-		
 	}
 }
