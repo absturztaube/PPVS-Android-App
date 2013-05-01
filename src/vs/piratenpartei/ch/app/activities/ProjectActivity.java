@@ -1,21 +1,19 @@
 package vs.piratenpartei.ch.app.activities;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
-import vs.piratenpartei.ch.app.helpers.RedmineParser;
+import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
+import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
+import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
-import android.os.AsyncTask;
+import vs.piratenpartei.ch.parser.redmine.RedmineLink;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameter;
+import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameterCollection;
+import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,7 +23,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,11 +34,11 @@ import android.widget.TextView;
 
 public class ProjectActivity extends FragmentActivity 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.FragmentActivity";
+	private static final String TAG = "ProjectActivity";
 	
 	private SectionsPagerAdapter _sectionsPagerAdapter;
 	private ViewPager _viewPager;
-	private int _xmlId;
+	private RedmineLink _issueLink;
 	private IssueDetailItem _data;
 	private JournalListAdapter _adapterJournal;
 
@@ -49,7 +46,8 @@ public class ProjectActivity extends FragmentActivity
 	protected void onCreate(Bundle pSavedInstanceState) 
 	{
 		super.onCreate(pSavedInstanceState);
-		Log.d(TAG, "onCreate()");
+		
+		Log.d(TAG, "onCreate(Bundle)");
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
@@ -64,22 +62,41 @@ public class ProjectActivity extends FragmentActivity
 		_viewPager.setAdapter(_sectionsPagerAdapter);
 
 		Bundle params = getIntent().getExtras();
-		this._xmlId = params.getInt("issue_id");
+		RedmineLinkParameterCollection linkParameters = new RedmineLinkParameterCollection();
+		linkParameters.add(new RedmineLinkParameter("include", "journals"));
+		this._issueLink = new RedmineLink(getString(R.string.config_issues_detail_xml), params.getInt("issue_id") + "", RedmineLink.DATA_TYPE_XML, linkParameters);
 		
 		TextView id_text = (TextView)findViewById(R.id.project_detail_id);
-		id_text.setText(this._xmlId + "");
+		id_text.setText(this._issueLink.getSubPage() + "");
 		
 		TextView subject_text = (TextView)findViewById(R.id.project_detail_title);
 		subject_text.setText(params.getString("issue_subject"));
-
+		
 		setProgressBarIndeterminateVisibility(true);
-		new ProjectsDetailLoaderTask().execute();
+		getIssueDetail();
+	}
+	
+	private void getIssueDetail()
+	{
+		Log.d(TAG, "getIssueDetail()");
+		try 
+		{
+			new AsyncXmlParserTask<IssueDetailItem>(new RedmineParser(), new OnCompleteAction()).execute(this._issueLink.getUrlString());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu pMenu) 
 	{
-		Log.d(TAG, "onCreateOptionsMenu(" + pMenu.toString() + ")");
+		Log.d(TAG, "onCreateOptionsMenu(Menu)");
 		getMenuInflater().inflate(R.menu.activity_project, pMenu);
 		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
@@ -87,7 +104,7 @@ public class ProjectActivity extends FragmentActivity
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
 				setProgressBarIndeterminateVisibility(true);
-				new ProjectsDetailLoaderTask().execute();
+				getIssueDetail();
 				return true;
 			}
 		});
@@ -95,7 +112,7 @@ public class ProjectActivity extends FragmentActivity
 	}
 	
 	public void updateView(int pPosition) {
-		Log.d(TAG, "updateView(" + pPosition + ")");
+		Log.d(TAG, "updateView(int)");
 		if(_data != null)
 		{
 			switch(pPosition)
@@ -111,16 +128,28 @@ public class ProjectActivity extends FragmentActivity
 				priority.setText(_data.getPriority());
 				
 				TextView startDate = (TextView)findViewById(R.id.text_project_detail_startdate);
-				startDate.setText(DateFormat.getInstance().format(_data.getStartDate()));
+				if(_data.getStartDate() != null)
+				{
+					startDate.setText(DateFormat.getInstance().format(_data.getStartDate()));
+				}
 				
 				TextView dueDate = (TextView)findViewById(R.id.text_project_detail_duedate);
-				dueDate.setText(DateFormat.getInstance().format(_data.getDueDate()));
+				if(_data.getDueDate() != null)
+				{
+					dueDate.setText(DateFormat.getInstance().format(_data.getDueDate()));
+				}
 				
 				TextView createdOn = (TextView)findViewById(R.id.text_project_detail_created);
-				createdOn.setText(DateFormat.getInstance().format(_data.getCreatedOn()));
+				if(_data.getCreatedOn() != null)
+				{
+					createdOn.setText(DateFormat.getInstance().format(_data.getCreatedOn()));
+				}
 				
 				TextView updatedOn = (TextView)findViewById(R.id.text_project_detail_updated);
-				updatedOn.setText(DateFormat.getInstance().format(_data.getUpdatedOn()));
+				if(_data.getUpdatedOn() != null)
+				{
+					updatedOn.setText(DateFormat.getInstance().format(_data.getUpdatedOn()));
+				}
 				break;
 			case 1:
 				TextView description = (TextView)findViewById(R.id.text_project_desc);
@@ -149,7 +178,7 @@ public class ProjectActivity extends FragmentActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem pItem) {
-		Log.d(TAG, "onOptionsItemSelected(" + pItem.toString() + ")");
+		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
@@ -164,15 +193,12 @@ public class ProjectActivity extends FragmentActivity
 
 		public SectionsPagerAdapter(FragmentManager pFragmentManager) {
 			super(pFragmentManager);
-			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(" + pFragmentManager.toString() + ")");
+			Log.d(TAG + TAG_EXT, "new SectionsPagerAdapter(FragmentManager)");
 		}
 
 		@Override
 		public Fragment getItem(int pPosition) {
-			Log.d(TAG + TAG_EXT, "getItem(" + pPosition + ")");
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
+			Log.d(TAG + TAG_EXT, "getItem(int)");
 			Fragment fragment;
 			switch(pPosition)
 			{
@@ -205,7 +231,9 @@ public class ProjectActivity extends FragmentActivity
 		}
 
 		@Override
-		public CharSequence getPageTitle(int pPosition) {
+		public CharSequence getPageTitle(int pPosition) 
+		{
+			Log.d(TAG + TAG_EXT, "getPageTitle(int)");
 			switch (pPosition) {
 			case 0:
 				return getString(R.string.issue_overview);
@@ -229,7 +257,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_overview_fragment, pContainer, false);
 		}
 		
@@ -249,7 +277,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_description_fragment, pContainer, false);
 		}
 
@@ -269,7 +297,7 @@ public class ProjectActivity extends FragmentActivity
 		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, 
 				Bundle pSavedInstanceState)
 		{
-			Log.d(TAG + TAG_EXT, "onCreateView()");
+			Log.d(TAG + TAG_EXT, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
 			return pInflater.inflate(R.layout.project_status_fragment, pContainer, false);
 		}
 
@@ -296,54 +324,16 @@ public class ProjectActivity extends FragmentActivity
 		}
 	}
 	
-	private class ProjectsDetailLoaderTask extends AsyncTask<Void, Void, Void>
+	private class OnCompleteAction implements IAsyncTaskAction<IssueDetailItem>
 	{
-		private static final String TAG_EXT = ".ProjectsDetailLoaderTask";
-		
+		private static final String TAG_EXT = ".OnCompleteAction";
+
 		@Override
-		protected Void doInBackground(Void... pParams) 
+		public void onComplete(IssueDetailItem pResult) 
 		{
-			Log.d(TAG + TAG_EXT, "doInBackground()");
-			try 
-			{
-				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(getString(R.string.config_issues_detail_xml) + _xmlId + ".xml?include=journals");
-				HttpResponse response;
-				response = client.execute(httpget);
-				if(response.getStatusLine().getStatusCode() == 200)
-				{
-					HttpEntity entity = response.getEntity();
-					if(entity != null)
-					{
-						InputStream in = entity.getContent();
-						_data = RedmineParser.readIssueDetail(in);
-						in.close();
-					}
-				}
-			} 
-			catch (ClientProtocolException exception) 
-			{
-				Log.e("[PPVS App]:ProjectsFragment -> ClientProtocolException", exception.getMessage());
-			}
-			catch (IOException exception) 
-			{
-				Log.e("[PPVS App]:ProjectsFragment -> IOException", exception.getMessage());
-			} catch (XmlPullParserException e) {
-				Log.e("[PPVS App]:ProjectsFragment -> XmlPullParserException", e.getMessage());
-			}
-			catch (Exception exception)
-			{
-				exception.printStackTrace();
-			}
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void pResult)
-		{
-			Log.d(TAG + TAG_EXT, "onPostExecute()");
+			Log.d(TAG + TAG_EXT, "onComplete(IssueDetailItem)");
+			_data = pResult;
 			int index = _viewPager.getCurrentItem();
-			Log.i(TAG + TAG_EXT, "pager page: " + index);
 			updateView(index);
 			updateView(index+1);
 			updateView(index-1);
@@ -351,28 +341,4 @@ public class ProjectActivity extends FragmentActivity
 		}
 		
 	}
-
-	public static class DummySectionFragment extends Fragment 
-	{
-		public static final String ARG_SECTION_NUMBER = "section_number";
-		
-		private static final String TAG_EXT = ".DummySectionFragment";
-
-		public DummySectionFragment() 
-		{
-			Log.d(TAG + TAG_EXT, "new DummySectionFragment()");
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer,
-				Bundle pSavedInstanceState) {
-			Log.d(TAG + TAG_EXT, "onCreateView(" + pInflater.toString() + ", " + pContainer.toString() + ", " + pSavedInstanceState.toString() + ")");
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return textView;
-		}
-	}
-
 }

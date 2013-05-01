@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class JournalListAdapter extends ArrayAdapter<JournalItem> 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.redmine.JournalArrayAdapter";
+	private static final String TAG = "JournalArrayAdapter";
 	
 	private Context _context;
 	private int _ressourceLayoutId;
@@ -25,7 +25,7 @@ public class JournalListAdapter extends ArrayAdapter<JournalItem>
 	public JournalListAdapter(Context pContext, int pLayoutResourceId, JournalItemCollection pData)
 	{
 		super(pContext, pLayoutResourceId, pData);
-		Log.d(TAG, "new JournalListAdapter(" + pContext.toString() + ", " + pLayoutResourceId + ", " + pData.toString() + ")");
+		Log.d(TAG, "new JournalListAdapter(Context, int, JournalItemCollection)");
 		this._ressourceLayoutId = pLayoutResourceId;
 		this._context = pContext;
 		this._data = pData;
@@ -34,7 +34,7 @@ public class JournalListAdapter extends ArrayAdapter<JournalItem>
 	public View getView(int pPosition, View pConvertView, ViewGroup pParent)
 	{
 		View row = pConvertView;
-		Log.d(TAG, "getView()");
+		Log.d(TAG, "getView(int, View, ViewGroup)");
 		JournalItemHolder holder = null;
 		if(row == null)
 		{

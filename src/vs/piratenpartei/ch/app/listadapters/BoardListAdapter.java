@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 public class BoardListAdapter extends ArrayAdapter<ThreadItem> 
 {
-	private static final String TAG = "vs.piratenpartei.ch.app.forum.BoardListAdapter";
+	private static final String TAG = "BoardListAdapter";
 
 	private Context _context;
 	private int _ressourceLayoutId;
@@ -26,7 +26,7 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 	public BoardListAdapter(Context pContext, int pLayoutResourceId, List<ThreadItem> pData)
 	{
 		super(pContext, pLayoutResourceId, pData);
-		Log.d(TAG, "new BoardListAdapter(" + pContext.toString() + ", " + pLayoutResourceId + ", " + pData.toString() + ")");
+		Log.d(TAG, "new BoardListAdapter(Context, int, List<ThreadItem>)");
 		this._ressourceLayoutId = pLayoutResourceId;
 		this._context = pContext;
 		this._data = pData;
@@ -34,8 +34,8 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 
 	public View getView(int pPosition, View pConvertView, ViewGroup pParent)
 	{
+		Log.d(TAG, "getView(int, View, ViewGroup)");
 		View row = pConvertView;
-		Log.d(TAG, "getView()");	//strange. if this line is before the prev line, eclipse shows me dead code!?!
 		BoardItemHolder holder = null;
 		if(row == null)
 		{
@@ -64,16 +64,19 @@ public class BoardListAdapter extends ArrayAdapter<ThreadItem>
 
 	public void add(ThreadItem pNewItem)
 	{
+		Log.d(TAG, "add(ThreadItem)");
 		this._data.add(pNewItem);
 	}
 
 	public void addAll(Collection<? extends ThreadItem> pNewItems)
 	{
+		Log.d(TAG, "addAll(Collection<? extends ThreadItem>)");
 		this._data.addAll(pNewItems);
 	}
 
 	public List<ThreadItem> getData()
 	{
+		Log.d(TAG, "getData()");
 		return this._data;
 	}
 
