@@ -46,4 +46,16 @@
 	<string name="menu_settings">Einstellungen</string>
 	<string name="menu_share">Teilen</string>
 	<string name="menu_view">Öffnen</string>
+	
+	<string name="pref_data">Daten</string>
+	<string name="pref_data_export_cal">PPVS Kalender exportieren</string>
+	<string name="pref_data_export_cal_sum">PPVS Kalender wird als .ICS Datei bereitgestellt</string>
+	
+	<string name="pref_about">Über</string>
+	<string name="pref_about_author_title">Programmiert von</string>
+	<string name="pref_about_author_summary">Absturztaube</string>
+	<string name="pref_about_github_title">Project Seite</string>
+	<string name="pref_about_github_summary">GitHub</string>
+	<string name="pref_about_license_title">Software-Lizenz</string>
+	<string name="pref_about_license_summary">GNU-GPL3</string>
 </resources>

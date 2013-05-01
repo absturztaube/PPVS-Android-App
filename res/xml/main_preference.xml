@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="@string/pref_data"
+        android:key="pref_key_data_category">
+        <Preference
+            android:key="pref_key_data_export_cal"
+            android:title="@string/pref_data_export_cal"
+            android:summary="@string/pref_data_export_cal_sum" />  
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/pref_about"
+        android:key="pref_key_about_category">
+        <Preference 
+            android:key="pref_about_author"
+            android:title="@string/pref_about_author_title"
+            android:summary="@string/pref_about_author_summary"/>
+        <Preference 
+            android:key="pref_about_github"
+            android:title="@string/pref_about_github_title"
+            android:summary="@string/pref_about_github_summary"/>
+        <Preference 
+            android:key="pref_about_license"
+            android:title="@string/pref_about_license_title"
+            android:summary="@string/pref_about_license_summary"/>      
+    </PreferenceCategory>
+</PreferenceScreen>

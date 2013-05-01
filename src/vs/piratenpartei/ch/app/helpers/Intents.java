@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.activities.MainSettingsActivity;
 import vs.piratenpartei.ch.app.activities.NewsActivity;
 import vs.piratenpartei.ch.app.activities.ProjectActivity;
 import vs.piratenpartei.ch.app.news.NewsItem;
@@ -39,6 +40,13 @@ public class Intents
 		Intent intent = new Intent(pContext, ProjectActivity.class);
 		intent.putExtra("issue_id", pIssueItem.getId());
 		intent.putExtra("issue_subject", pIssueItem.getSubject());
+		return intent;
+	}
+	
+	public static Intent getMainSettingsIntent(Context pContext)
+	{
+		Log.d(TAG, "getMainSettingsIntent(Context)");
+		Intent intent = new Intent(pContext, MainSettingsActivity.class);
 		return intent;
 	}
 
