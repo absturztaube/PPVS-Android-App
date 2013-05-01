@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
+//import android.support.v4.app.NavUtils;
 
 public class NewsActivity extends Activity 
 {
@@ -64,7 +64,8 @@ public class NewsActivity extends Activity
 		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
 		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+			onBackPressed();
+			//NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.news_share:
 			Intent intentShare = Intents.getShareTextIntent(this, this._title, this._shareLink);

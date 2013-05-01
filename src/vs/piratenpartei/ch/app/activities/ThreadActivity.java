@@ -138,6 +138,18 @@ public class ThreadActivity extends Activity
     	});
     	return true;
     }
+    
+    @Override
+	public boolean onOptionsItemSelected(MenuItem pItem) {
+		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
+		switch (pItem.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			//NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(pItem);
+	}
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() 

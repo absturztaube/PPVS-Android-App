@@ -20,7 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.NavUtils;
+//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,8 +40,8 @@ public class ProjectActivity extends FragmentActivity
 	private SectionsPagerAdapter _sectionsPagerAdapter;
 	private ViewPager _viewPager;
 	private RedmineLink _issueLink;
-	private IssueDetailItem _data;
-	private JournalListAdapter _adapterJournal;
+	private IssueDetailItem _data = null;
+	public JournalListAdapter _adapterJournal;
 
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) 
@@ -73,7 +74,10 @@ public class ProjectActivity extends FragmentActivity
 		subject_text.setText(params.getString("issue_subject"));
 		
 		setProgressBarIndeterminateVisibility(true);
-		getIssueDetail();
+		if(_data == null)
+		{
+			getIssueDetail();
+		}
 	}
 	
 	private void getIssueDetail()
@@ -169,6 +173,7 @@ public class ProjectActivity extends FragmentActivity
 				estHours.setText(_data.getEstimatedHours());
 				break;
 			case 3:
+				Log.i(TAG, "Create List Adapter");
 				_adapterJournal = new JournalListAdapter(this, R.layout.journal_list_item, _data.getJournal());
 				_adapterJournal.notifyDataSetChanged();
 				break;
@@ -181,7 +186,8 @@ public class ProjectActivity extends FragmentActivity
 		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
 		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+			onBackPressed();
+			//NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
 		return super.onOptionsItemSelected(pItem);
@@ -212,6 +218,7 @@ public class ProjectActivity extends FragmentActivity
 				fragment = new StatusFragment();
 				break;
 			case 3:
+				Log.i(TAG + TAG_EXT, "Create Fragment");
 				fragment = new JournalFragment();
 				break;
 			default:
@@ -318,9 +325,19 @@ public class ProjectActivity extends FragmentActivity
 			super.onResume();
 			Log.d(TAG + TAG_EXT, "onResume()");
 			ProjectActivity parent = ((ProjectActivity) getActivity());
+			Log.i(TAG + TAG_EXT, "Fragment->Update()");
 			parent.updateView(3);
-			setListAdapter(parent._adapterJournal);
-			setListShown(true);
+			if(parent._data != null)
+			{
+				this.adaptListAdapter(parent._adapterJournal);
+			}
+		}
+		
+		public void adaptListAdapter(ListAdapter pListAdapter)
+		{
+			Log.i(TAG + TAG_EXT, "Adapt ListAdapter");
+			this.setListAdapter(pListAdapter);
+			this.setListShown(true);
 		}
 	}
 	
@@ -334,6 +351,7 @@ public class ProjectActivity extends FragmentActivity
 			Log.d(TAG + TAG_EXT, "onComplete(IssueDetailItem)");
 			_data = pResult;
 			int index = _viewPager.getCurrentItem();
+			Log.i(TAG + TAG_EXT, "Backgroundworker->Update()");
 			updateView(index);
 			updateView(index+1);
 			updateView(index-1);
