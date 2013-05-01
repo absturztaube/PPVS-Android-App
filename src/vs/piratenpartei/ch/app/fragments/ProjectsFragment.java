@@ -97,7 +97,7 @@ public class ProjectsFragment extends Fragment
 	{
 		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.projects_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		pMenu.findItem(R.id.projects_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
 			private static final String TAG_EXT = ".Menu[0]";
 

@@ -104,7 +104,7 @@ public class ForumFragment extends ListFragment
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
 		pInflater.inflate(R.menu.forum_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		pMenu.findItem(R.id.forum_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
 			private static final String TAG_EXT = ".Menu[0]";
 			

@@ -43,4 +43,7 @@
     
     <string name="menu_refresh">Aktualisieren</string>
 	<string name="tracker_all">Alle</string>
+	<string name="menu_settings">Einstellungen</string>
+	<string name="menu_share">Teilen</string>
+	<string name="menu_view">Öffnen</string>
 </resources>

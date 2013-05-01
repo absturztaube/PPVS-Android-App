@@ -43,7 +43,7 @@ public class NewsFragment extends ListFragment
 	{
 		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.news_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		pMenu.findItem(R.id.news_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
 			private static final String TAG_EXT = "Menu[0]";
 			

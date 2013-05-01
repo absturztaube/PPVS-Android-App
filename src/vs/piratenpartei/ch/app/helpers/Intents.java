@@ -17,12 +17,13 @@ import android.util.Log;
 public class Intents 
 {
 	private static final String TAG = "Intents";
-	
+
 	public static Intent getNewsDetailIntent(Context pContext, NewsItem pNewsItem)
 	{
 		Log.d(TAG, "getNewsDetailIntent(Context, NewsItem)");
 		Intent intent = new Intent(pContext, NewsActivity.class);
 		Bundle params = new Bundle();
+		params.putString("link", pNewsItem.getLink());
 		params.putString("title", pNewsItem.getTitle());
 		params.putString("author", pNewsItem.getCreator());
 		Date pubDate = pNewsItem.getPublishDate();
@@ -31,7 +32,7 @@ public class Intents
 		intent.putExtras(params);
 		return intent;
 	}
-	
+
 	public static Intent getIssueDetailIntent(Context pContext, IssueItem pIssueItem)
 	{
 		Log.d(TAG, "getIssueDetailIntent(Context, IssueItem)");
@@ -40,7 +41,7 @@ public class Intents
 		intent.putExtra("issue_subject", pIssueItem.getSubject());
 		return intent;
 	}
-	
+
 	public static Intent getWebsiteIntent(Context pContext)
 	{
 		Log.d(TAG, "getWebsiteIntent(Context)");
@@ -49,7 +50,7 @@ public class Intents
 		intent.setData(Uri.parse(pContext.getString(R.string.config_website)));
 		return intent;
 	}
-	
+
 	public static Intent getMailToIntent(Context pContext)
 	{
 		Log.d(TAG, "getMailToIntent(Context)");
@@ -60,7 +61,7 @@ public class Intents
 		intent.putExtra(Intent.EXTRA_SUBJECT, "[" + pContext.getString(R.string.app_name) + "]");
 		return intent;
 	}
-	
+
 	public static Intent getFacebookIntent(Context pContext)
 	{
 		Log.d(TAG, "getFacebookIntent(Context)");
@@ -77,7 +78,7 @@ public class Intents
 		}
 		return intent;
 	}
-	
+
 	public static Intent getGooglePlusIntent(Context pContext)
 	{
 		Log.d(TAG, "getGooglePlusIntent(Context)");
@@ -86,13 +87,32 @@ public class Intents
 		intent.setData(Uri.parse(pContext.getString(R.string.config_googleplus)));
 		return intent;
 	}
-	
+
 	public static Intent getTwitterIntent(Context pContext)
 	{
 		Log.d(TAG, "getTwitterIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(pContext.getString(R.string.config_twitter)));
+		return intent;
+	}
+
+	public static Intent getShareTextIntent(Context pContext, String pTitle, String pContent)
+	{
+		Log.d(TAG, "getShareTextIntent(Context, String, String)");
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, pTitle);
+		intent.putExtra(Intent.EXTRA_TEXT, pContent);
+		return intent;
+	}
+
+	public static Intent getViewUrlIntent(Context pContext, String pUrl)
+	{
+		Log.d(TAG, "getViewUrlIntent(Context, String)");
+		Intent intent = new Intent();
+		intent.setAction(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(pUrl));
 		return intent;
 	}
 }
