@@ -1,23 +1,17 @@
 package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
+import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
 import vs.piratenpartei.ch.app.helpers.Intents;
-import vs.piratenpartei.ch.app.helpers.RssParser;
 import vs.piratenpartei.ch.app.news.NewsItem;
 import vs.piratenpartei.ch.app.news.NewsItemCollection;
+import vs.piratenpartei.ch.parser.rss.RssParser;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -30,7 +24,7 @@ import android.widget.ListView;
 
 public class NewsFragment extends ListFragment 
 {	
-	private static final String TAG = "vs.piratenpartei.ch.app.news.NewsFragment";
+	private static final String TAG = "NewsFragment";
 	
 	private NewsItemCollection _feedItems = new NewsItemCollection();
 		
@@ -38,23 +32,27 @@ public class NewsFragment extends ListFragment
 	public void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
-		Log.d(TAG, "onCreate()");
+		Log.d(TAG, "onCreate(Bundle)");
 		setHasOptionsMenu(true);
 		getActivity().setProgressBarIndeterminateVisibility(true);
-		new NewsLoaderTask().execute();
+		getNewsItems();
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.news_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+		pMenu.findItem(R.id.news_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			private static final String TAG_EXT = "Menu[0]";
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
+				Log.d(TAG + TAG_EXT, "onMenuItemClick(MenuItem)");
 				getActivity().setProgressBarIndeterminateVisibility(true);
-				new NewsLoaderTask().execute();
+				getNewsItems();
 				return true;
 			}
 		});
@@ -63,62 +61,40 @@ public class NewsFragment extends ListFragment
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
-		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pView.toString() + ", " + pPosition + ", " + pId + ")");
+		Log.d(TAG, "onListItemClick(ListView, View, int, long)");
 		NewsItem clicked = this._feedItems.get(pPosition);
 		Intent intent = Intents.getNewsDetailIntent(getActivity(), clicked);
 		startActivity(intent);
 	}
 	
-	private class NewsLoaderTask extends AsyncTask<Void, Void, Void>
+	private void getNewsItems()
 	{
-		private static final String TAG_EXT = ".NewsLoaderTask";
-		
-		@Override
-		protected Void doInBackground(Void... pParams) 
-		{
-			Log.d(TAG + TAG_EXT, "doInBackground()");
-			try 
-			{
-				HttpClient client = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(getString(R.string.config_news_rss));
-				HttpResponse response;
-				response = client.execute(httpget);
-				if(response.getStatusLine().getStatusCode() == 200)
-				{
-					HttpEntity entity = response.getEntity();
-					if(entity != null)
-					{
-						InputStream in = entity.getContent();
-						_feedItems = RssParser.readFeed(in);
-						in.close();
-					}
-				}
-			} 
-			catch (ClientProtocolException e) 
-			{
-				Log.e("[PPVS App]:NewsFragment -> ClientProtocolException", e.getMessage());
-			}
-			catch (IOException e) 
-			{
-				Log.e("[PPVS App]:NewsFragment -> IOException", e.getMessage());
-			} catch (XmlPullParserException e) {
-				Log.e("[PPVS App]:NewsFragment -> XmlPullParserException", e.getMessage());
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			return null;
+		Log.d(TAG, "getNewsItems()");
+		try {
+			new AsyncXmlParserTask<NewsItemCollection>(new RssParser(), new NewsLoadedAction()).execute(getString(R.string.config_news_rss));
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
+	}
+	
+	private class NewsLoadedAction implements IAsyncTaskAction<NewsItemCollection>
+	{
+		private static final String TAG_EXT = "NewsLoadedAction";
+
 		@Override
-		protected void onPostExecute(Void pResult)
+		public void onComplete(NewsItemCollection pResult) 
 		{
-			Log.d(TAG + TAG_EXT, "onPostExecute()");
+			Log.d(TAG + TAG_EXT, "onComplete(NewsItemCollection)");
+			
+			_feedItems = pResult;
 			ArrayList<String> titles = new ArrayList<String>();
-			for(int i = 0; i < _feedItems.size(); i++)
+			for(int i = 0; i < pResult.size(); i++)
 			{
-				titles.add(_feedItems.get(i).getTitle());
+				titles.add(pResult.get(i).getTitle());
 			}
 			try
 			{
@@ -128,7 +104,7 @@ public class NewsFragment extends ListFragment
 			}
 			catch(NullPointerException e)
 			{
-				Log.w(TAG + TAG_EXT, "Activity doesnt exists anymore");
+				Log.w(TAG, "Activity doesnt exists anymore");
 			}
 		}
 		

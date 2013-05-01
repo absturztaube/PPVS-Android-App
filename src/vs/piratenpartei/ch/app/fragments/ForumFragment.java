@@ -1,13 +1,15 @@
 package vs.piratenpartei.ch.app.fragments;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.activities.ThreadActivity;
 import vs.piratenpartei.ch.app.forum.ThreadItem;
-import vs.piratenpartei.ch.app.helpers.ForumParser;
 import vs.piratenpartei.ch.app.listadapters.BoardListAdapter;
+import vs.piratenpartei.ch.parser.forum.ForumLink;
+import vs.piratenpartei.ch.parser.forum.ForumParser;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,9 +25,10 @@ import android.widget.ListView;
 public class ForumFragment extends ListFragment 
 {
 	private static final int ITEMS_PER_PAGE = 25;
-	private static final String TAG = "vs.piratenpartei.ch.app.forum.ForumFragment";
+	private static final String TAG = "ForumFragment";
 
 	private int _lastLoadedOffset = -1;
+	private ForumLink _boardLink;
 	private BoardListAdapter _arrayAdapter;
 	private boolean _clearBeforeUpdate = false;
 
@@ -33,6 +36,7 @@ public class ForumFragment extends ListFragment
 	public void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
 		this.setHasOptionsMenu(true);
 	}
 	
@@ -40,21 +44,24 @@ public class ForumFragment extends ListFragment
 	public void onActivityCreated(Bundle pSavedInstanceState)
 	{
 		super.onActivityCreated(pSavedInstanceState);
-		Log.d(TAG, "onActivityCreated()");
+		Log.d(TAG, "onActivityCreated(Bundle)");
+		
+		this._boardLink = new ForumLink();
+		
 		this.getListView().setOnScrollListener(new AbsListView.OnScrollListener() 
 		{			
 			private static final String TAG_EXT = ".onScrollListener";
 			@Override
 			public void onScrollStateChanged(AbsListView pView, int pScrollState) 
 			{
-				Log.d(TAG + TAG_EXT, "onScrollStateChanged(" + pView.toString() + ", " + pScrollState + ")");
+				Log.d(TAG + TAG_EXT, "onScrollStateChanged(AbsListView, int)");
 			}
 
 			@Override
 			public void onScroll(AbsListView pView, int pFirstVisibleItem,
 					int pVisibleItemCount, int pTotalItemCount) 
 			{
-				Log.d(TAG + TAG_EXT, "onScroll(" + pView.toString() + ", " + pFirstVisibleItem + ", " + pVisibleItemCount + ", " + pTotalItemCount + ")");
+				Log.d(TAG + TAG_EXT, "onScroll(AbsListView, int, int, int)");
 				if(ThreadItem.LastBoardOffset >= pTotalItemCount)
 				{
 					if(pFirstVisibleItem >= (pTotalItemCount - pVisibleItemCount))
@@ -71,7 +78,7 @@ public class ForumFragment extends ListFragment
 	public void onViewCreated(View pView, Bundle pSavedInstanceState)
 	{
 		super.onViewCreated(pView, pSavedInstanceState);
-		Log.d(TAG, "onViewCreated()");
+		Log.d(TAG, "onViewCreated(View, Bundle)");
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		new BoardLoaderTask().execute();
 	}
@@ -79,7 +86,7 @@ public class ForumFragment extends ListFragment
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
-		Log.d(TAG, "onListItemClick(" + pListView.toString() + ", " + pPosition + ", " + pId + ")");
+		Log.d(TAG, "onListItemClick(ListView, View, int, long)");
 		ThreadItem selectedItem = _arrayAdapter.getData().get(pPosition);
 		String title = selectedItem.getTitle();
 		String topicLink = selectedItem.getTopicLink();
@@ -97,11 +104,14 @@ public class ForumFragment extends ListFragment
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
 		pInflater.inflate(R.menu.forum_fragment_menu, pMenu);
-		pMenu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+		pMenu.findItem(R.id.forum_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
+		{
+			private static final String TAG_EXT = ".Menu[0]";
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
+				Log.d(TAG + TAG_EXT, "onMenuItemClick(MenuItem)");
 				_clearBeforeUpdate = true;
 				_lastLoadedOffset = -1;
 				getActivity().setProgressBarIndeterminateVisibility(true);
@@ -128,19 +138,22 @@ public class ForumFragment extends ListFragment
 		public BoardLoaderTask(int pPage)
 		{
 			super();
-			Log.d(TAG + TAG_EXT, "new BoardLoaderTask(" + pPage + ")");
+			Log.d(TAG + TAG_EXT, "new BoardLoaderTask(int)");
 			this._offset = pPage * ITEMS_PER_PAGE;
 		}
 
 		@Override
 		protected Void doInBackground(Void... pParams) 
 		{
-			Log.d(TAG + TAG_EXT, "doInBackground()");
+			Log.d(TAG + TAG_EXT, "doInBackground(Void[])");
 			try {
 				if(_lastLoadedOffset < this._offset)
 				{
 					_lastLoadedOffset = this._offset;
-					_newThreads = ForumParser.getBoard(174, this._offset);
+					_boardLink.setOffset(this._offset);
+					ForumParser parser = new ForumParser();
+					parser.initialize(new URL(_boardLink.getUrlString()));
+					_newThreads = parser.getBoard();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -151,7 +164,7 @@ public class ForumFragment extends ListFragment
 		@Override
 		protected void onPostExecute(Void pResult)
 		{
-			Log.d(TAG + TAG_EXT, "onPostExecute()");
+			Log.d(TAG + TAG_EXT, "onPostExecute(Void)");
 			if(getView() != null && _newThreads != null)
 			{
 				Log.d(TAG + TAG_EXT, "Loaded Items: " + _newThreads.size());
