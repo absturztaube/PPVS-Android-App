@@ -39,6 +39,7 @@ public class ProjectsFragment extends Fragment
 	private IssueItemCollection _issues = new IssueItemCollection();
 	private RedmineLink _redmineLink;
 	private TrackerCollection _trackers = new TrackerCollection();
+	private boolean _hasToReload = false;
 
 	@Override
 	public void onCreate(Bundle pSavedInstanceState)
@@ -50,6 +51,7 @@ public class ProjectsFragment extends Fragment
 		this._redmineLink.addParameter(new RedmineLinkParameter("limit", "100"));
 		this._redmineLink.addParameter(new RedmineLinkParameter("status_id", "open"));
 		this.setHasOptionsMenu(true);
+		this._hasToReload = true;
 	}
 
 	@Override
@@ -58,7 +60,15 @@ public class ProjectsFragment extends Fragment
 		super.onResume();
 		Log.d(TAG, "onResume()");
 		getActivity().setProgressBarIndeterminateVisibility(true);
-		getTrackers();
+		if(this._hasToReload)
+		{
+			getTrackers();
+			this._hasToReload = false;
+		}
+		else
+		{
+			getIssuesFromRedmine();
+		}
 	}
 
 	public void getIssuesFromRedmine() 

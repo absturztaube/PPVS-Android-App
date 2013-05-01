@@ -106,6 +106,10 @@ public class NewsFragment extends ListFragment
 			{
 				Log.w(TAG, "Activity doesnt exists anymore");
 			}
+			catch(IllegalStateException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 	}
