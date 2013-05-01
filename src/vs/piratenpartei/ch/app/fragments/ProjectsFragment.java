@@ -241,7 +241,7 @@ public class ProjectsFragment extends Fragment
 				trackers[i + 1] = pResult.get(i).getName();
 			}
 			Spinner trackerView = (Spinner)getActivity().findViewById(R.id.project_type);
-			trackerView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, trackers));
+			trackerView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, trackers));
 			getIssuesFromRedmine();
 		}
 	}
