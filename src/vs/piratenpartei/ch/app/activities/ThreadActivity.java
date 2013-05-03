@@ -167,7 +167,6 @@ public class ThreadActivity extends Activity
 		private static final String TAG_EXT = ".TopicLoaderTask";
 
 		private ForumLink _realLink;
-		private TopicItemCollection _data = new TopicItemCollection();
 
 		public TopicLoaderTask()
 		{
@@ -193,7 +192,7 @@ public class ThreadActivity extends Activity
 					ForumParser parser = new ForumParser();
 					parser.setOnProgressEvent(new ThreadProgressAction());
 					parser.initialize(new URL(this._realLink.getUrlString()));
-					this._data = parser.getTopic();
+					parser.getTopic();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

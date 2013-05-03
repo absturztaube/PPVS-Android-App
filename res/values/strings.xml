@@ -13,7 +13,7 @@
     <string name="btn_googleplus">Google Plus</string>
 
     <string-array name="projects_types">
-        <item>Lade Trackerliste...</item>
+        <item>Lade Trackerliste&#8230;</item>
     </string-array>
     <string-array name="project_states">
         <item>Alle</item>
