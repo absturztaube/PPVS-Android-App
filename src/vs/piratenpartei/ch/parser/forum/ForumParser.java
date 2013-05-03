@@ -49,6 +49,8 @@ public class ForumParser extends AbstractWebParser
 	private static final String c_selectorPostDate = "div.postarea div.keyinfo div.smalltext";
 	private static final String c_selectorLastBoardLink = "div.pagesection a.navPages:last-child";
 	
+	private IParserProgress _progressEvent;
+	
 	public ForumParser()
 	{
 		this._selectors.put(ForumParser.SUBJECT, ForumParser.c_selectorSubject);
@@ -64,7 +66,20 @@ public class ForumParser extends AbstractWebParser
 		this._selectors.put(ForumParser.POST_CONTENT, ForumParser.c_selectorPostContent);
 		this._selectors.put(ForumParser.POST_DATE, ForumParser.c_selectorPostDate);
 		this._selectors.put(ForumParser.LAST_BOARD_LINK, ForumParser.c_selectorLastBoardLink);
-	}	
+	}
+	
+	public void setOnProgressEvent(IParserProgress pProgressEvent)
+	{
+		this._progressEvent = pProgressEvent;
+	}
+	
+	private void fireProgress(TopicItem pTopicItem)
+	{
+		if(this._progressEvent != null)
+		{
+			this._progressEvent.onProgress(pTopicItem);
+		}
+	}
 
 	public Elements getSubjects()
 	{
@@ -230,6 +245,7 @@ public class ForumParser extends AbstractWebParser
 				current.setDate(Html.fromHtml(date.html()).toString());
 			}
 			result.add(current);
+			this.fireProgress(current);
 		}
 		return result;
 	}
@@ -263,5 +279,10 @@ public class ForumParser extends AbstractWebParser
 			}
 		}
 		return result;
+	}
+	
+	public interface IParserProgress
+	{
+		void onProgress(TopicItem pLoadedTopicItem);
 	}
 }

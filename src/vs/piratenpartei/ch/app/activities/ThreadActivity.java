@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import vs.piratenpartei.ch.app.R;
+import vs.piratenpartei.ch.app.forum.TopicItem;
 import vs.piratenpartei.ch.app.forum.TopicItemCollection;
 import vs.piratenpartei.ch.app.helpers.Intents;
 import vs.piratenpartei.ch.app.listadapters.TopicListAdapter;
@@ -28,7 +29,7 @@ public class ThreadActivity extends Activity
 {
 	private static final String TAG = "ThreadActivity";
 	private static final int ITEMS_PER_PAGE = 20;
-	
+
 	private ListView _postList;
 	private TopicListAdapter _arrayAdapter;
 	private ForumLink _topicLink;
@@ -36,32 +37,32 @@ public class ThreadActivity extends Activity
 	private Context _context = this;
 	private int _lastLoadedOffset = -1;
 	private int _maxOffset = 0;
-	
-    @Override
-    protected void onCreate(Bundle pSavedInstanceState) 
-    {
-        super.onCreate(pSavedInstanceState);
-        Log.d(TAG, "onCreate(Bundle)");
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_thread);
-        Bundle params = getIntent().getExtras();
-        this._threadTitle = params.getString("title");
-        this._topicLink = ForumLink.parse(params.getString("topicUrl"));
-        this._maxOffset = params.getInt("maxOffset");
-        TextView titleTextView = (TextView)findViewById(R.id.text_thread_title);
-        titleTextView.setText(this._threadTitle);
-        setupActionBar();
-        this._postList = (ListView)findViewById(R.id.list_thread_posts);
-        this._postList.setOnScrollListener(new AbsListView.OnScrollListener() 
-        {
-        	private static final String TAG_EXT = ".list_thread_posts";
-        	
+
+	@Override
+	protected void onCreate(Bundle pSavedInstanceState) 
+	{
+		super.onCreate(pSavedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		setContentView(R.layout.activity_thread);
+		Bundle params = getIntent().getExtras();
+		this._threadTitle = params.getString("title");
+		this._topicLink = ForumLink.parse(params.getString("topicUrl"));
+		this._maxOffset = params.getInt("maxOffset");
+		TextView titleTextView = (TextView)findViewById(R.id.text_thread_title);
+		titleTextView.setText(this._threadTitle);
+		setupActionBar();
+		this._postList = (ListView)findViewById(R.id.list_thread_posts);
+		this._postList.setOnScrollListener(new AbsListView.OnScrollListener() 
+		{
+			private static final String TAG_EXT = ".list_thread_posts";
+
 			@Override
 			public void onScrollStateChanged(AbsListView pView, int pScrollState) 
 			{
 				Log.d(TAG + TAG_EXT, "onScrollStateChanged(AbsListView, int)");
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView pView, int pFirstVisibleItem,
 					int pVisibleItemCount, int pTotalItemCount) 
@@ -77,19 +78,19 @@ public class ThreadActivity extends Activity
 				}
 			}
 		});
-        this.setProgressBarIndeterminateVisibility(true);
-        new TopicLoaderTask().execute();
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu pMenu)
-    {
-    	Log.d(TAG, "onCreateOptionsMenu(Menu)");
-    	getMenuInflater().inflate(R.menu.actiivity_thread, pMenu);
-    	pMenu.findItem(R.id.thread_activity_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
-    	{
-    		private static final String TAG_EXT = ".Menu[0]";
-    		
+		this.setProgressBarIndeterminateVisibility(true);
+		new TopicLoaderTask().execute();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu pMenu)
+	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu)");
+		getMenuInflater().inflate(R.menu.actiivity_thread, pMenu);
+		pMenu.findItem(R.id.thread_activity_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+		{
+			private static final String TAG_EXT = ".Menu[0]";
+
 			@Override
 			public boolean onMenuItemClick(MenuItem pClickedItem) 
 			{
@@ -100,12 +101,12 @@ public class ThreadActivity extends Activity
 				new TopicLoaderTask().execute();
 				return true;
 			}
-    		
-    	});
-    	pMenu.findItem(R.id.thread_activity_share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
-    	{
-    		private static final String TAG_EXT = ".Menu[1]";
-    		
+
+		});
+		pMenu.findItem(R.id.thread_activity_share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+		{
+			private static final String TAG_EXT = ".Menu[1]";
+
 			@Override
 			public boolean onMenuItemClick(MenuItem pClickedItem) 
 			{
@@ -117,12 +118,12 @@ public class ThreadActivity extends Activity
 				_topicLink.setOffset(offsetBuffer);
 				return true;
 			}
-    		
-    	});
-    	pMenu.findItem(R.id.thread_activity_view).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
-    	{
-    		private static final String TAG_EXT = ".Menu[2]";
-    		
+
+		});
+		pMenu.findItem(R.id.thread_activity_view).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+		{
+			private static final String TAG_EXT = ".Menu[2]";
+
 			@Override
 			public boolean onMenuItemClick(MenuItem pClickedItem) 
 			{
@@ -134,12 +135,12 @@ public class ThreadActivity extends Activity
 				_topicLink.setOffset(offsetBuffer);
 				return true;
 			}
-    		
-    	});
-    	return true;
-    }
-    
-    @Override
+
+		});
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem pItem) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem)");
 		switch (pItem.getItemId()) {
@@ -151,36 +152,36 @@ public class ThreadActivity extends Activity
 		return super.onOptionsItemSelected(pItem);
 	}
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() 
-    {
-    	Log.d(TAG, "setupActionBar()");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
-        {
-        	getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-    
-    private class TopicLoaderTask extends AsyncTask<Void, Void, Void>
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setupActionBar() 
 	{
-    	private static final String TAG_EXT = ".TopicLoaderTask";
-    	
-    	private ForumLink _realLink;
+		Log.d(TAG, "setupActionBar()");
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
+		{
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
+
+	private class TopicLoaderTask extends AsyncTask<Void, TopicItem, Void>
+	{
+		private static final String TAG_EXT = ".TopicLoaderTask";
+
+		private ForumLink _realLink;
 		private TopicItemCollection _data = new TopicItemCollection();
-    	
+
 		public TopicLoaderTask()
 		{
 			Log.d(TAG + TAG_EXT, "new TopicLoaderTask()");
 			this._realLink = _topicLink;
 		}
-		
+
 		public TopicLoaderTask(int pPage)
 		{
 			Log.d(TAG + TAG_EXT, "new TopicLoaderTask(int)");
 			this._realLink = _topicLink;
 			this._realLink.setOffset(pPage * ITEMS_PER_PAGE);
 		}
-		
+
 		@Override
 		protected Void doInBackground(Void... pParams) 
 		{
@@ -190,6 +191,7 @@ public class ThreadActivity extends Activity
 				try {
 					_lastLoadedOffset = this._realLink.getOffset();
 					ForumParser parser = new ForumParser();
+					parser.setOnProgressEvent(new ThreadProgressAction());
 					parser.initialize(new URL(this._realLink.getUrlString()));
 					this._data = parser.getTopic();
 				} catch (IOException e) {
@@ -200,21 +202,40 @@ public class ThreadActivity extends Activity
 		}
 		
 		@Override
-		protected void onPostExecute(Void pResult)
+		protected void onProgressUpdate(TopicItem... pLoadedItems)
 		{
-			Log.d(TAG + TAG_EXT, "onPostExecute(Void)");
+			TopicItemCollection data = new TopicItemCollection();
+			for(int index = 0; index < pLoadedItems.length; index++)
+			{
+				data.add(pLoadedItems[index]);
+			}
 			if(_arrayAdapter == null)
 			{
-				_arrayAdapter = new TopicListAdapter(_context, R.layout.thread_list_item, this._data);
+				_arrayAdapter = new TopicListAdapter(_context, R.layout.thread_list_item, data);
 				_postList.setAdapter(_arrayAdapter);
 			}
 			else
 			{
-				_arrayAdapter.addAll(this._data);
+				_arrayAdapter.addAll(data);
 				_arrayAdapter.notifyDataSetChanged();
 			}
+		}
+
+		@Override
+		protected void onPostExecute(Void pResult)
+		{
+			Log.d(TAG + TAG_EXT, "onPostExecute(Void)");
 			setProgressBarIndeterminateVisibility(false);
 		}
-		
+
+		private class ThreadProgressAction implements ForumParser.IParserProgress
+		{
+			@Override
+			public void onProgress(TopicItem pLoadedTopicItem) 
+			{
+				publishProgress(pLoadedTopicItem);
+			}
+
+		}
 	}
 }

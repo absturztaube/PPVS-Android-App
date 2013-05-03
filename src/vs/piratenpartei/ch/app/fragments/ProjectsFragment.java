@@ -99,6 +99,7 @@ public class ProjectsFragment extends Fragment
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState)
 	{
 		Log.d(TAG, "onCreateView(LayoutInflater, ViewGroup, Bundle)");
+		this._hasToReload = true;
 		return pInflater.inflate(R.layout.projects_fragment, pContainer, false);
 	}
 

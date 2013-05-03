@@ -10,6 +10,7 @@ import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
 import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
+import vs.piratenpartei.ch.app.redmine.JournalItemCollection;
 import vs.piratenpartei.ch.parser.redmine.RedmineLink;
 import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameter;
 import vs.piratenpartei.ch.parser.redmine.RedmineLinkParameterCollection;
@@ -62,6 +63,8 @@ public class ProjectActivity extends FragmentActivity
 		_viewPager = (ViewPager) findViewById(R.id.pager);
 		_viewPager.setAdapter(_sectionsPagerAdapter);
 
+		_adapterJournal = new JournalListAdapter(this, R.layout.journal_list_item, new JournalItemCollection());
+		
 		Bundle params = getIntent().getExtras();
 		RedmineLinkParameterCollection linkParameters = new RedmineLinkParameterCollection();
 		linkParameters.add(new RedmineLinkParameter("include", "journals"));
@@ -173,8 +176,9 @@ public class ProjectActivity extends FragmentActivity
 				estHours.setText(_data.getEstimatedHours());
 				break;
 			case 3:
-				Log.i(TAG, "Create List Adapter");
-				_adapterJournal = new JournalListAdapter(this, R.layout.journal_list_item, _data.getJournal());
+				Log.i(TAG, "Update List Adapter");
+				_adapterJournal.clear();
+				_adapterJournal.addAll(_data.getJournal());
 				_adapterJournal.notifyDataSetChanged();
 				break;
 			}
@@ -325,12 +329,12 @@ public class ProjectActivity extends FragmentActivity
 			super.onResume();
 			Log.d(TAG + TAG_EXT, "onResume()");
 			ProjectActivity parent = ((ProjectActivity) getActivity());
-			Log.i(TAG + TAG_EXT, "Fragment->Update()");
-			parent.updateView(3);
 			if(parent._data != null)
 			{
 				this.adaptListAdapter(parent._adapterJournal);
 			}
+			Log.i(TAG + TAG_EXT, "Fragment->Update()");
+			parent.updateView(3);
 		}
 		
 		public void adaptListAdapter(ListAdapter pListAdapter)
