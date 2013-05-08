@@ -15,8 +15,6 @@ import android.preference.PreferenceActivity;
  */
 public class MainSettingsActivity extends PreferenceActivity 
 {
-	private static final String TAG = "MainSettingsActivity";
-
 	private static final String url_calendar = "https://vs.piratenpartei.ch/?plugin=all-in-one-event-calendar&controller=ai1ec_exporter_controller&action=export_events&cb=1731167005&lang=de";
 	private static final String url_github = "https://github.com/absturztaube/PPVS-Android-App";
 	private static final String url_gnu_gpl = "http://www.gnu.org/licenses/gpl.txt";
