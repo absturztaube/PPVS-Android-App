@@ -90,7 +90,7 @@ public class RedmineParser extends AbstractXmlParser
 		return result;
 	}
 
-	public IssueItemCollection getIssuesList() throws XmlPullParserException, IOException
+	public IssueItemCollection getIssuesList() throws XmlPullParserException, IOException, ParseException
 	{
 		Log.d(TAG, "getIssueList()");
 		IssueItemCollection result = new IssueItemCollection();
@@ -198,7 +198,7 @@ public class RedmineParser extends AbstractXmlParser
 		return result;
 	}
 
-	public IssueItem getIssueItem() throws XmlPullParserException, IOException
+	public IssueItem getIssueItem() throws XmlPullParserException, IOException, ParseException
 	{
 		Log.d(TAG, "getIssueItem()");
 		IssueItem result = new IssueItem();
@@ -217,6 +217,14 @@ public class RedmineParser extends AbstractXmlParser
 			else if(tagName.equals("subject"))
 			{
 				result.setSubject(this.getText(tagName));
+			}
+			else if(tagName.equals("updated_on"))
+			{
+				String date = this.getText(tagName);
+				if(date.length() != 0)
+				{
+					result.setLastUpdate(RedmineParser.convertXmlDateTime(date));
+				}
 			}
 			else
 			{

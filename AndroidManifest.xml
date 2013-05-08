@@ -55,6 +55,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="vs.piratenpartei.ch.app.MainActivity" />
         </activity>
+        <service
+            android:name="vs.piratenpartei.ch.app.services.NotificationService"></service>
     </application>
 
 </manifest>

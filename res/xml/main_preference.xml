@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_notify"
+        android:key="pref_key_notify_category">
+        <CheckBoxPreference 
+            android:key="pref_key_notify_enable"
+            android:title="@string/pref_notify_enable_title"
+            android:summary="@string/pref_notify_enable_summary"
+            android:defaultValue="true" />
+        <ListPreference 
+            android:key="pref_key_notify_interval"
+            android:dependency="pref_key_notify_enable"
+            android:title="@string/pref_notify_interval_title"
+            android:summary="@string/pref_notify_interval_summary"
+            android:entryValues="@array/pref_notify_interval_entryValues"
+            android:entries="@array/pref_notify_interval_entries"
+            android:defaultValue="60"/>
+        <CheckBoxPreference 
+            android:key="pref_key_notify_news"
+            android:dependency="pref_key_notify_enable"
+            android:title="@string/pref_notify_news_title"
+            android:summary="@string/pref_notify_news_summary"
+            android:defaultValue="true" />
+        <CheckBoxPreference 
+            android:key="pref_key_notify_forum"
+            android:dependency="pref_key_notify_enable"
+            android:title="@string/pref_notify_forum_title"
+            android:summary="@string/pref_notify_forum_summary"
+            android:defaultValue="true" />
+        <CheckBoxPreference 
+            android:key="pref_key_notify_redmine"
+            android:dependency="pref_key_notify_enable"
+            android:title="@string/pref_notify_redmine_title"
+            android:summary="@string/pref_notify_redmine_summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/pref_data"
         android:key="pref_key_data_category">

@@ -44,6 +44,38 @@
 	<string name="menu_share">Teilen</string>
 	<string name="menu_view">Öffnen</string>
 	
+	<string name="pref_notify">Benachrichtigungen</string>
+	<string name="pref_notify_enable_title">Service aktivieren</string>
+	<string name="pref_notify_enable_summary">Die App informiert Sie, wenn neue Informationen vorliegen</string>
+	<string name="pref_notify_interval_title">Aktualisierungsintervall</string>
+	<string name="pref_notify_interval_summary">Zeitspanne zwischen den Benachrichtigungen</string>
+	<string-array name="pref_notify_interval_entries">
+	    <item>15 Minuten</item>
+	    <item>30 Minuten</item>
+	    <item>1 Stunde</item>
+	    <item>2 Stunden</item>
+	    <item>3 Stunden</item>
+	    <item>6 Stunden</item>
+	   	<item>12 Stunden</item>
+	   	<item>1 Tag</item>
+	</string-array>
+	<string-array name="pref_notify_interval_entryValues">
+	 	<item>15</item>
+	    <item>30</item>
+	    <item>60</item>
+	    <item>120</item>
+	    <item>180</item>
+	    <item>360</item>
+	   	<item>720</item>
+	   	<item>1440</item>   
+	</string-array>
+	<string name="pref_notify_news_title">News</string>
+	<string name="pref_notify_news_summary">Benachrichtigungen bei ungelesenen News</string>
+	<string name="pref_notify_forum_title">Forum</string>
+	<string name="pref_notify_forum_summary">Benachrichtigungen bei ungelesenen Themen im Forum</string>
+	<string name="pref_notify_redmine_title">Projekte</string>
+	<string name="pref_notify_redmine_summary">Benachrichtigungen bei Änderungen in den Projekten</string>
+	
 	<string name="pref_data">Daten</string>
 	<string name="pref_data_export_cal">PPVS Kalender exportieren</string>
 	<string name="pref_data_export_cal_sum">PPVS Kalender wird als .ICS Datei bereitgestellt</string>

@@ -7,6 +7,7 @@ import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
 import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
 import vs.piratenpartei.ch.app.backgroundworker.TrackerLoaderTask;
+import vs.piratenpartei.ch.app.configuration.AppConfiguration;
 import vs.piratenpartei.ch.app.helpers.Intents;
 import vs.piratenpartei.ch.app.redmine.IssueItem;
 import vs.piratenpartei.ch.app.redmine.IssueItemCollection;
@@ -46,7 +47,7 @@ public class ProjectsFragment extends Fragment
 	{
 		super.onCreate(pSavedInstanceState);
 		Log.d(TAG, "onCreate(Bundle)");
-		this._redmineLink = new RedmineLink(this.getString(R.string.config_issues_xml), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
+		this._redmineLink = new RedmineLink(AppConfiguration.getActiveConfig().getRedmineProjectPage(), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
 		this._redmineLink.addParameter(new RedmineLinkSortParameter("updated_on", RedmineLinkSortParameter.SORT_DESC));
 		this._redmineLink.addParameter(new RedmineLinkParameter("limit", "100"));
 		this._redmineLink.addParameter(new RedmineLinkParameter("status_id", "open"));
@@ -88,7 +89,7 @@ public class ProjectsFragment extends Fragment
 	public void getTrackers()
 	{
 		Log.d(TAG, "getTrackers()");
-		RedmineLink link = new RedmineLink(this.getString(R.string.config_issues_xml), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
+		RedmineLink link = new RedmineLink(AppConfiguration.getActiveConfig().getRedmineProjectPage(), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
 		link.addParameter(new RedmineLinkParameter("set_filter", "1"));
 		link.addParameter(new RedmineLinkParameter("status_id", "*"));
 		link.addParameter(new RedmineLinkParameter("limit", "100"));

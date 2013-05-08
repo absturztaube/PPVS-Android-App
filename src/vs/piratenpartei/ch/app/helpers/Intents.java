@@ -7,6 +7,7 @@ import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.activities.MainSettingsActivity;
 import vs.piratenpartei.ch.app.activities.NewsActivity;
 import vs.piratenpartei.ch.app.activities.ProjectActivity;
+import vs.piratenpartei.ch.app.configuration.AppConfiguration;
 import vs.piratenpartei.ch.app.news.NewsItem;
 import vs.piratenpartei.ch.app.redmine.IssueItem;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class Intents
 		Log.d(TAG, "getWebsiteIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(pContext.getString(R.string.config_website)));
+		intent.setData(Uri.parse(AppConfiguration.getActiveConfig().getWebsite()));
 		return intent;
 	}
 
@@ -65,7 +66,7 @@ public class Intents
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_SENDTO);
 		intent.setType("text/plain");
-		intent.setData(Uri.parse("mailto:" + pContext.getString(R.string.config_email)));
+		intent.setData(Uri.parse("mailto:" + AppConfiguration.getActiveConfig().getEmail()));
 		intent.putExtra(Intent.EXTRA_SUBJECT, "[" + pContext.getString(R.string.app_name) + "]");
 		return intent;
 	}
@@ -76,13 +77,13 @@ public class Intents
 		Intent intent;
 		try {
 			pContext.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(pContext.getString(R.string.config_facebook_app_intent)));
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfiguration.getActiveConfig().getFaceBookAppProfile()));
 		} 
 		catch (Exception e) 
 		{
 			intent = new Intent();
 			intent.setAction(Intent.ACTION_VIEW);
-			intent.setData(Uri.parse(pContext.getString(R.string.config_facebook)));
+			intent.setData(Uri.parse(AppConfiguration.getActiveConfig().getFaceBookWebProfile()));
 		}
 		return intent;
 	}
@@ -92,7 +93,7 @@ public class Intents
 		Log.d(TAG, "getGooglePlusIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(pContext.getString(R.string.config_googleplus)));
+		intent.setData(Uri.parse(AppConfiguration.getActiveConfig().getGooglePlusProfile()));
 		return intent;
 	}
 
@@ -101,7 +102,7 @@ public class Intents
 		Log.d(TAG, "getTwitterIntent(Context)");
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(pContext.getString(R.string.config_twitter)));
+		intent.setData(Uri.parse(AppConfiguration.getActiveConfig().getTwitterProfile()));
 		return intent;
 	}
 

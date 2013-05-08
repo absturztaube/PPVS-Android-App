@@ -7,8 +7,11 @@ import vs.piratenpartei.ch.app.fragments.ForumFragment;
 import vs.piratenpartei.ch.app.fragments.NewsFragment;
 import vs.piratenpartei.ch.app.fragments.ProjectsFragment;
 import vs.piratenpartei.ch.app.helpers.Intents;
+import vs.piratenpartei.ch.app.services.NotificationService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -53,6 +56,16 @@ public class MainActivity extends FragmentActivity
 				getSupportFragmentManager());
 		_viewPager = (ViewPager) findViewById(R.id.pager);
 		_viewPager.setAdapter(_sectionPagerAdapter);
+		
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		if(preferences.getBoolean(MainSettingsActivity.KEY_NOTIFY_ENABLE, true))
+		{
+			if(NotificationService.getInstance() == null)
+			{
+				Intent service = new Intent(this, NotificationService.class);
+				startService(service);
+			}
+		}
 	}
 
 	/**

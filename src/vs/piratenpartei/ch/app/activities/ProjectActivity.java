@@ -7,6 +7,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
 import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
+import vs.piratenpartei.ch.app.configuration.AppConfiguration;
 import vs.piratenpartei.ch.app.fragments.DummySectionFragment;
 import vs.piratenpartei.ch.app.listadapters.JournalListAdapter;
 import vs.piratenpartei.ch.app.redmine.IssueDetailItem;
@@ -68,7 +69,12 @@ public class ProjectActivity extends FragmentActivity
 		Bundle params = getIntent().getExtras();
 		RedmineLinkParameterCollection linkParameters = new RedmineLinkParameterCollection();
 		linkParameters.add(new RedmineLinkParameter("include", "journals"));
-		this._issueLink = new RedmineLink(getString(R.string.config_issues_detail_xml), params.getInt("issue_id") + "", RedmineLink.DATA_TYPE_XML, linkParameters);
+		this._issueLink = new RedmineLink(
+				AppConfiguration.getActiveConfig().getRedmineIssuesPage(), 
+				params.getInt("issue_id") + "", 
+				RedmineLink.DATA_TYPE_XML, 
+				linkParameters
+				);
 		
 		TextView id_text = (TextView)findViewById(R.id.project_detail_id);
 		id_text.setText(this._issueLink.getSubPage() + "");

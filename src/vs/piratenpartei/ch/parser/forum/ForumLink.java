@@ -1,5 +1,7 @@
 package vs.piratenpartei.ch.parser.forum;
 
+import vs.piratenpartei.ch.app.configuration.AppConfiguration;
+
 public class ForumLink 
 {
 	public static final String TYPE_BOARD = "board";
@@ -22,7 +24,7 @@ public class ForumLink
 	
 	public ForumLink(String pBaseUrl, String pType)
 	{
-		this(pBaseUrl, pType, 174, 0);
+		this(pBaseUrl, pType, AppConfiguration.getActiveConfig().getForumBoardId(), 0);
 	}
 	
 	public ForumLink(String pBaseUrl, String pType, int pId)

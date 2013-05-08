@@ -7,6 +7,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import vs.piratenpartei.ch.app.R;
 import vs.piratenpartei.ch.app.backgroundworker.AsyncXmlParserTask;
 import vs.piratenpartei.ch.app.backgroundworker.IAsyncTaskAction;
+import vs.piratenpartei.ch.app.configuration.AppConfiguration;
 import vs.piratenpartei.ch.app.helpers.Intents;
 import vs.piratenpartei.ch.app.news.NewsItem;
 import vs.piratenpartei.ch.app.news.NewsItemCollection;
@@ -25,9 +26,9 @@ import android.widget.ListView;
 public class NewsFragment extends ListFragment 
 {	
 	private static final String TAG = "NewsFragment";
-	
+
 	private NewsItemCollection _feedItems = new NewsItemCollection();
-		
+
 	@Override
 	public void onCreate(Bundle pSavedInstanceState)
 	{
@@ -37,7 +38,7 @@ public class NewsFragment extends ListFragment
 		getActivity().setProgressBarIndeterminateVisibility(true);
 		getNewsItems();
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
@@ -46,7 +47,7 @@ public class NewsFragment extends ListFragment
 		pMenu.findItem(R.id.news_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{
 			private static final String TAG_EXT = "Menu[0]";
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem pItem) 
 			{
@@ -57,7 +58,7 @@ public class NewsFragment extends ListFragment
 			}
 		});
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView pListView, View pView, int pPosition, long pId)
 	{
@@ -66,12 +67,15 @@ public class NewsFragment extends ListFragment
 		Intent intent = Intents.getNewsDetailIntent(getActivity(), clicked);
 		startActivity(intent);
 	}
-	
+
 	private void getNewsItems()
 	{
 		Log.d(TAG, "getNewsItems()");
 		try {
-			new AsyncXmlParserTask<NewsItemCollection>(new RssParser(), new NewsLoadedAction()).execute(getString(R.string.config_news_rss));
+			new AsyncXmlParserTask<NewsItemCollection>(
+					new RssParser(), 
+					new NewsLoadedAction()
+				).execute(AppConfiguration.getActiveConfig().getRssFeed());
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,7 +84,7 @@ public class NewsFragment extends ListFragment
 			e.printStackTrace();
 		}
 	}
-	
+
 	private class NewsLoadedAction implements IAsyncTaskAction<NewsItemCollection>
 	{
 		private static final String TAG_EXT = "NewsLoadedAction";
@@ -89,7 +93,7 @@ public class NewsFragment extends ListFragment
 		public void onComplete(NewsItemCollection pResult) 
 		{
 			Log.d(TAG + TAG_EXT, "onComplete(NewsItemCollection)");
-			
+
 			_feedItems = pResult;
 			ArrayList<String> titles = new ArrayList<String>();
 			for(int i = 0; i < pResult.size(); i++)
@@ -111,6 +115,6 @@ public class NewsFragment extends ListFragment
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 }

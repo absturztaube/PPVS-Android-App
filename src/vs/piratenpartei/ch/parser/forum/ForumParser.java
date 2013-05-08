@@ -2,6 +2,12 @@ package vs.piratenpartei.ch.parser.forum;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xml.sax.XMLReader;
@@ -20,7 +26,7 @@ import android.util.Log;
 public class ForumParser extends AbstractWebParser
 {
 	private static final String TAG = "ForumParser";
-	
+
 	public static final String SUBJECT 	= "subject";
 	public static final String STARTER 	= "starter";
 	public static final String VIEWS	= "views";
@@ -34,7 +40,7 @@ public class ForumParser extends AbstractWebParser
 	public static final String POST_CONTENT = "post_content";
 	public static final String POST_DATE = "post_date";
 	public static final String LAST_BOARD_LINK = "last_board_link";
-	
+
 	private static final String c_selectorSubject = "div.topic_table td.subject span a";
 	private static final String c_selectorStarter = "div.topic_table td.subject p>a";
 	private static final String c_selectorViews = "div.topic_table td.stats";
@@ -48,9 +54,9 @@ public class ForumParser extends AbstractWebParser
 	private static final String c_selectorPostContent = "div.postarea div.post div.inner";
 	private static final String c_selectorPostDate = "div.postarea div.keyinfo div.smalltext";
 	private static final String c_selectorLastBoardLink = "div.pagesection a.navPages:last-child";
-	
+
 	private IParserProgress _progressEvent;
-	
+
 	public ForumParser()
 	{
 		this._selectors.put(ForumParser.SUBJECT, ForumParser.c_selectorSubject);
@@ -67,12 +73,12 @@ public class ForumParser extends AbstractWebParser
 		this._selectors.put(ForumParser.POST_DATE, ForumParser.c_selectorPostDate);
 		this._selectors.put(ForumParser.LAST_BOARD_LINK, ForumParser.c_selectorLastBoardLink);
 	}
-	
+
 	public void setOnProgressEvent(IParserProgress pProgressEvent)
 	{
 		this._progressEvent = pProgressEvent;
 	}
-	
+
 	private void fireProgress(TopicItem pTopicItem)
 	{
 		if(this._progressEvent != null)
@@ -85,62 +91,62 @@ public class ForumParser extends AbstractWebParser
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.SUBJECT);
 	}
-	
+
 	public Elements getStarters()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.STARTER);
 	}
-	
+
 	public Elements getViews()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.VIEWS);
 	}
-	
+
 	public Elements getPosts()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.POSTS);
 	}
-	
+
 	public Elements getLastUpdateDates()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.LAST_UPDATE_DATE);
 	}
-	
+
 	public Elements getLastMessageLink()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.LAST_MESSAGE_LINK);
 	}
-	
+
 	public Elements getLastUpdateAuthors()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.LAST_UPDATE_AUTHOR);
 	}
-	
+
 	public Elements getPostAuthors()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.POST_AUTHOR);
 	}
-	
+
 	public Elements getPostAvatars()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.POST_AUTHOR_AVATAR);
 	}
-	
+
 	public Elements getPostContents()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.POST_CONTENT);
 	}
-	
+
 	public Elements getPostDates()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.POST_DATE);
 	}
-	
+
 	public Elements getCompletePost()
 	{
 		return this.getElementsByPredefinedSelector(ForumParser.COMPLETE_POST);
 	}
-	
+
 	public Element getLastBoardPageLink()
 	{
 		Elements result = this.getElementsByPredefinedSelector(ForumParser.LAST_BOARD_LINK);
@@ -151,7 +157,7 @@ public class ForumParser extends AbstractWebParser
 		}
 		return null;
 	}
-	
+
 	public ThreadItemCollection getBoard()
 	{
 		Log.d(TAG, "getBoard()");
@@ -183,7 +189,7 @@ public class ForumParser extends AbstractWebParser
 		}
 		return result;
 	}
-	
+
 	public TopicItemCollection getTopic() throws IOException
 	{
 		Log.d(TAG, "getTopic()");
@@ -213,7 +219,7 @@ public class ForumParser extends AbstractWebParser
 			{
 				Element content = contents.get(0);
 				current.setContent(Html.fromHtml(content.html(), new Html.ImageGetter() {
-					
+
 					@Override
 					public Drawable getDrawable(String pSource) {
 						Log.i(TAG, "Getting Image from: " + pSource);
@@ -230,7 +236,7 @@ public class ForumParser extends AbstractWebParser
 						return null;
 					}
 				}, new Html.TagHandler() {
-					
+
 					@Override
 					public void handleTag(boolean pOpening, String pTag, Editable pOutput,
 							XMLReader pXmlReader) {
@@ -249,7 +255,7 @@ public class ForumParser extends AbstractWebParser
 		}
 		return result;
 	}
-	
+
 	private static String detectString(String pInput)
 	{
 		Log.d(TAG, "detectString(String)");
@@ -280,7 +286,16 @@ public class ForumParser extends AbstractWebParser
 		}
 		return result;
 	}
-	
+
+	public static Date convertForumDate(String pDate) throws ParseException
+	{
+		Date now = new Date();
+		DateFormat nowDate = new SimpleDateFormat("d. MMMMM yyyy", Locale.ENGLISH);
+		pDate.replace("Today", nowDate.format(now));
+		DateFormat df = new SimpleDateFormat("d. MMMMM yyyy, HH:mm:ss", Locale.ENGLISH);
+		return df.parse(pDate);
+	}
+
 	public interface IParserProgress
 	{
 		void onProgress(TopicItem pLoadedTopicItem);
