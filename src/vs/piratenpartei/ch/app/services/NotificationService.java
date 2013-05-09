@@ -39,7 +39,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-//TODO Refactoring Code
+
 public class NotificationService extends IntentService 
 {
 	private static final String TAG = "NotificationService";
@@ -80,154 +80,194 @@ public class NotificationService extends IntentService
 			if(preferences.getBoolean(MainSettingsActivity.KEY_NOTIFY_NEWS, true))
 			{
 				Log.i(TAG, "check news");
-				try 
-				{
-					HttpClient client = new DefaultHttpClient();
-					HttpGet httpget = new HttpGet(AppConfiguration.getActiveConfig().getRssFeed());
-					HttpResponse response;
-					response = client.execute(httpget);
-					if(response.getStatusLine().getStatusCode() == 200)
-					{
-						HttpEntity entity = response.getEntity();
-						if(entity != null)
-						{
-							InputStream in = entity.getContent();
-							RssParser parser = new RssParser();
-							parser.setInput(in);
-							NewsItemCollection news = new NewsItemCollection();
-							news = (NewsItemCollection)parser.parse();
-							in.close();
-							for(NewsItem newsItem : news)
-							{
-								if(newsItem.getPublishDate().after(lastUpdate))
-								{
-									messages.add(this.getString(R.string.title_news) + ": " + newsItem.getTitle());
-								}
-							}
-						}
-					}
-				} 
-				catch (ClientProtocolException exception) 
-				{
-					exception.getStackTrace();
-				}
-				catch (IOException exception) 
-				{
-					exception.getStackTrace();
-				}
-				catch (Exception exception)
-				{
-					exception.getStackTrace();
-				}
+				ArrayList<String> msgNews = updateNews(lastUpdate);
+				messages.addAll(msgNews);
 			}
 			if(preferences.getBoolean(MainSettingsActivity.KEY_NOTIFY_FORUM, true))
 			{
 				Log.i(TAG, "check forum");
-				try {
-					ForumLink link = new ForumLink();
-					ForumParser parser = new ForumParser();
-					parser.initialize(new URL(link.getUrlString()));
-					ThreadItemCollection board = parser.getBoard();
-					for(ThreadItem thread : board)
-					{
-						if(ForumParser.convertForumDate(thread.getLastUpdateDate()).after(lastUpdate))
-						{
-							messages.add(this.getString(R.string.title_forum) + ": " + thread.getTitle());
-						}
-					}
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ArrayList<String> msgForum = updateForum(lastUpdate);
+				messages.addAll(msgForum);
 			}
 			if(preferences.getBoolean(MainSettingsActivity.KEY_NOTIFY_REDMINE, true))
 			{
 				Log.i(TAG, "check redmine");
-				try 
-				{
-					RedmineLink link = new RedmineLink(AppConfiguration.getActiveConfig().getRedmineProjectPage(), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
-					HttpClient client = new DefaultHttpClient();
-					HttpGet httpget = new HttpGet(link.getUrlString());
-					HttpResponse response;
-					response = client.execute(httpget);
-					if(response.getStatusLine().getStatusCode() == 200)
-					{
-						HttpEntity entity = response.getEntity();
-						if(entity != null)
-						{
-							InputStream in = entity.getContent();
-							RedmineParser parser = new RedmineParser();
-							parser.setInput(in);
-							IssueItemCollection issues = new IssueItemCollection();
-							issues = (IssueItemCollection)parser.parse();
-							in.close();
-							for(IssueItem issue : issues)
-							{
-								if(issue.getLastUpdate() == null)
-								{
-									continue;
-								}
-								if(issue.getLastUpdate().after(lastUpdate))
-								{
-									messages.add(this.getString(R.string.title_projects) + ": " + issue.getSubject());
-								}
-							}
-						}
-					}
-				} 
-				catch (ClientProtocolException exception) 
-				{
-					exception.getStackTrace();
-				}
-				catch (IOException exception) 
-				{
-					exception.getStackTrace();
-				}
-				catch (Exception exception)
-				{
-					exception.getStackTrace();
-				}
+				ArrayList<String> msgRedmine = updateRedmine(lastUpdate);
+				messages.addAll(msgRedmine);
 			}
 
 			Log.i(TAG, messages.size() + " new things to notify");
 			if(messages.size() > 0)
 			{
-				NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this);
-				notifyBuilder.setSmallIcon(R.drawable.ic_launcher);
-				notifyBuilder.setContentTitle(this.getString(R.string.app_name) + ": " + messages.size() + " Aktualisierungen");
-				notifyBuilder.setContentText(messages.get(0));
-				notifyBuilder.setNumber(messages.size());
-
-				NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-				inboxStyle.setBigContentTitle("Aktualisierungen");
-				for(String msg : messages)
-				{
-					inboxStyle.addLine(msg);
-				}
-				notifyBuilder.setStyle(inboxStyle);
-
-				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				mNotificationManager.notify(1, notifyBuilder.build());
+				buildShowNotification(messages);
 			}
 
 			lastUpdate = new Date();
-			int interval = Integer.parseInt(preferences.getString(MainSettingsActivity.KEY_NOTIFY_INTERVAL, "60"));
-			long endedTime = System.currentTimeMillis();
-			try 
-			{
-				Thread.sleep(interval * 60000 - (endedTime - startedTime));
-			} catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-				this.stopSelf();
-			}
+			waitTillNextSync(preferences, startedTime);
 		}
+	}
+
+	private void waitTillNextSync(SharedPreferences preferences,
+			long startedTime) 
+	{
+		Log.d(TAG, "waitTillNextSync(SharedPreferences, long)");
+		int interval = Integer.parseInt(preferences.getString(MainSettingsActivity.KEY_NOTIFY_INTERVAL, "60"));
+		long endedTime = System.currentTimeMillis();
+		try 
+		{
+			Thread.sleep(interval * 60000 - (endedTime - startedTime));
+		} catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+			this.stopSelf();
+		}
+	}
+
+	private void buildShowNotification(ArrayList<String> messages) 
+	{
+		Log.d(TAG, "buildShowNotification(ArrayList<String>)");
+		NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this);
+		notifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+		notifyBuilder.setContentTitle(this.getString(R.string.app_name) + ": " + messages.size() + " Aktualisierungen");
+		notifyBuilder.setContentText(messages.get(0));
+		notifyBuilder.setNumber(messages.size());
+
+		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+		inboxStyle.setBigContentTitle("Aktualisierungen");
+		for(String msg : messages)
+		{
+			inboxStyle.addLine(msg);
+		}
+		notifyBuilder.setStyle(inboxStyle);
+
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.notify(1, notifyBuilder.build());
+	}
+
+	private ArrayList<String> updateRedmine(Date lastUpdate) 
+	{
+		Log.d(TAG, "updateRedmine(Date)");
+		ArrayList<String> msgRedmine = new ArrayList<String>();
+		try 
+		{
+			RedmineLink link = new RedmineLink(AppConfiguration.getActiveConfig().getRedmineProjectPage(), RedmineLink.SUB_PAGE_ISSUES, RedmineLink.DATA_TYPE_XML, new RedmineLinkParameterCollection());
+			HttpClient client = new DefaultHttpClient();
+			HttpGet httpget = new HttpGet(link.getUrlString());
+			HttpResponse response;
+			response = client.execute(httpget);
+			if(response.getStatusLine().getStatusCode() == 200)
+			{
+				HttpEntity entity = response.getEntity();
+				if(entity != null)
+				{
+					InputStream in = entity.getContent();
+					RedmineParser parser = new RedmineParser();
+					parser.setInput(in);
+					IssueItemCollection issues = new IssueItemCollection();
+					issues = (IssueItemCollection)parser.parse();
+					in.close();
+					for(IssueItem issue : issues)
+					{
+						if(issue.getLastUpdate() == null)
+						{
+							continue;
+						}
+						if(issue.getLastUpdate().after(lastUpdate))
+						{
+							msgRedmine.add(this.getString(R.string.title_projects) + ": " + issue.getSubject());
+						}
+					}
+				}
+			}
+		} 
+		catch (ClientProtocolException exception) 
+		{
+			exception.getStackTrace();
+		}
+		catch (IOException exception) 
+		{
+			exception.getStackTrace();
+		}
+		catch (Exception exception)
+		{
+			exception.getStackTrace();
+		}
+		return msgRedmine;
+	}
+
+	private ArrayList<String> updateForum(Date lastUpdate) 
+	{
+		Log.d(TAG, "updateForum(Date)");
+		ArrayList<String> msgForum = new ArrayList<String>();
+		try {
+			ForumLink link = new ForumLink();
+			ForumParser parser = new ForumParser();
+			parser.initialize(new URL(link.getUrlString()));
+			ThreadItemCollection board = parser.getBoard();
+			for(ThreadItem thread : board)
+			{
+				if(ForumParser.convertForumDate(thread.getLastUpdateDate()).after(lastUpdate))
+				{
+					msgForum.add(this.getString(R.string.title_forum) + ": " + thread.getTitle());
+				}
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msgForum;
+	}
+
+	private ArrayList<String> updateNews(Date lastUpdate) 
+	{
+		Log.d(TAG, "updateNews(Date)");
+		ArrayList<String> msgNews = new ArrayList<String>();
+		try 
+		{
+			HttpClient client = new DefaultHttpClient();
+			HttpGet httpget = new HttpGet(AppConfiguration.getActiveConfig().getRssFeed());
+			HttpResponse response;
+			response = client.execute(httpget);
+			if(response.getStatusLine().getStatusCode() == 200)
+			{
+				HttpEntity entity = response.getEntity();
+				if(entity != null)
+				{
+					InputStream in = entity.getContent();
+					RssParser parser = new RssParser();
+					parser.setInput(in);
+					NewsItemCollection news = new NewsItemCollection();
+					news = (NewsItemCollection)parser.parse();
+					in.close();
+					for(NewsItem newsItem : news)
+					{
+						if(newsItem.getPublishDate().after(lastUpdate))
+						{
+							msgNews.add(this.getString(R.string.title_news) + ": " + newsItem.getTitle());
+						}
+					}
+				}
+			}
+		} 
+		catch (ClientProtocolException exception) 
+		{
+			exception.getStackTrace();
+		}
+		catch (IOException exception) 
+		{
+			exception.getStackTrace();
+		}
+		catch (Exception exception)
+		{
+			exception.getStackTrace();
+		}
+		return msgNews;
 	}
 
 }
