@@ -29,21 +29,25 @@ public abstract class AbstractWebParser
 	
 	public boolean isDocumentLoaded()
 	{
+		Log.d(TAG, "isDocumentLoaded()");
 		return this._docLoaded;
 	}
 	
 	public String getPredefinedSelector(String pSelectorName)
 	{
+		Log.d(TAG, "getPredefinedSelector(String)");
 		return this._selectors.get(pSelectorName);
 	}
 	
 	public Elements getElementsBySelector(String pSelector)
 	{
+		Log.d(TAG, "getElementsBySelector(String)");
 		return this._dom.select(pSelector);
 	}
 	
 	public Elements getElementsByPredefinedSelector(String pSelectorName)
 	{
+		Log.d(TAG, "getElementsByPredefinedSelector(String)");
 		String selector = this._selectors.get(pSelectorName);
 		return this._dom.select(selector);
 	}

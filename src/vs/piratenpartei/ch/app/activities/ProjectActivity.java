@@ -182,7 +182,6 @@ public class ProjectActivity extends FragmentActivity
 				estHours.setText(_data.getEstimatedHours());
 				break;
 			case 3:
-				Log.i(TAG, "Update List Adapter");
 				_adapterJournal.clear();
 				_adapterJournal.addAll(_data.getJournal());
 				_adapterJournal.notifyDataSetChanged();
@@ -228,7 +227,6 @@ public class ProjectActivity extends FragmentActivity
 				fragment = new StatusFragment();
 				break;
 			case 3:
-				Log.i(TAG + TAG_EXT, "Create Fragment");
 				fragment = new JournalFragment();
 				break;
 			default:
@@ -339,7 +337,6 @@ public class ProjectActivity extends FragmentActivity
 			{
 				this.adaptListAdapter(parent._adapterJournal);
 			}
-			Log.i(TAG + TAG_EXT, "Fragment->Update()");
 			parent.updateView(3);
 		}
 		
@@ -361,7 +358,6 @@ public class ProjectActivity extends FragmentActivity
 			Log.d(TAG + TAG_EXT, "onComplete(IssueDetailItem)");
 			_data = pResult;
 			int index = _viewPager.getCurrentItem();
-			Log.i(TAG + TAG_EXT, "Backgroundworker->Update()");
 			updateView(index);
 			updateView(index+1);
 			updateView(index-1);

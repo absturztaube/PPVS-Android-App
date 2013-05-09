@@ -106,6 +106,7 @@ public class ForumFragment extends ListFragment
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater)
 	{
+		Log.d(TAG, "onCreateOptionsMenu(Menu, MenuInflater)");
 		pInflater.inflate(R.menu.forum_fragment_menu, pMenu);
 		pMenu.findItem(R.id.forum_fragment_refresh).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() 
 		{

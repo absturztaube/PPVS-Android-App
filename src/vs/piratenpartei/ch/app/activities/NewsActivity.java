@@ -10,8 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
-//import android.support.v4.app.NavUtils;
 
+/**
+ * this activity displays one news item from the rss feed. to prevent double loading of the feed,
+ * the title and the text is passed by its parent activity
+ * @author absturztaube
+ */
 public class NewsActivity extends Activity 
 {
 	private static final String TAG = "NewsActivity";

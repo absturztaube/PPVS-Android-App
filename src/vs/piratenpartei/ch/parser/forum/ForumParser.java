@@ -5,6 +5,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -59,6 +60,7 @@ public class ForumParser extends AbstractWebParser
 
 	public ForumParser()
 	{
+		Log.d(TAG, "new ForumParser()");
 		this._selectors.put(ForumParser.SUBJECT, ForumParser.c_selectorSubject);
 		this._selectors.put(ForumParser.STARTER, ForumParser.c_selectorStarter);
 		this._selectors.put(ForumParser.VIEWS, ForumParser.c_selectorViews);
@@ -76,11 +78,13 @@ public class ForumParser extends AbstractWebParser
 
 	public void setOnProgressEvent(IParserProgress pProgressEvent)
 	{
+		Log.d(TAG, "setOnProgressEvent(IParserProgress)");
 		this._progressEvent = pProgressEvent;
 	}
 
 	private void fireProgress(TopicItem pTopicItem)
 	{
+		Log.d(TAG, "fireProgress(TopicItem)");
 		if(this._progressEvent != null)
 		{
 			this._progressEvent.onProgress(pTopicItem);
@@ -287,11 +291,16 @@ public class ForumParser extends AbstractWebParser
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Date convertForumDate(String pDate) throws ParseException
 	{
+		Log.d(TAG, "convertForumDate(String)");
 		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.set(now.getYear(), now.getMonth(), now.getDay() - 1);
 		DateFormat nowDate = new SimpleDateFormat("d. MMMMM yyyy", Locale.ENGLISH);
 		pDate.replace("Today", nowDate.format(now));
+		pDate.replace("Yesterday", nowDate.format(cal.getTime()));
 		DateFormat df = new SimpleDateFormat("d. MMMMM yyyy, HH:mm:ss", Locale.ENGLISH);
 		return df.parse(pDate);
 	}

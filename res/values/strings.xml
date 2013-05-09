@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">PPVS</string>
+    
+    <!-- Titles -->
     <string name="title_news">Aktuell</string>
     <string name="title_forum">Forum</string>
     <string name="title_projects">Projekte</string>
     <string name="title_contact">Kontakt</string>
+    
+    <!-- Buttons -->
     <string name="btn_webpage">Webseite</string>
     <string name="btn_mail">E-Mail</string>
     <string name="btn_twitter">Twitter</string>
     <string name="btn_facebook">Facebook</string>
     <string name="btn_googleplus">Google Plus</string>
 
+    <!-- Spinners -->
+	<string name="tracker_all">Alle</string>
     <string-array name="projects_types">
         <item>Lade Trackerliste&#8230;</item>
     </string-array>
@@ -21,10 +26,13 @@
         <item>Geschlossen</item>
     </string-array>
 
+    <!-- Issues Detail Titles -->
     <string name="issue_overview">Übersicht</string>
     <string name="issue_description">Beschreibung</string>
     <string name="issue_status">Status</string>
     <string name="issue_journal">Journal</string>
+    
+    <!-- Issues Labels -->
     <string name="issue_label_author">Author</string>
     <string name="issue_label_assignee">Zugewissen an</string>
     <string name="issue_label_status">Status</string>
@@ -35,15 +43,18 @@
     <string name="issue_label_createdon">Erstellt am</string>
     <string name="issue_label_updatedon">Letztes Update am</string>
     <string name="issue_label_progress">Stand</string>
+    
+    <!-- Forum -->
     <string name="last_post_string">Letzter Post:</string>
     <string name="string_avatar">Profilbild</string>
     
+    <!-- Menus -->
     <string name="menu_refresh">Aktualisieren</string>
-	<string name="tracker_all">Alle</string>
 	<string name="menu_settings">Einstellungen</string>
 	<string name="menu_share">Teilen</string>
 	<string name="menu_view">Öffnen</string>
 	
+	<!-- Preferences -->
 	<string name="pref_notify">Benachrichtigungen</string>
 	<string name="pref_notify_enable_title">Service aktivieren</string>
 	<string name="pref_notify_enable_summary">Die App informiert Sie, wenn neue Informationen vorliegen</string>

@@ -7,32 +7,63 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
 /**
- * 
+ * this activity presents the main settings for this application, where the user can specify
+ * how the app will behave
  * @author absturztaube
- *
+ * TODO But layout into a fragment and instancing fragment here
  */
 public class MainSettingsActivity extends PreferenceActivity 
 {
+	private static final String TAG = "MainSettingsActivity";
+	
 	private static final String url_calendar = "https://vs.piratenpartei.ch/?plugin=all-in-one-event-calendar&controller=ai1ec_exporter_controller&action=export_events&cb=1731167005&lang=de";
 	private static final String url_github = "https://github.com/absturztaube/PPVS-Android-App";
 	private static final String url_gnu_gpl = "http://www.gnu.org/licenses/gpl.txt";
 
+	/**
+	 * Key to Notification enable preference
+	 */
 	public static final String KEY_NOTIFY_ENABLE = "pref_key_notify_enable";
+	
+	/**
+	 * Key to notification interval preference
+	 */
 	public static final String KEY_NOTIFY_INTERVAL = "pref_key_notify_interval";
+	
+	/**
+	 * Key to notification news preference
+	 */
 	public static final String KEY_NOTIFY_NEWS = "pref_key_notify_news";
+	
+	/**
+	 * Key to notification forum preference
+	 */
 	public static final String KEY_NOTIFY_FORUM = "pref_key_notify_forum";
+	
+	/**
+	 * Key to notification redmine preference
+	 */
 	public static final String KEY_NOTIFY_REDMINE = "pref_key_notify_redmine";
 
+	/**
+	 * Creates the View. initial setup for layout and events
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate(Bundle)");
+		
+		//Setting up layout
 		this.addPreferencesFromResource(R.xml.main_preference);
 
-		this.findPreference("pref_key_data_export_cal").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
+		//Setting up Events
+		this.findPreference("pref_key_data_export_cal").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() 
+		{
 			@Override
 			public boolean onPreferenceClick(Preference preference) 
 			{

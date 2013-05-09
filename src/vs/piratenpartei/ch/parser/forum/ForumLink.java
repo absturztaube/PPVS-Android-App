@@ -1,9 +1,12 @@
 package vs.piratenpartei.ch.parser.forum;
 
+import android.util.Log;
 import vs.piratenpartei.ch.app.configuration.AppConfiguration;
 
 public class ForumLink 
 {
+	private static final String TAG = "ForumLink";
+	
 	public static final String TYPE_BOARD = "board";
 	public static final String TYPE_TOPIC = "topic";
 	
@@ -15,25 +18,30 @@ public class ForumLink
 	public ForumLink()
 	{
 		this("http://forum.piratenpartei.ch/index.php/");
+		Log.d(TAG, "new ForumLink()");
 	}
 	
 	public ForumLink(String pBaseUrl)
 	{
 		this(pBaseUrl, ForumLink.TYPE_BOARD);
+		Log.d(TAG, "new ForumLink(String)");
 	}
 	
 	public ForumLink(String pBaseUrl, String pType)
 	{
 		this(pBaseUrl, pType, AppConfiguration.getActiveConfig().getForumBoardId(), 0);
+		Log.d(TAG, "new ForumLink(String, String)");
 	}
 	
 	public ForumLink(String pBaseUrl, String pType, int pId)
 	{
 		this(pBaseUrl, pType, pId, 0);
+		Log.d(TAG, "new ForumLink(String, String, int)");
 	}
 	
 	public ForumLink(String pBaseUrl, String pType, int pId, int pOffset)
 	{
+		Log.d(TAG, "new ForumLink(String, String, int, int)");
 		this._baseUrl = pBaseUrl;
 		this._type = pType;
 		this._id = pId;
@@ -87,6 +95,7 @@ public class ForumLink
 	
 	public static ForumLink parse(String pString)
 	{
+		Log.d(TAG, "parse(String)");
 		ForumLink result = new ForumLink();
 		String[] urlParts = pString.split("\\/");
 		String importantPart = urlParts[urlParts.length - 1];

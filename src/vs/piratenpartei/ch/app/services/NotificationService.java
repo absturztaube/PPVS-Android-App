@@ -39,7 +39,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
+//TODO Refactoring Code
 public class NotificationService extends IntentService 
 {
 	private static final String TAG = "NotificationService";
@@ -50,17 +50,20 @@ public class NotificationService extends IntentService
 	public NotificationService() 
 	{
 		super("PpvsNotificationService");
+		Log.d(TAG, "new NotificationService()");
 		NotificationService.instance = this;
 	}
 
 	public static NotificationService getInstance()
 	{
+		Log.d(TAG, "getInstance()");
 		return NotificationService.instance;
 	}
 
 	@Override
 	protected void onHandleIntent(Intent pIntent) 
 	{
+		Log.d(TAG, "onHandleIntent(Intent)");
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Date lastUpdate = new Date();
 		if(DEBUG)

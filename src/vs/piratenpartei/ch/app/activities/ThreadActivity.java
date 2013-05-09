@@ -203,6 +203,7 @@ public class ThreadActivity extends Activity
 		@Override
 		protected void onProgressUpdate(TopicItem... pLoadedItems)
 		{
+			Log.d(TAG + TAG_EXT, "onProgressUpdate(TopicItem[])");
 			TopicItemCollection data = new TopicItemCollection();
 			for(int index = 0; index < pLoadedItems.length; index++)
 			{
@@ -229,9 +230,12 @@ public class ThreadActivity extends Activity
 
 		private class ThreadProgressAction implements ForumParser.IParserProgress
 		{
+			private static final String TAG_EXT_EXT = ".ThreadProgressAction";
+			
 			@Override
 			public void onProgress(TopicItem pLoadedTopicItem) 
 			{
+				Log.d(TAG + TAG_EXT + TAG_EXT_EXT, "onProgress(TopicItem)");
 				publishProgress(pLoadedTopicItem);
 			}
 

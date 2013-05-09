@@ -13,20 +13,25 @@ import vs.piratenpartei.ch.app.redmine.TrackerCollection;
 import vs.piratenpartei.ch.parser.redmine.RedmineLink;
 import vs.piratenpartei.ch.parser.redmine.RedmineParser;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class TrackerLoaderTask extends
-AsyncTask<RedmineLink, Void, TrackerCollection> {
-
+AsyncTask<RedmineLink, Void, TrackerCollection> 
+{
+	private static final String TAG = "TrackerLoaderTask";
+	
 	private IAsyncTaskAction<TrackerCollection> _onComplete;
 
 	public TrackerLoaderTask(IAsyncTaskAction<TrackerCollection> pOnComplete)
 	{
+		Log.d(TAG, "new TrackerLoaderTask(IAsyncTaskAction<TrackerCollection>)");
 		this._onComplete = pOnComplete;
 	}
 
 	@Override
 	protected TrackerCollection doInBackground(RedmineLink... params) 
 	{
+		Log.d(TAG, "doInBackground(RedmineLink[])");
 		TrackerCollection result = new TrackerCollection();
 		if(params.length > 0)
 		{
@@ -66,6 +71,7 @@ AsyncTask<RedmineLink, Void, TrackerCollection> {
 	@Override
 	protected void onPostExecute(TrackerCollection pResult)
 	{
+		Log.d(TAG, "onPostExecute(TrackerCollection)");
 		try
 		{
 			this._onComplete.onComplete(pResult);

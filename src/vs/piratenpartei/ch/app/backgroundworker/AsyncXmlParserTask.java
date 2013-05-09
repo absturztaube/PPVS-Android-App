@@ -76,6 +76,7 @@ public class AsyncXmlParserTask<Result> extends
 	@Override
 	protected void onPostExecute(List<Result> pResult)
 	{
+		Log.d(TAG, "onPostExecute(List<Result>)");
 		for(Result result : pResult)
 		{
 			try
